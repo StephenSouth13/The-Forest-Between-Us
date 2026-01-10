@@ -1,0 +1,88 @@
+# --- [ UNITY QUAN TRỌNG ] ---
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Mm]emoryCaptures/
+/[Pp]ackageCache/
+/[Aa]ssetBackups/
+/Assets/AssetStoreTools*
+
+# --- [ IDE & TRÌNH BIÊN DỊCH ] ---
+.vs/
+.gradle/
+.idea/
+.consulo/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.shader
+*.orig
+*.obj
+ExportedObj/
+
+# --- [ CÁC FILE LỚN & TEMP ] ---
+# Chặn các folder chứa dữ liệu tạm mà bạn đã note
+.Assets/Survival 3D/Prefabs/Temp/
+Assets/Survival 3D/Prefabs/Temp/
+node_modules/
+
+# --- [ HỆ ĐIỀU HÀNH & TRÌNH DUYỆT ] ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+
+# --- [ SẢN PHẨM SAU BUILD ] ---
+*.apk
+*.aab
+*.unitypackage
+*.exe
+*.zip
+*.rar
+*.7z
+
+# --- [ QUY TẮC VỀ FILE .META ] ---
+
+# KHÔNG chặn file .meta của những file đang được sử dụng
+!/[Aa]ssets/**/*.meta
+!/[Pp]ackages/**/*.meta
+!/[Pp]roject[Ss]ettings/**/*.meta
+
+# CHỈ chặn file .meta nếu file gốc của nó cũng bị chặn
+# Ví dụ: Nếu Library bị chặn, thì Library.meta cũng phải bị chặn
+/[Ll]ibrary/
+/[Ll]ibrary.meta
+
+/[Tt]emp/
+/[Tt]emp.meta
+
+/[Oo]bj/
+/[Oo]bj.meta
+
+/[Bb]uild/
+/[Bb]uild.meta
+
+/[Ll]ogs/
+/[Ll]ogs.meta
+
+# Chặn các file meta rác sinh ra do lỗi hệ thống hoặc phần mềm bên thứ 3
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
