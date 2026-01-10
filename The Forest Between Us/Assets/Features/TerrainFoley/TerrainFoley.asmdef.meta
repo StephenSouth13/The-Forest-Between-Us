@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: bdcc3bc3841b2944eb873f100e7db257
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/TerrainFoley/TerrainFoley.asmdef
+  uploadId: 569154

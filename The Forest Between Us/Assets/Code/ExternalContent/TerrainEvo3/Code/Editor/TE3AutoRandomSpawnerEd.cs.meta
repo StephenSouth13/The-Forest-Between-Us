@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 892e4a7a26b818245b039c1589a5b8ef
+timeCreated: 1505928742
+licenseType: Store
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Code/ExternalContent/TerrainEvo3/Code/Editor/TE3AutoRandomSpawnerEd.cs
+  uploadId: 569154

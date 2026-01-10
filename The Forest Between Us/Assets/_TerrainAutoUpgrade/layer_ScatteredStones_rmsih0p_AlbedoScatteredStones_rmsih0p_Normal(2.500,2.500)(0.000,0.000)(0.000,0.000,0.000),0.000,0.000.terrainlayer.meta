@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: beb39eb8d73501243ab41353a01e28c4
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8574412962073106934
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/_TerrainAutoUpgrade/layer_ScatteredStones_rmsih0p_AlbedoScatteredStones_rmsih0p_Normal(2.500,2.500)(0.000,0.000)(0.000,0.000,0.000),0.000,0.000.terrainlayer
+  uploadId: 569154

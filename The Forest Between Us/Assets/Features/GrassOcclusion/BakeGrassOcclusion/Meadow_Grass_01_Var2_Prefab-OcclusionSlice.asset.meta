@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: aabd627498c5413428497853e1bcab5d
+timeCreated: 1507065901
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2800000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/GrassOcclusion/BakeGrassOcclusion/Meadow_Grass_01_Var2_Prefab-OcclusionSlice.asset
+  uploadId: 569154

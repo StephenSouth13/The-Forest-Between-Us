@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: df86fd44cb19f8f458e6acfbbf773f3e
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/PropertyMaster/Code/PropertyMaster.asmdef
+  uploadId: 569154

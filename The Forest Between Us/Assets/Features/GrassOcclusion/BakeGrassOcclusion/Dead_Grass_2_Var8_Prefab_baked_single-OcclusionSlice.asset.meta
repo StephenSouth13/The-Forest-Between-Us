@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: d11159fe26f35e64aacf52b8b996a11e
+timeCreated: 1508712832
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2800000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/GrassOcclusion/BakeGrassOcclusion/Dead_Grass_2_Var8_Prefab_baked_single-OcclusionSlice.asset
+  uploadId: 569154

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: d5c0779938849664896c205f42d3b5f2
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Code/ExternalContent/HapkiLibs/Source/Hapki.Fixed.cs
+  uploadId: 569154

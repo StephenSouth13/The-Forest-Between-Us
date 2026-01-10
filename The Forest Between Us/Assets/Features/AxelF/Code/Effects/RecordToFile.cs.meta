@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: d3933c537014878469875e43a4362aaf
+timeCreated: 1498816366
+licenseType: Store
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/AxelF/Code/Effects/RecordToFile.cs
+  uploadId: 569154

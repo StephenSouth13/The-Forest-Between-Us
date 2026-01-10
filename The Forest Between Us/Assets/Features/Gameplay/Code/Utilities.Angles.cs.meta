@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 0d6b21604feb8fd4a8fbb518e0a5f6eb
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/Gameplay/Code/Utilities.Angles.cs
+  uploadId: 569154

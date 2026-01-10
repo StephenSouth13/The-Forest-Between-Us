@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: e64537fa1e9dd504c9ce5eca01f03d07
+timeCreated: 1475677471
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/AxelF/Code/AudioEmitter.cs
+  uploadId: 569154

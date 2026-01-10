@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 1dacbce80a34c194487989a0610f8a1d
+timeCreated: 1475747210
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/AxelF/Editor/Monitor.cs
+  uploadId: 569154

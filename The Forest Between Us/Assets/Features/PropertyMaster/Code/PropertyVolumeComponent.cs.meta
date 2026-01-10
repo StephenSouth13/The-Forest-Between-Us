@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 8cb8612b14cf0134cae35f888f290c20
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/PropertyMaster/Code/PropertyVolumeComponent.cs
+  uploadId: 569154

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 1dc3e0726da85354f8fc71d6b2bfacc8
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/PropertyMaster/Editor/PropertyInspectorEditor.cs
+  uploadId: 569154

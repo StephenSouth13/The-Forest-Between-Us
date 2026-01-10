@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: e0035c2ce49bac040989a5be4ceb51f3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Code/ExternalContent/HapkiLibs/Source/Editor/Hapki.Editor.SerializedEnumDrawer.cs
+  uploadId: 569154

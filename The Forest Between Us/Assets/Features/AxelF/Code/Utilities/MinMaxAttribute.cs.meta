@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 97edb0e79138b1a4abe8013a224ad89a
+timeCreated: 1475131724
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/AxelF/Code/Utilities/MinMaxAttribute.cs
+  uploadId: 569154

@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 370283d675e7d394ab2613d3ec7994ea
+timeCreated: 1494244956
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 900
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/AxelF/Code/Effects/Occlusion.cs
+  uploadId: 569154

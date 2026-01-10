@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: fb01a9ad0544bb247ac825ee4c549276
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Code/ExternalContent/HapkiLibs/Source/Solvers/Hapki.Solvers.InverseKinematics.cs
+  uploadId: 569154

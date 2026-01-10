@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: a772cacf1055eb141808e3c6647a7f07
+timeCreated: 1496268074
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Code/ExternalContent/TerrainEvo3/Code/TE3ScatterProxy.cs
+  uploadId: 569154

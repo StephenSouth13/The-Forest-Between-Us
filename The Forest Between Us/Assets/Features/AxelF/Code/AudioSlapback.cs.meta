@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 8b750a04734893d45b7f67e43a0a32c3
+timeCreated: 1475498609
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/AxelF/Code/AudioSlapback.cs
+  uploadId: 569154

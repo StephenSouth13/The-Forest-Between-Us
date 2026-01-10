@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: dae12f6665dc6e448868ba68cbf75165
+timeCreated: 1473797961
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/AxelF/Code/Synthesizer.cs
+  uploadId: 569154

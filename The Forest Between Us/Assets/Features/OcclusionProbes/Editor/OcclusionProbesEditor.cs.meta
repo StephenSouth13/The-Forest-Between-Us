@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: f6d732bf17fd6434bb4c7556224a59fb
+timeCreated: 1505739623
+licenseType: Store
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/OcclusionProbes/Editor/OcclusionProbesEditor.cs
+  uploadId: 569154

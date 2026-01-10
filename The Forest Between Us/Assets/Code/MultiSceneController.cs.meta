@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: d83161e350a471b4fb23ae70c6bcf21c
+timeCreated: 1452273602
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Code/MultiSceneController.cs
+  uploadId: 569154

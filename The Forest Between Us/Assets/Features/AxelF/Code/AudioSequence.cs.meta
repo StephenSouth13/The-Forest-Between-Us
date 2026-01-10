@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 230dd24bc8d0c6542b5644937d6d6df2
+timeCreated: 1473746495
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/AxelF/Code/AudioSequence.cs
+  uploadId: 569154
