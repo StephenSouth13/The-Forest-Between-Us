@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: e6d093e9a6cb0274badcf0843b91b944
+timeCreated: 1495100683
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Audio/CHAR/PLAYER_breathing/PLAYER_breathing_animated_nose/PLAYER_breathing_IN_slow_animated_nose/PLAYER_breathing_IN_slow_animated_nose.asset
+  uploadId: 569154

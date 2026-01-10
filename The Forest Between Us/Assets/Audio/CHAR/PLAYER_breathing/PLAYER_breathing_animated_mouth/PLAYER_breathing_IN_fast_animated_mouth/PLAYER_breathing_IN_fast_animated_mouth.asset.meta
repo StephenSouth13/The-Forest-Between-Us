@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 161f8d22b08ce1145bfa720cef02adce
+timeCreated: 1495118030
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Audio/CHAR/PLAYER_breathing/PLAYER_breathing_animated_mouth/PLAYER_breathing_IN_fast_animated_mouth/PLAYER_breathing_IN_fast_animated_mouth.asset
+  uploadId: 569154
