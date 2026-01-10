@@ -207,7 +207,7 @@ public class PlayerCharacter : MonoBehaviour {
                 _lastVegetationPosition = footPlantPosition;
 
                 Vector3 normal;
-                PhysicMaterial physicalMaterial;
+                PhysicsMaterial physicalMaterial;
                 FindFootPlacement(ref position, out normal, out physicalMaterial);
                 playerFoley.PlayFootstep(
                     transform, position, normal, physicalMaterial, _jumpSpeedScalar, landing: true);
@@ -217,7 +217,7 @@ public class PlayerCharacter : MonoBehaviour {
                     _lastFootPlantPosition = footPlantPosition;
 
                     Vector3 normal;
-                    PhysicMaterial physicalMaterial;
+                    PhysicsMaterial physicalMaterial;
                     FindFootPlacement(ref position, out normal, out physicalMaterial);
                     playerFoley.PlayFootstep(transform, position, normal, physicalMaterial, speedScalar: 0f);
                 }
@@ -226,7 +226,7 @@ public class PlayerCharacter : MonoBehaviour {
                 _lastFootPlantPosition = footPlantPosition;
 
                 Vector3 normal;
-                PhysicMaterial physicalMaterial;
+                PhysicsMaterial physicalMaterial;
                 FindFootPlacement(ref position, out normal, out physicalMaterial);
                 playerFoley.PlayFootstep(transform, position, normal, physicalMaterial, speedScalar);
             } else if (playerFoley.intersectingVegetation) {
@@ -236,7 +236,7 @@ public class PlayerCharacter : MonoBehaviour {
                     _lastVegetationPosition = footPlantPosition;
 
                     Vector3 normal;
-                    PhysicMaterial physicalMaterial;
+                    PhysicsMaterial physicalMaterial;
                     FindFootPlacement(ref position, out normal, out physicalMaterial);
                     playerFoley.PlayVegetation(transform, position, speedScalar);
                 }
@@ -244,7 +244,7 @@ public class PlayerCharacter : MonoBehaviour {
         }
     }
 
-    bool FindFootPlacement(ref Vector3 position, out Vector3 normal, out PhysicMaterial physicalMaterial) {
+    bool FindFootPlacement(ref Vector3 position, out Vector3 normal, out PhysicsMaterial physicalMaterial) {
         RaycastHit hit;
         if (Physics.Raycast(position + Vector3.up, Vector3.down, out hit, 2f, footPlanting.floorLayers)) {
             position = hit.point;

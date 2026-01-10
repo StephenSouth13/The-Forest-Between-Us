@@ -114,7 +114,7 @@ public class PlayerFoley : MonoBehaviour {
     BreathingState _breathingState;
     VegetationState _vegetationState;
     FoleyMap _foleyMap;
-    Dictionary<PhysicMaterial, int> _materialMap;
+    Dictionary<PhysicsMaterial, int> _materialMap;
     bool _mapInitialized;
 
     public float breathingIntensity { get; set; }
@@ -125,7 +125,7 @@ public class PlayerFoley : MonoBehaviour {
     public bool intersectingVegetation { get { return _vegetationState.intersecting; }}
 
     AxelF.Patch GetFootstepAsset(
-            PlayerFoleyAsset foley, Vector3 position, PhysicMaterial physicalMaterial,
+            PlayerFoleyAsset foley, Vector3 position, PhysicsMaterial physicalMaterial,
             float speedScalar, VegetationType type, bool landing = false) {
         var footstep = default(PlayerFoleyAsset.Footstep);
         int footstepIndex;
@@ -176,7 +176,7 @@ public class PlayerFoley : MonoBehaviour {
     }
 
     public void PlayFootstep(
-            Transform transform, Vector3 position, Vector3 normal, PhysicMaterial physicalMaterial,
+            Transform transform, Vector3 position, Vector3 normal, PhysicsMaterial physicalMaterial,
             float speedScalar, bool landing = false) {
         var foley = GetFoleyAsset();
 
@@ -229,7 +229,7 @@ public class PlayerFoley : MonoBehaviour {
             var terrainFoley = TerrainFoleyManager.current;
 
             if (terrainFoley) {
-                _materialMap = new Dictionary<PhysicMaterial, int>();
+                _materialMap = new Dictionary<PhysicsMaterial, int>();
 
                 var list = new List<string>(foley.footsteps.Length);
                 for (int i = 0, n = foley.footsteps.Length; i < n; ++i) {

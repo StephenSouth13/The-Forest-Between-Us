@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 9c3245a827dead046a5d7f759807fab2
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Scenes/Forest_EnvironmentSample/OcclusionProbeData.asset
+  uploadId: 569154

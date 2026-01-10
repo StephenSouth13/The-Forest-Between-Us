@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 117574e773368a14e97025c95d3d7e3b
+timeCreated: 1494579865
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Audio/CHAR/PLAYER_vegipass/PLAYER_vegipass_branch/PLAYER_vegipass_branch_break/PLAYER_vegipass_branch_break.asset
+  uploadId: 569154

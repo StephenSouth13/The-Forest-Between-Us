@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 335abad6336ae3548a076e4d4fd7bd57
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Audio/FX/FX_stones_falling/FX_stones_falling.asset
+  uploadId: 569154

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5574e724213266f4cb11aa089e8199ce
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Audio/FX/FX_woodscreak/woodscreak_c.asset
+  uploadId: 569154

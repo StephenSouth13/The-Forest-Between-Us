@@ -12,7 +12,7 @@ public class PlayerFoleyAsset : ScriptableObject {
     [Serializable]
     public struct Footstep {
         public string name;
-        public PhysicMaterial physicalMaterial;
+        public PhysicsMaterial physicalMaterial;
         public AxelF.Patch walking;
         public AxelF.Patch walkingUndergrowth;
         public AxelF.Patch jogging;
