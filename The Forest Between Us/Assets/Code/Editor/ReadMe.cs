@@ -240,7 +240,7 @@ public class ReadMe : EditorWindow {
     }
 
     static void ResetRenderPipeline() {
-        var hdrp = GraphicsSettings.renderPipelineAsset as HDRenderPipelineAsset;
+        var hdrp = GraphicsSettings.defaultRenderPipeline as HDRenderPipelineAsset;
         if(hdrp) {
             Debug.Log("Resetting renderpipeline.");
 

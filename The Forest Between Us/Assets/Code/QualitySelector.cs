@@ -48,8 +48,8 @@ public class QualitySelector : MonoBehaviour {
 		if(Application.isPlaying && verbose)
 			Debug.LogFormat("Applying quality: {0}", quality.platform);
 
-		if(quality.renderPipeline && quality.renderPipeline != GraphicsSettings.renderPipelineAsset)
-			GraphicsSettings.renderPipelineAsset = quality.renderPipeline;
+		if(quality.renderPipeline && quality.renderPipeline != GraphicsSettings.defaultRenderPipeline)
+			GraphicsSettings.defaultRenderPipeline = quality.renderPipeline;
 
 		if(quality.layerCulling && quality.layerCulling != LayerCulling.Instance) {
 			if(LayerCulling.Instance)
