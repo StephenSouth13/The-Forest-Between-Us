@@ -33,6 +33,7 @@ Material:
   - _DETAILMODE_OFF
   - _DISABLE_SSR_TRANSPARENT
   - _MASKMAP
+  - _MATERIAL_FEATURE_TRANSMISSION
   - _NORMALMAPSPACE_TANGENT_SPACE
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -211,6 +212,7 @@ Material:
     - _DoubleSidedNormalMode: 1
     - _Drag: 1
     - _DstBlend: 0
+    - _DstBlend2: 0
     - _EmissiveColorMode: 1
     - _EmissiveExposureWeight: 1
     - _EmissiveIntensity: 1
@@ -222,6 +224,7 @@ Material:
     - _EnableSpecularOcclusion: 0
     - _EnableWind: 0
     - _EnergyConservingSpecularColor: 1
+    - _ExcludeFromTUAndAA: 0
     - _ForceForwardEmissive: 0
     - _HdrpVersion: 1
     - _HeightAmplitude: 0.02
@@ -241,6 +244,7 @@ Material:
     - _LinkDetailsWithBase: 1
     - _MASKMAP: 1
     - _MaterialID: 5
+    - _MaterialTypeMask: 32
     - _Metallic: 0
     - _MetallicRemapMax: 0
     - _MetallicRemapMin: 0
@@ -253,6 +257,7 @@ Material:
     - _PPDMinSamples: 5
     - _PPDPrimitiveLength: 1
     - _PPDPrimitiveWidth: 1
+    - _PerPixelSorting: 0
     - _PreRefractionPass: 0
     - _RayTracing: 0
     - _ReceivesSSR: 1
@@ -361,6 +366,7 @@ Material:
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!114 &1270105764211425189
 MonoBehaviour:
   m_ObjectHideFlags: 11

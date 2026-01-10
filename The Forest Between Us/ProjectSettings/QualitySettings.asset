@@ -6,7 +6,7 @@ QualitySettings:
   serializedVersion: 5
   m_CurrentQuality: 0
   m_QualitySettings:
-  - serializedVersion: 3
+  - serializedVersion: 5
     name: Desktop Unlocked
     pixelLightCount: 4
     shadows: 2
@@ -28,8 +28,13 @@ QualitySettings:
     realtimeReflectionProbes: 0
     billboardsFaceCameraPosition: 0
     useLegacyDetailDistribution: 1
+    adaptiveVsync: 0
     vSyncCount: 0
+    realtimeGICPUUsage: 25
+    adaptiveVsyncExtraA: 0
+    adaptiveVsyncExtraB: 0
     lodBias: 1
+    meshLodThreshold: 1
     maximumLODLevel: 0
     enableLODCrossFade: 1
     streamingMipmapsActive: 0
@@ -56,7 +61,7 @@ QualitySettings:
     excludedTargetPlatforms:
     - iPhone
     - Windows Store Apps
-  - serializedVersion: 3
+  - serializedVersion: 5
     name: Desktop
     pixelLightCount: 4
     shadows: 2
@@ -78,8 +83,13 @@ QualitySettings:
     realtimeReflectionProbes: 0
     billboardsFaceCameraPosition: 0
     useLegacyDetailDistribution: 1
+    adaptiveVsync: 0
     vSyncCount: 2
+    realtimeGICPUUsage: 25
+    adaptiveVsyncExtraA: 0
+    adaptiveVsyncExtraB: 0
     lodBias: 0.5
+    meshLodThreshold: 1
     maximumLODLevel: 0
     enableLODCrossFade: 1
     streamingMipmapsActive: 0
@@ -107,7 +117,7 @@ QualitySettings:
     - iPhone
     - Windows Store Apps
     - PS4
-  - serializedVersion: 3
+  - serializedVersion: 5
     name: Base
     pixelLightCount: 4
     shadows: 2
@@ -129,8 +139,13 @@ QualitySettings:
     realtimeReflectionProbes: 0
     billboardsFaceCameraPosition: 0
     useLegacyDetailDistribution: 1
+    adaptiveVsync: 0
     vSyncCount: 2
+    realtimeGICPUUsage: 25
+    adaptiveVsyncExtraA: 0
+    adaptiveVsyncExtraB: 0
     lodBias: 0.35
+    meshLodThreshold: 1
     maximumLODLevel: 1
     enableLODCrossFade: 1
     streamingMipmapsActive: 0
@@ -159,7 +174,7 @@ QualitySettings:
     - Windows Store Apps
     - Standalone
     - XboxOne
-  - serializedVersion: 3
+  - serializedVersion: 5
     name: Neo
     pixelLightCount: 4
     shadows: 2
@@ -181,8 +196,13 @@ QualitySettings:
     realtimeReflectionProbes: 0
     billboardsFaceCameraPosition: 0
     useLegacyDetailDistribution: 1
+    adaptiveVsync: 0
     vSyncCount: 2
+    realtimeGICPUUsage: 50
+    adaptiveVsyncExtraA: 0
+    adaptiveVsyncExtraB: 0
     lodBias: 0.5
+    meshLodThreshold: 1
     maximumLODLevel: 0
     enableLODCrossFade: 1
     streamingMipmapsActive: 0
@@ -211,7 +231,7 @@ QualitySettings:
     - Windows Store Apps
     - Standalone
     - XboxOne
-  - serializedVersion: 3
+  - serializedVersion: 5
     name: XboxOne
     pixelLightCount: 4
     shadows: 2
@@ -233,8 +253,13 @@ QualitySettings:
     realtimeReflectionProbes: 0
     billboardsFaceCameraPosition: 0
     useLegacyDetailDistribution: 1
+    adaptiveVsync: 0
     vSyncCount: 2
+    realtimeGICPUUsage: 50
+    adaptiveVsyncExtraA: 0
+    adaptiveVsyncExtraB: 0
     lodBias: 0.35
+    meshLodThreshold: 1
     maximumLODLevel: 1
     enableLODCrossFade: 1
     streamingMipmapsActive: 0
@@ -262,7 +287,7 @@ QualitySettings:
     - iPhone
     - Windows Store Apps
     - Standalone
-  - serializedVersion: 3
+  - serializedVersion: 5
     name: XboxOneX
     pixelLightCount: 4
     shadows: 2
@@ -284,8 +309,13 @@ QualitySettings:
     realtimeReflectionProbes: 0
     billboardsFaceCameraPosition: 0
     useLegacyDetailDistribution: 1
+    adaptiveVsync: 0
     vSyncCount: 2
+    realtimeGICPUUsage: 100
+    adaptiveVsyncExtraA: 0
+    adaptiveVsyncExtraB: 0
     lodBias: 0.5
+    meshLodThreshold: 1
     maximumLODLevel: 0
     enableLODCrossFade: 1
     streamingMipmapsActive: 0
@@ -315,6 +345,7 @@ QualitySettings:
     - Standalone
   m_TextureMipmapLimitGroupNames: []
   m_PerPlatformDefaultQuality:
+    Nintendo Switch 2: 5
     PS4: 1
     Server: 0
     Standalone: 0
