@@ -86,3 +86,5 @@ Thumbs.db
 *.pidb.meta
 *.pdb.meta
 *.mdb.meta
+
+/[Uu]ser[Ss]ettings/
