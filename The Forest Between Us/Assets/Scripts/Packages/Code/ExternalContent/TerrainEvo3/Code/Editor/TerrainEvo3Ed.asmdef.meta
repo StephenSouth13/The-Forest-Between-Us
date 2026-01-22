@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 998118dc4ed2e5946aa82ccd579a792d
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Code/ExternalContent/TerrainEvo3/Code/Editor/TerrainEvo3Ed.asmdef
+  uploadId: 569154

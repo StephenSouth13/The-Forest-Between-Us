@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 46cb374c32b116f49a106bc10d3a3037
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Scenes/Forest_EnvironmentSample/AmbientProbeData.asset
+  uploadId: 569154

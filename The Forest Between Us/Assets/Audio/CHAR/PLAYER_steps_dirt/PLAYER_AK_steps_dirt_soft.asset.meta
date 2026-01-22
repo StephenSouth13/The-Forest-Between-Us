@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4363eea5bbff252448df76c5b96f4723
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Audio/CHAR/PLAYER_steps_dirt/PLAYER_AK_steps_dirt_soft.asset
+  uploadId: 569154

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 8eac2547ffed516499ef5dcdb1541100
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Code/Editor/UIControllerEd.cs
+  uploadId: 569154

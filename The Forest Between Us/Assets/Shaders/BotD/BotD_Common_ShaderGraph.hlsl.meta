@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: da7a15d458d496c4191f007afbda1dda
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Shaders/BotD/BotD_Common_ShaderGraph.hlsl
+  uploadId: 569154

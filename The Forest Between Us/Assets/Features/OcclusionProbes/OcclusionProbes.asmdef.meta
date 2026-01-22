@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 6ac9bc9bf7a83144ba89950c79a24d46
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/OcclusionProbes/OcclusionProbes.asmdef
+  uploadId: 569154

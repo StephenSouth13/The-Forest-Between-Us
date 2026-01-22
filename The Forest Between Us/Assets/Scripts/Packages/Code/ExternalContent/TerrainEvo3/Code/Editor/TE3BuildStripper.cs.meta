@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: d2197e2fc13551b4282e892818a064f1
+timeCreated: 1517303714
+licenseType: Store
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Code/ExternalContent/TerrainEvo3/Code/Editor/TE3BuildStripper.cs
+  uploadId: 569154

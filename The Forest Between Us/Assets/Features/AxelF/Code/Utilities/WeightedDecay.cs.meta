@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 834798fa85858984faa7fdaf7ac253b2
+timeCreated: 1473750447
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/AxelF/Code/Utilities/WeightedDecay.cs
+  uploadId: 569154

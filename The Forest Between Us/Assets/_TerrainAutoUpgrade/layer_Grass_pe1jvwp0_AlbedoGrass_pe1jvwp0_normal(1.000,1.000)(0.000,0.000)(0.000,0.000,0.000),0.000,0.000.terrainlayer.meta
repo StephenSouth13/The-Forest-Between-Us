@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c22ca74ea1261df439332d0c12e4f1a3
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8574412962073106934
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/_TerrainAutoUpgrade/layer_Grass_pe1jvwp0_AlbedoGrass_pe1jvwp0_normal(1.000,1.000)(0.000,0.000)(0.000,0.000,0.000),0.000,0.000.terrainlayer
+  uploadId: 569154

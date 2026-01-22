@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: ab9e4e6f567129047a652683214e34ad
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/Gameplay/Code/PlayerInput.cs
+  uploadId: 569154

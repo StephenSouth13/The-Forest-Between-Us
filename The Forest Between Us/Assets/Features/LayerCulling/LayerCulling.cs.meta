@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 196cc44a40e47144eb024af3885f2c7b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: -100
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/LayerCulling/LayerCulling.cs
+  uploadId: 569154

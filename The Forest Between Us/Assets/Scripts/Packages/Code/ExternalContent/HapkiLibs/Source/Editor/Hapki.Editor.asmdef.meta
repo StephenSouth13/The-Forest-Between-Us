@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: f81a32d0b8483a64585c27146216cfd3
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Code/ExternalContent/HapkiLibs/Source/Editor/Hapki.Editor.asmdef
+  uploadId: 569154

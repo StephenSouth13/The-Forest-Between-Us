@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 6f3e63c4fdbbc0b4bb7b33b4f0b9a750
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/AxelF/VERSION.txt
+  uploadId: 569154

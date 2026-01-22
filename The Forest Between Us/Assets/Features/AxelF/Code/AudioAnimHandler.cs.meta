@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: f08587329cb95864fac3cae30d628975
+timeCreated: 1498504709
+licenseType: Store
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/AxelF/Code/AudioAnimHandler.cs
+  uploadId: 569154

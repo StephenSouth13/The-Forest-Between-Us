@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 77ee95d0efe8c6b4897c2190f5984cdb
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Audio/CHAR/PLAYER_steps_wood_coat/PLAYER_steps_wood_coat_jump/PLAYER_steps_wood_coat_jump.asset
+  uploadId: 569154

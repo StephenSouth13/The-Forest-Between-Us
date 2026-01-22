@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 27d1b7d0c13dc4a4e8aff08d8ab5c149
+timeCreated: 1495031746
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Audio/CHAR/PLAYER_breathing/PLAYER_breathing_fast/PLAYER_breathing_OUT_fast_plain_nose/PLAYER_breathing_OUT_fast_plain_nose.asset
+  uploadId: 569154

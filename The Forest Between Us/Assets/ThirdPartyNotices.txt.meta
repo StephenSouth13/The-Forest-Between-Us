@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0fd8c3cf7568c6246b9a6387d7287a1e
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/ThirdPartyNotices.txt
+  uploadId: 569154

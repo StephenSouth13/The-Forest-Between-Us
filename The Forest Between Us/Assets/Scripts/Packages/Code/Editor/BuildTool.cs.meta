@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 3fdf250f31f0bab46a9c7bcb9eb99c42
+timeCreated: 1517303714
+licenseType: Store
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Code/Editor/BuildTool.cs
+  uploadId: 569154

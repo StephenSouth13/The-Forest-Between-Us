@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: de9d6c82e38258c4e91601c43f9f5483
+timeCreated: 1474367139
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/AxelF/Editor/ImportSettingsEditor.cs
+  uploadId: 569154

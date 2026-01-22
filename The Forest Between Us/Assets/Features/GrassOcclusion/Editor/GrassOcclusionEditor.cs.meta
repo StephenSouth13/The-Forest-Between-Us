@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 749d5e7aba23d984fb9748dc29be4ed6
+timeCreated: 1506527950
+licenseType: Store
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/GrassOcclusion/Editor/GrassOcclusionEditor.cs
+  uploadId: 569154

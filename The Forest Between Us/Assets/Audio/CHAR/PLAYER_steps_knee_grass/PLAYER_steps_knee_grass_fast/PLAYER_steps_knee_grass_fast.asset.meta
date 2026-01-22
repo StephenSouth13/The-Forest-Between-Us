@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: e3241e01bc2002f4e9e3f7991768d0cf
+timeCreated: 1494579628
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Audio/CHAR/PLAYER_steps_knee_grass/PLAYER_steps_knee_grass_fast/PLAYER_steps_knee_grass_fast.asset
+  uploadId: 569154

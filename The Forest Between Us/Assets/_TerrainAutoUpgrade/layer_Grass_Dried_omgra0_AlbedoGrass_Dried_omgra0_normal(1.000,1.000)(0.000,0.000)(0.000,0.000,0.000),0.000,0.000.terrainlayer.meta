@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c547df5d24c96ea46ad92266bb4aa847
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8574412962073106934
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/_TerrainAutoUpgrade/layer_Grass_Dried_omgra0_AlbedoGrass_Dried_omgra0_normal(1.000,1.000)(0.000,0.000)(0.000,0.000,0.000),0.000,0.000.terrainlayer
+  uploadId: 569154

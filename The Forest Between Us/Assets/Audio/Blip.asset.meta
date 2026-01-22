@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8d7f84cf136069745a11486d7e0de091
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Audio/Blip.asset
+  uploadId: 569154

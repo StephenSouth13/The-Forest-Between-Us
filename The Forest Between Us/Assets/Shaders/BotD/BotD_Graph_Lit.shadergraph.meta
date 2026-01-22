@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: be07626d9cb737d49aef25821700e2fa
+ScriptedImporter:
+  fileIDToRecycleName:
+    4800000: MainAsset
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 625f186215c104763be7675aa2d941aa, type: 3}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Shaders/BotD/BotD_Graph_Lit.shadergraph
+  uploadId: 569154

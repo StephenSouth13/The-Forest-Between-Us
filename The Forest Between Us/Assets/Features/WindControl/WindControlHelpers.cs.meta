@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: cda2182f9c6e4374c99bd7055a97cb56
+timeCreated: 1515430886
+licenseType: Store
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/WindControl/WindControlHelpers.cs
+  uploadId: 569154

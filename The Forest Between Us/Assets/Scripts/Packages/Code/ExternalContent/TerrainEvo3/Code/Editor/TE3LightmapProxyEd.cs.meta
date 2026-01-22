@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 4ad9d790125b6194e9f24897d0ebd4eb
+timeCreated: 1505593325
+licenseType: Store
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Code/ExternalContent/TerrainEvo3/Code/Editor/TE3LightmapProxyEd.cs
+  uploadId: 569154

@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 153886a04fe81c64fb488a2fdc6018f2
+timeCreated: 1475132876
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Features/AxelF/Editor/MinMaxDrawer.cs
+  uploadId: 569154

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: e3ce1fd3f0653e04f97519454ed956a5
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Code/ExternalContent/HapkiLibs/Source/Interpolation/Hapki.Interpolation.cs
+  uploadId: 569154

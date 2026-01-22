@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 32a584ca35cc3c4409ec433d19fe1a64
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 6475696996188705980
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Scenes/Master/LightingData.asset
+  uploadId: 569154
