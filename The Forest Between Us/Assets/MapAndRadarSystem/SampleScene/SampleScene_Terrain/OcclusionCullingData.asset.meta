@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f20b91d5594694648ab0e6c21be0811d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 36300000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 312078
+  packageName: Easy Map, Radar and Navigation System for Both Mobile and PC Games
+  packageVersion: 1.2
+  assetPath: Assets/MapAndRadarSystem/SampleScene/SampleScene_Terrain/OcclusionCullingData.asset
+  uploadId: 847106

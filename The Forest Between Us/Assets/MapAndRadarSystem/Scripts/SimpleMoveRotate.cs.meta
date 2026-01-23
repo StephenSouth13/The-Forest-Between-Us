@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 11248534964a273448fd4b2981468951
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 312078
+  packageName: Easy Map, Radar and Navigation System for Both Mobile and PC Games
+  packageVersion: 1.2
+  assetPath: Assets/MapAndRadarSystem/Scripts/SimpleMoveRotate.cs
+  uploadId: 847106

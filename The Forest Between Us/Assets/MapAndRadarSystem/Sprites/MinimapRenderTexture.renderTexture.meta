@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: debb108f6340b034e92de860d7026765
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 312078
+  packageName: Easy Map, Radar and Navigation System for Both Mobile and PC Games
+  packageVersion: 1.2
+  assetPath: Assets/MapAndRadarSystem/Sprites/MinimapRenderTexture.renderTexture
+  uploadId: 847106

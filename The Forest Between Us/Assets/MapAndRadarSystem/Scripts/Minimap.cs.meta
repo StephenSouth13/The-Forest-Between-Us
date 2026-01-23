@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: e9615f8db4e1632459a0939ee8640b3f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 312078
+  packageName: Easy Map, Radar and Navigation System for Both Mobile and PC Games
+  packageVersion: 1.2
+  assetPath: Assets/MapAndRadarSystem/Scripts/Minimap.cs
+  uploadId: 847106

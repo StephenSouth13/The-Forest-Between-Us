@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 419a157d979be8247a298e4d30b2c551
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8574412962073106934
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 312078
+  packageName: Easy Map, Radar and Navigation System for Both Mobile and PC Games
+  packageVersion: 1.2
+  assetPath: Assets/MapAndRadarSystem/Materials and Textures/Terrain/Layer1.terrainlayer
+  uploadId: 847106

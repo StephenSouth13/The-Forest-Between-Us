@@ -88,3 +88,4 @@ Thumbs.db
 *.mdb.meta
 
 /[Uu]ser[Ss]ettings/
+.fake

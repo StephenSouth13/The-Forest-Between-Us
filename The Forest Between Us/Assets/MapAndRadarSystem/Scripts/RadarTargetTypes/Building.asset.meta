@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 43a6d6fed17d31b4fb704e3df6965408
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 312078
+  packageName: Easy Map, Radar and Navigation System for Both Mobile and PC Games
+  packageVersion: 1.2
+  assetPath: Assets/MapAndRadarSystem/Scripts/RadarTargetTypes/Building.asset
+  uploadId: 847106

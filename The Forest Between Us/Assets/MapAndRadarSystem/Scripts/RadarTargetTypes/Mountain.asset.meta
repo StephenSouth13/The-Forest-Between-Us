@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6b998b768c912e8468592920840b0b64
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 312078
+  packageName: Easy Map, Radar and Navigation System for Both Mobile and PC Games
+  packageVersion: 1.2
+  assetPath: Assets/MapAndRadarSystem/Scripts/RadarTargetTypes/Mountain.asset
+  uploadId: 847106

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 56fa906e1d19e2f44997d7cccacae1fb
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 312078
+  packageName: Easy Map, Radar and Navigation System for Both Mobile and PC Games
+  packageVersion: 1.2
+  assetPath: Assets/MapAndRadarSystem/Prefabs/Building.prefab
+  uploadId: 847106

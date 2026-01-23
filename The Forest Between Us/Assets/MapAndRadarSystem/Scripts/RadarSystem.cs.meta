@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: f91caebec4a3a4dfdad9a3fba75a4b8b
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 312078
+  packageName: Easy Map, Radar and Navigation System for Both Mobile and PC Games
+  packageVersion: 1.2
+  assetPath: Assets/MapAndRadarSystem/Scripts/RadarSystem.cs
+  uploadId: 847106

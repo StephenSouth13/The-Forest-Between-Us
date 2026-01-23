@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 2e14b3bcbb9e1a04cadef12390838914
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 312078
+  packageName: Easy Map, Radar and Navigation System for Both Mobile and PC Games
+  packageVersion: 1.2
+  assetPath: Assets/MapAndRadarSystem/Prefabs/Tank.prefab
+  uploadId: 847106

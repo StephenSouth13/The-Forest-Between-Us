@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 039f9b0930d147546ab57b402ddcaf4f
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 312078
+  packageName: Easy Map, Radar and Navigation System for Both Mobile and PC Games
+  packageVersion: 1.2
+  assetPath: Assets/MapAndRadarSystem/Prefabs/Door.prefab
+  uploadId: 847106

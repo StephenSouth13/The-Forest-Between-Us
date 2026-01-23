@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 888e023d5f2a55843a103d6ca3496b2c
+timeCreated: 1433780145
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 312078
+  packageName: Easy Map, Radar and Navigation System for Both Mobile and PC Games
+  packageVersion: 1.2
+  assetPath: Assets/MapAndRadarSystem/SampleScene/SampleScene_Terrain.unity
+  uploadId: 847106

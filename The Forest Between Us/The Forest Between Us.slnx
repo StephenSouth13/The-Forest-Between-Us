@@ -1,0 +1,26 @@
+﻿<Solution>
+  <Project Path="TerrainFoley.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="AxelF.Editor.csproj" />
+  <Project Path="Hapki.csproj" />
+  <Project Path="PropertyMaster.csproj" />
+  <Project Path="TerrainEvo3Ed.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="OcclusionProbes.csproj" />
+  <Project Path="Gameplay.csproj" />
+  <Project Path="AxelF.csproj" />
+  <Project Path="TerrainEvo3.csproj" />
+  <Project Path="Hapki.Interpolation.csproj" />
+  <Project Path="Hapki.Playables.csproj" />
+  <Project Path="DepthOfFieldAutoFocus.csproj" />
+  <Project Path="WindControl.csproj" />
+  <Project Path="StaggeredCascade.csproj" />
+  <Project Path="Hapki.Editor.csproj" />
+  <Project Path="WindControlEd.csproj" />
+  <Project Path="Gameplay.Editor.csproj" />
+  <Project Path="PropertyMaster.Editor.csproj" />
+  <Project Path="OcclusionProbesEditor.csproj" />
+  <Project Path="LayerCulling.csproj" />
+  <Project Path="Hapki.Solvers.csproj" />
+  <Project Path="Hapki.Spatial.csproj" />
+</Solution>
