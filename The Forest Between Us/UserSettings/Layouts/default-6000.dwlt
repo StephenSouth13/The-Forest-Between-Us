@@ -353,7 +353,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 43.2
+    y: 0
     width: 1536
     height: 36
   m_SerializedDataModeController:
@@ -619,8 +619,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1078.4
-    y: 79.200005
+    x: 1
+    y: 24
     width: 456.59998
     height: 451.6
   m_SerializedDataModeController:
@@ -671,8 +671,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Hierarchy\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 864.8
-    y: 79.200005
+    x: 865.8
+    y: 24
     width: 211.60004
     height: 431.6
   m_SerializedDataModeController:
@@ -691,10 +691,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs:
-      - m_Data: 64998
+      m_SelectedIDs: []
       m_LastClickedID:
-        m_Data: 64998
+        m_Data: 0
       m_ExpandedIDs:
       - m_Data: -1314
       - m_Data: 58896
@@ -749,7 +748,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 79.200005
+    y: 24
     width: 863.8
     height: 431.6
   m_SerializedDataModeController:
@@ -1310,7 +1309,7 @@ MonoBehaviour:
   m_Position:
     m_Target: {x: -209, y: 198.39, z: -197}
     speed: 2
-    m_Value: {x: -208.99895, y: 198.3898, z: -196.99951}
+    m_Value: {x: -209, y: 198.39, z: -197}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1348,7 +1347,7 @@ MonoBehaviour:
       m_Fade:
         m_Target: 0
         speed: 2
-        m_Value: 1
+        m_Value: 0
       m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 0.4}
       m_Pivot: {x: 0, y: 0, z: 0}
       m_Size: {x: 1, y: 1}
@@ -1358,11 +1357,11 @@ MonoBehaviour:
   m_Rotation:
     m_Target: {x: -0.08717229, y: 0.89959055, z: -0.21045254, w: -0.3726226}
     speed: 2
-    m_Value: {x: 0, y: 0, z: 0, w: 1}
+    m_Value: {x: -0.08717229, y: 0.89959055, z: -0.21045254, w: -0.3726226}
   m_Size:
     m_Target: 12.124355
     speed: 2
-    m_Value: 12.124938
+    m_Value: 12.124355
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1419,7 +1418,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 536.8
+    y: 481.6
     width: 1077.4
     height: 233.19998
   m_SerializedDataModeController:
@@ -1666,8 +1665,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Game\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1078.4
-    y: 556.8
+    x: 1
+    y: 501.6
     width: 456.59998
     height: 213.19998
   m_SerializedDataModeController:
