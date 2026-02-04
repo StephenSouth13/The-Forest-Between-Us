@@ -8,7 +8,7 @@ public class InventoryManager : MonoBehaviour
     void Start()
     {
         // Nó sẽ tự động chui vào cái Grid và lấy hết 12 ô bỏ vào danh sách
-        // Bạn không cần kéo thả bằng tay từng ô nữa!
+        // Bạn không cần kéo thả bằng tay từng ô nữa! Team cần đưa ra chỉnh sửa thì cũng dễ hơn
         allSlots.AddRange(GetComponentsInChildren<InventorySlot>());
     }
 
