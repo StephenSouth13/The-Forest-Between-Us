@@ -1,25 +1,49 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // Nếu bạn dùng TextMeshPro cho đẹp
+using TMPro;
 
 public class InventorySlot : MonoBehaviour
 {
-    public Image iconDisplay;       // Kéo cái Image con (nơi hiện ảnh vật phẩm) vào đây
-    public TextMeshProUGUI countText; // Kéo cái chữ hiện số lượng vào đây
+    [Header("UI References")]
+    public Image iconDisplay;       // Kéo Image con vào đây
+    public TextMeshProUGUI countText; // Kéo TextMeshPro con vào đây
 
-    // Hàm này để "vẽ" vật phẩm lên ô rương
+    [Header("Data")]
+    private ItemData currentItem;   // Lưu dữ liệu món đồ đang giữ
+    private int currentCount;       // Lưu số lượng hiện tại
+
+    // Hàm cập nhật dữ liệu và hiển thị cho ô rương
     public void UpdateSlot(ItemData item, int amount)
     {
+        currentItem = item;
+        currentCount = amount;
+
         if (item != null)
         {
-            iconDisplay.sprite = item.icon; // Đổi ảnh ô rương thành ảnh vật phẩm
+            iconDisplay.sprite = item.icon; 
             iconDisplay.enabled = true;
-            countText.text = (amount > 1) ? amount.ToString() : ""; // Hiện số nếu > 1
+            
+            // Chỉ hiện số lượng nếu món đồ có thể cộng dồn và số lượng > 1
+            countText.text = (item.isStackable && amount > 1) ? amount.ToString() : "";
         }
         else
         {
-            iconDisplay.enabled = false; // Ô trống thì ẩn ảnh đi
-            countText.text = "";
+            ClearSlot();
         }
     }
+
+    // Hàm xóa trống ô rương
+    public void ClearSlot()
+    {
+        currentItem = null;
+        currentCount = 0;
+        iconDisplay.enabled = false;
+        iconDisplay.sprite = null;
+        countText.text = "";
+    }
+
+    // --- Các hàm hỗ trợ cho InventoryManager ---
+    public bool IsEmpty() => currentItem == null;
+    public ItemData GetItem() => currentItem;
+    public int GetCount() => currentCount;
 }
