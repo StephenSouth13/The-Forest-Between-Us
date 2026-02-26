@@ -32,7 +32,7 @@ public class EnemyMovement : MonoBehaviour
             Time.deltaTime * 5f
         );
     }
-    public bool ReachedDestination()
+    public bool ReachedDestination() // Kiểm tra nếu kẻ địch đã đến đích
     {
         if(!agent.enabled) return true;
         if (!agent.pathPending)

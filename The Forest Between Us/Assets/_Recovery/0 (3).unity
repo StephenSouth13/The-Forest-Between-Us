@@ -315,7 +315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.ProbeVolumePerSceneData
   serializedBakingSet: {fileID: 0}
-  sceneGUID: 1a64b8036fb622e458dbaf958b484a3e
+  sceneGUID: e63dbccc8155120469dc17989516bdcf
   obsoleteAsset: {fileID: 0}
   obsoleteCellSharedDataAsset: {fileID: 0}
   obsoleteCellSupportDataAsset: {fileID: 0}
@@ -678,7 +678,6 @@ MonoBehaviour:
   awarenessLevel: 0
   awarenessIncreaseRate: 0.3
   awarenessDecreaseRate: 0.2
-  distanceExponent: 3
   lastSeenPosition: {x: 0, y: 0, z: 0}
   lockAwareness: 0
 --- !u!114 &626556611
@@ -708,20 +707,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAIController
   enemyMovement: {fileID: 0}
   enemyPerception: {fileID: 0}
-  stateMachine: {fileID: 0}
   lastSeenPosition: {x: 0, y: 0, z: 0}
---- !u!114 &626556614
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 626556607}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 173a106fc8fb4674c9c42ed64cd6a91c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyStateMachine
 --- !u!1 &722374534
 GameObject:
   m_ObjectHideFlags: 0
@@ -1293,10 +1279,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3680066674703502588, guid: d29a97bc4d67bb24fa4ca76f8a9177fc,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 626556614}
-    - targetCorrespondingSourceObject: {fileID: 3680066674703502588, guid: d29a97bc4d67bb24fa4ca76f8a9177fc,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 626556609}
     - targetCorrespondingSourceObject: {fileID: 1865723851081334376, guid: d29a97bc4d67bb24fa4ca76f8a9177fc,
         type: 3}
@@ -1737,7 +1719,7 @@ PrefabInstance:
     - target: {fileID: 7085052445619132129, guid: d29a97bc4d67bb24fa4ca76f8a9177fc,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 55.27
+      value: 60.07
       objectReference: {fileID: 0}
     - target: {fileID: 7085052445619132129, guid: d29a97bc4d67bb24fa4ca76f8a9177fc,
         type: 3}
@@ -1747,7 +1729,7 @@ PrefabInstance:
     - target: {fileID: 7085052445619132129, guid: d29a97bc4d67bb24fa4ca76f8a9177fc,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 24.39
+      value: 21.892
       objectReference: {fileID: 0}
     - target: {fileID: 7085052445619132129, guid: d29a97bc4d67bb24fa4ca76f8a9177fc,
         type: 3}
