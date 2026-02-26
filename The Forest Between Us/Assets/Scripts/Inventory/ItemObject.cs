@@ -1,19 +1,18 @@
+//D:\VTC_Academy\game3d\The-Forest-Between-Us\The Forest Between Us\Assets\Scripts\Inventory\Interactable.cs
 using UnityEngine;
 
-public class ItemObject : MonoBehaviour, IInteractable
+public class ItemObject : MonoBehaviour, Interactable
 {
     [Header("Item Configuration")]
     public ItemData itemData; // Kéo file ScriptableObject (ItemData) tương ứng vào đây
-    public int amount = 1;    // Số lượng sẽ nhận được khi nhặt
+    public int amount = 1;        // Số lượng sẽ nhận được khi nhặt
 
-    // Trả về tên món đồ để hiện lên màn hình thông báo (Prompt Text)
+    // Trả về tên
     public string GetInteractPrompt()
     {
-        if (itemData == null) return "Vật phẩm lỗi";
+        if (itemData == null) return "Error Item";
         return itemData.itemName;
     }
-
-    // Hàm này được gọi từ InteractionManager khi người chơi nhấn phím [F]
     public void OnInteract()
     {
         if (itemData == null) return;
