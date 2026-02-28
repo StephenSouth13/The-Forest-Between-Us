@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyAIController : MonoBehaviour
@@ -16,7 +17,14 @@ public class EnemyAIController : MonoBehaviour
     public ChaseState chaseState;
 
     bool wasChasing = false;
-    public Vector3 lastSeenPosition;
+    public Vector3 lastSeenPosition
+    {
+        get { return enemyPerception.lastSeenPosition; }
+    }
+    public float awareness 
+    {
+        get { return enemyPerception.awarenessLevel; }
+    }
 
     // [Header("Patrol Settings")]
     // public float patrolRadius = 5f;
@@ -39,11 +47,24 @@ public class EnemyAIController : MonoBehaviour
     {
         HandleTransitions();
         stateMachine.UpdateState();
-
     }
     void HandleTransitions()
     {
         float awareness = enemyPerception.awarenessLevel;
+
+        //
+        if(stateMachine.currentState == searchState)
+        {
+            if(!searchState.IsSearchComplete)
+            {
+                if(awareness >= 1f)
+                {
+                    stateMachine.ChangeState(chaseState);
+                }
+                return; // Không cho phép chuyển trạng thái khác khi đang trong SearchState và chưa hoàn thành tìm kiếm
+            }
+        }
+        //
         if(awareness >= 1f)
         {
             stateMachine.ChangeState(chaseState);
@@ -63,6 +84,10 @@ public class EnemyAIController : MonoBehaviour
         {
             stateMachine.ChangeState(patrolState);
         }
+    }
+    public void ForcePatrol()
+    {
+        stateMachine.ChangeState(patrolState);
     }
 }
 // using UnityEngine;

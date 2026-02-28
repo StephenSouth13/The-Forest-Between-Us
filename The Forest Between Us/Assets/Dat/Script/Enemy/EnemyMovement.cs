@@ -32,19 +32,25 @@ public class EnemyMovement : MonoBehaviour
             Time.deltaTime * 5f
         );
     }
-    public bool ReachedDestination() // Kiểm tra nếu kẻ địch đã đến đích
+// hàm này có thể dùng để kiểm tra nếu đã đến điểm cuối cùng của đường đi, không phải chỉ là điểm dừng hiện tại
+    public bool ReachedDestination()
     {
-        if(!agent.enabled) return true;
-        if (!agent.pathPending)
+        if (!agent.enabled) return true;
+
+        // Nếu agent chưa tính xong path thì chưa coi là đến
+        if (agent.pathPending) return false;
+
+        // Nếu khoảng cách còn lại nhỏ hơn hoặc bằng stoppingDistance
+        if (agent.remainingDistance <= agent.stoppingDistance)
         {
-            if (agent.remainingDistance <= agent.stoppingDistance)
+            // Nếu agent không còn path hoặc tốc độ rất nhỏ (gần như đứng yên)
+            if (!agent.hasPath || agent.velocity.magnitude < 0.1f)
             {
-                if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
-                {
-                    return true;
-                }
+                return true;
             }
         }
+
         return false;
     }
+
 }

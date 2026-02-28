@@ -25,6 +25,7 @@ public class EnemyStateMachine : MonoBehaviour
     {
         if(currentState != null)
         {
+            Debug.Log("Current State: " + currentState.GetType().Name);
             currentState.Update();
         }
     }

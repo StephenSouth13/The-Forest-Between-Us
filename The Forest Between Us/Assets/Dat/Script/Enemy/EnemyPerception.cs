@@ -8,15 +8,15 @@ public class EnemyPerception : MonoBehaviour
     [Header("Vision Settings")]
     public float detectionRange = 15f; // Khoảng cách tầm nhìn
     [Range(0, 180)]
-    public float fieldOfViewAngle = 120f; // Góc tầm nhìn
+    public float fieldOfViewAngle = 100f; // Góc tầm nhìn
     public Transform visionOrigin; // Điểm xuất phát tầm nhìn (thường là vị trí mắt kẻ địch)
 
     [Header("Awareness Settings")]
     public float awarenessLevel = 0f; // Mức độ nhận thức hiện tại
-    public float awarenessIncreaseRate = 1.2f; // Tốc độ tăng mức độ nhận thức khi thấy mục tiêu
+    public float awarenessIncreaseRate = 3f; // Tốc độ tăng mức độ nhận thức khi thấy mục tiêu
     public float awarenessDecreaseRate = 0.2f; // Tốc độ giảm mức độ nhận thức khi không thấy mục tiêu
     [Header("Distance Scaling")]
-    public float distanceExponent = 3f; // Hệ số mũ để điều chỉnh ảnh hưởng của khoảng cách đến mức độ nhận thức
+    public float distanceExponent = 1.5f; // Hệ số mũ để điều chỉnh ảnh hưởng của khoảng cách đến mức độ nhận thức
 
     [Header("RunTime Variables")]
     public Vector3 lastSeenPosition; // Vị trí cuối cùng biết của mục tiêu
@@ -34,12 +34,30 @@ public class EnemyPerception : MonoBehaviour
         {
             float distance = Vector3.Distance(visionOrigin.position, player.position);
             // Tăng mức độ nhận thức dựa trên khoảng cách (gần hơn thì tăng nhanh hơn)
-            float distanceFactor = 1f - (distance / detectionRange); // Tỷ lệ khoảng cách (0 khi ở rìa, 1 khi ở gần)
-            distanceFactor = Mathf.Clamp01(distanceFactor); // Đảm bảo giá trị trong khoảng 0-1
-            distanceFactor = Mathf.Pow(distanceFactor, distanceExponent); // Điều chỉnh bằng hệ số mũ để tăng cường ảnh hưởng của khoảng cách
-            float scaledIncrease = awarenessIncreaseRate * distanceFactor; // Tăng tốc độ nhận thức khi gần hơn
-            awarenessLevel += scaledIncrease * Time.deltaTime; 
-            lastSeenPosition = player.position; // Cập nhật vị trí cuối cùng biết của mục tiêu
+            if(distance < detectionRange * 0.4f) // Nếu rất gần cố định mức độ nhận thức ở 1
+            {
+                awarenessLevel = 1f;
+                lastSeenPosition = player.position; // Cập nhật vị trí cuối cùng biết của mục
+            }
+            else if(distance < detectionRange * 0.8f) // Nếu ở khoảng giữa thì tăng mức độ nhận thức hẳn lên 0.3 rồi tăng tiếp dựa vào tuyen tính khoảng cách
+            {
+                awarenessLevel = Mathf.Max(awarenessLevel, 0.3f); // Đảm bảo mức độ nhận thức ít nhất là 0.3 khi ở khoảng này
+                float distanceFactor = 1f - ((distance - detectionRange * 0.4f) / (detectionRange * 0.35f)); // Tỷ lệ khoảng cách trong khoảng giữa (0 khi ở rìa, 1 khi ở gần)
+                distanceFactor = Mathf.Clamp01(distanceFactor); // Đảm bảo giá trị trong khoảng 0-1
+                distanceFactor = Mathf.Pow(distanceFactor, distanceExponent); // Điều chỉnh bằng hệ số mũ để tăng cường ảnh hưởng của khoảng cách
+                float scaledIncrease = awarenessIncreaseRate * distanceFactor; // Tăng tốc độ nhận thức khi gần hơn
+                awarenessLevel += scaledIncrease * Time.deltaTime; 
+                lastSeenPosition = player.position; // Cập nhật vị trí cuối cùng biết của mục tiêu
+            }
+            else
+            {
+                float distanceFactor = 1f - (distance / detectionRange); // Tỷ lệ khoảng cách (0 khi ở rìa, 1 khi ở gần)
+                distanceFactor = Mathf.Clamp01(distanceFactor); // Đảm bảo giá trị trong khoảng 0-1
+                distanceFactor = Mathf.Pow(distanceFactor, distanceExponent); // Điều chỉnh bằng hệ số mũ để tăng cường ảnh hưởng của khoảng cách
+                float scaledIncrease = awarenessIncreaseRate * distanceFactor; // Tăng tốc độ nhận thức khi gần hơn
+                awarenessLevel += scaledIncrease * Time.deltaTime; 
+                lastSeenPosition = player.position; // Cập nhật vị trí cuối cùng biết của mục tiêu
+            }
         }
         else
         {
@@ -54,12 +72,12 @@ public class EnemyPerception : MonoBehaviour
 
         Vector3 toPlayer = player.position - visionOrigin.position;
         float distance = toPlayer.magnitude; // magnitude trả về độ dài vector
-        if(distance > detectionRange) return false;
+        if(distance > detectionRange) return false; // Nếu ngoài tầm nhìn thì không cần kiểm tra góc
         toPlayer.Normalize(); // Chuẩn hóa vector để chỉ giữ hướng
         Vector3 forward = visionOrigin.forward; // forward là hướng nhìn về phía trước của transform
         forward.Normalize();
         float angle = Vector3.Angle(forward, toPlayer); // Tính góc giữa hai vector
-        if(angle > fieldOfViewAngle) return false;
+        if(angle > fieldOfViewAngle * 0.5f) return false; // Nếu ngoài góc nhìn thì không thấy
         return true;
     }
     void OnDrawGizmosSelected()
