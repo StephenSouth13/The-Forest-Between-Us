@@ -21,7 +21,8 @@ public class EnemyPerception : MonoBehaviour
     [Header("RunTime Variables")]
     public Vector3 lastSeenPosition; // Vị trí cuối cùng biết của mục tiêu
     public bool lockAwareness = false; // Khóa mức độ nhận thức // bật khi chaseState
-
+    [Header("Vision Obstacle")]
+    public LayerMask obstacleMask;
     void Update()
     {
         if(lockAwareness)

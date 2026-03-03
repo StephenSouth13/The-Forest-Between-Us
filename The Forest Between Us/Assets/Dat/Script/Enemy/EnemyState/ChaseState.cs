@@ -2,8 +2,26 @@ using UnityEngine;
 
 public class ChaseState : EnemyState
 {
-    public ChaseState(EnemyAIController controller) : base(controller){}
-
+    EnemyMovement movement;
+    public ChaseState(EnemyAIController controller) : base(controller)
+    {
+        movement = controller.GetComponent<EnemyMovement>();
+    }
+    public override void Enter()
+    {
+        Debug.Log("Entering Chase State");
+    }
+    public override void Update()
+    {
+        Vector3 target = controller.TargetPosition;
+        movement.MoveTo(target);
+        movement.RotateTowards(target);
+    }
+    public override void Exit()
+    {
+        Debug.Log("Exiting Chase State");
+        movement.StopMovement();
+    }
     
     // public override void Enter()
     // {

@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1504
     height: 912
   m_ShowMode: 4
-  m_Title: Inspector
+  m_Title: Scene
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -120,7 +120,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 112}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 99
+  controlID: 51
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 112}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 100
+  controlID: 52
   draggingID: 0
 --- !u!114 &7
 MonoBehaviour:
@@ -228,7 +228,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 112}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 148
+  controlID: 93
   draggingID: 0
 --- !u!114 &10
 MonoBehaviour:
@@ -249,8 +249,8 @@ MonoBehaviour:
     y: 0
     width: 508.6667
     height: 470
-  m_MinSize: {x: 202, y: 226}
-  m_MaxSize: {x: 4002, y: 4026}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 20}
   m_Panes:
   - {fileID: 20}
@@ -301,8 +301,8 @@ MonoBehaviour:
     y: 0
     width: 388.66663
     height: 856
-  m_MinSize: {x: 276, y: 76}
-  m_MaxSize: {x: 4001, y: 4026}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 22}
   m_Panes:
   - {fileID: 22}
@@ -832,12 +832,12 @@ MonoBehaviour:
       displayed: 1
       id: unity-transform-toolbar
       index: 2
-      contents: '{"m_Layout":2,"m_Collapsed":false,"m_Folded":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":-292.6666564941406,"y":-400.0},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":3,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
+      contents: '{"m_Layout":2,"m_Collapsed":false,"m_Folded":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":-292.6666564941406,"y":0.0},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":1,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
       floating: 0
       collapsed: 0
-      snapOffset: {x: -292.66666, y: -400}
+      snapOffset: {x: -292.66666, y: 0}
       snapOffsetDelta: {x: 0, y: 0}
-      snapCorner: 3
+      snapCorner: 1
       layout: 2
       size: {x: 0, y: 0}
       sizeOverridden: 0
@@ -1318,9 +1318,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 54.96823, y: 0.6375474, z: 22.550438}
+    m_Target: {x: 56.627678, y: -0.41705045, z: 22.973541}
     speed: 2
-    m_Value: {x: 54.96823, y: 0.6375474, z: 22.550438}
+    m_Value: {x: 56.627678, y: -0.41705045, z: 22.973541}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1366,13 +1366,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+    m_Target: {x: 0.3028364, y: 0.6774691, z: -0.36484262, w: 0.5623322}
     speed: 2
-    m_Value: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+    m_Value: {x: 0.30190933, y: 0.67839533, z: -0.36446673, w: 0.56195617}
   m_Size:
-    m_Target: 6.1509995
+    m_Target: 3.0748942
     speed: 2
-    m_Value: 6.1509995
+    m_Value: 3.0748942
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -2071,24 +2071,17 @@ MonoBehaviour:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs:
-      - m_Data: 59636
+      - m_Data: 1064
       m_LastClickedID:
-        m_Data: 59636
+        m_Data: 0
       m_ExpandedIDs:
-      - m_Data: -1446
-      - m_Data: -1444
-      - m_Data: -1440
-      - m_Data: -1356
-      - m_Data: -1352
-      - m_Data: -1348
-      - m_Data: -1304
       - m_Data: -1298
-      - m_Data: 59666
-      - m_Data: 59710
+      - m_Data: 59664
+      - m_Data: 59712
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
+        m_Name: CinemachineCamera (1)
+        m_OriginalName: CinemachineCamera (1)
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
@@ -2096,10 +2089,10 @@ MonoBehaviour:
           width: 0
           height: 0
         m_UserData:
-          m_Data: 0
+          m_Data: 59686
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 11
+        m_OriginalEventType: 0
         m_IsRenamingFilename: 0
         m_TrimLeadingAndTrailingWhitespace: 0
         m_ClientGUIView: {fileID: 10}
@@ -2160,7 +2153,7 @@ MonoBehaviour:
     m_SkipHidden: 1
     m_SearchArea: 1
     m_Folders:
-    - Assets/Dat/Script/Enemy
+    - Assets/Dat/Script/Enemy/EnemyState
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -2170,21 +2163,20 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 75
   m_LastFolders:
-  - Assets/Dat/Script/Enemy
+  - Assets/Dat/Script/Enemy/EnemyState
   m_LastFoldersGridSize: 75
   m_LastProjectPath: C:\Dev_Dat\The-Forest-Between-Us\The Forest Between Us
   m_LockTracker:
     m_IsLocked: 1
   m_LastLocalAssetsSearchArea: 1
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 180}
+    scrollPos: {x: 0, y: 120}
     m_SelectedIDs:
-    - m_Data: 60438
+    - m_Data: 60784
     m_LastClickedID:
-      m_Data: 60438
+      m_Data: 60784
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 60396
     - m_Data: 60398
     - m_Data: 60400
     - m_Data: 60402
@@ -2206,6 +2198,7 @@ MonoBehaviour:
     - m_Data: 60434
     - m_Data: 60436
     - m_Data: 60438
+    - m_Data: 60440
     - m_Data: 1000000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -2239,7 +2232,6 @@ MonoBehaviour:
       m_Data: 0
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 60396
     - m_Data: 60398
     - m_Data: 60400
     - m_Data: 60402
@@ -2261,6 +2253,7 @@ MonoBehaviour:
     - m_Data: 60434
     - m_Data: 60436
     - m_Data: 60438
+    - m_Data: 60440
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2288,14 +2281,15 @@ MonoBehaviour:
       m_ResourceFile: 
   m_ListAreaState:
     m_SelectedInstanceIDs:
-    - m_Data: 59636
-    m_LastClickedInstanceID: 59636
-    m_HadKeyboardFocusLastEvent: 1
+    - m_Data: 1064
+    m_LastClickedInstanceID: 1064
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs:
     - m_Data: 58646
     - m_Data: 59142
     - m_Data: 57958
     - m_Data: 83974
+    - m_Data: 67306
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

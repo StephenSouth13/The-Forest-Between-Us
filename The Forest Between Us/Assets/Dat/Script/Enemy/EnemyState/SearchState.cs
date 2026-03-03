@@ -17,7 +17,7 @@ public class SearchState : EnemyState
     public override void Enter()
     {
         IsSearchComplete = false; 
-        targetPosition = controller.lastSeenPosition;
+        targetPosition = controller.TargetPosition; // Lấy vị trí cuối cùng của người chơi từ EnemyAIController
         Debug.Log("Enter Search");
         reachedPoint = false;
         searchTime = 0f;

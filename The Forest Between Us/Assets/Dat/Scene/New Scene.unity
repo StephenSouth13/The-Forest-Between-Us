@@ -675,6 +675,9 @@ MonoBehaviour:
   distanceExponent: 3
   lastSeenPosition: {x: 0, y: 0, z: 0}
   lockAwareness: 0
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &626556611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -703,6 +706,7 @@ MonoBehaviour:
   enemyMovement: {fileID: 0}
   enemyPerception: {fileID: 0}
   stateMachine: {fileID: 0}
+  attackRange: 1.5
 --- !u!114 &626556614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -873,8 +877,8 @@ MonoBehaviour:
   Lookahead:
     Enabled: 1
     Time: 0
-    Smoothing: 0
-    IgnoreY: 0
+    Smoothing: 30
+    IgnoreY: 1
 --- !u!114 &765863884
 MonoBehaviour:
   m_ObjectHideFlags: 0

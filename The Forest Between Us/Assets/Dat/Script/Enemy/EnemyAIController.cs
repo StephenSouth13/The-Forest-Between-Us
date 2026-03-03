@@ -15,7 +15,9 @@ public class EnemyAIController : MonoBehaviour
     public SuspiciousState suspiciousState;
     public SearchState searchState;
     public ChaseState chaseState;
-
+    public AttackState attackState;
+    [Header("Attack State")]
+    public float attackRange = 1.5f;
     bool wasChasing = false;
     public Vector3 lastSeenPosition
     {
@@ -25,7 +27,30 @@ public class EnemyAIController : MonoBehaviour
     {
         get { return enemyPerception.awarenessLevel; }
     }
+    public Vector3 TargetPosition
+    {
+        get
+        {
+            if (enemyPerception.player == null)
+                return transform.position;
 
+            return enemyPerception.player.position;
+        }
+    }
+    public bool IsPlayerInAttackRange
+    {
+        get
+        {
+            if (enemyPerception.player == null) return false;
+
+            float dist = Vector3.Distance(
+                transform.position,
+                enemyPerception.player.position
+            );
+
+            return dist <= attackRange;
+        }
+    }
     // [Header("Patrol Settings")]
     // public float patrolRadius = 5f;
 
@@ -35,6 +60,7 @@ public class EnemyAIController : MonoBehaviour
         suspiciousState = new SuspiciousState(this);
         searchState = new SearchState(this);
         chaseState = new ChaseState(this);
+        attackState = new AttackState(this);
         stateMachine = GetComponent<EnemyStateMachine>();
         enemyMovement = GetComponent<EnemyMovement>();
         enemyPerception = GetComponent<EnemyPerception>();
@@ -51,7 +77,12 @@ public class EnemyAIController : MonoBehaviour
     void HandleTransitions()
     {
         float awareness = enemyPerception.awarenessLevel;
-
+        // ưu tiên attackState cao nhất
+        if(awareness >= 1f && IsPlayerInAttackRange)
+        {
+            stateMachine.ChangeState(attackState);
+            return; // Không cho phép chuyển trạng thái khác khi đã vào AttackState
+        }
         //
         if(stateMachine.currentState == searchState)
         {
@@ -89,6 +120,7 @@ public class EnemyAIController : MonoBehaviour
     {
         stateMachine.ChangeState(patrolState);
     }
+
 }
 // using UnityEngine;
 
