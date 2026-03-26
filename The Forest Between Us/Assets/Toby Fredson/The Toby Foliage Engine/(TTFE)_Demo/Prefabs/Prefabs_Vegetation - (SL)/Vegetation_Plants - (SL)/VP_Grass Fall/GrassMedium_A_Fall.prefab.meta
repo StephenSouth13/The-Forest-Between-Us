@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a333c7736d5f45845a0bba13bc58394a
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282901
+  packageName: The Toby Foliage Engine / Light
+  packageVersion: 1.1.0
+  assetPath: Assets/Toby Fredson/The Toby Foliage Engine/(TTFE)_Demo/Prefabs/Prefabs_Vegetation
+    - (SL)/Vegetation_Plants - (SL)/VP_Grass Fall/GrassMedium_A_Fall.prefab
+  uploadId: 759151

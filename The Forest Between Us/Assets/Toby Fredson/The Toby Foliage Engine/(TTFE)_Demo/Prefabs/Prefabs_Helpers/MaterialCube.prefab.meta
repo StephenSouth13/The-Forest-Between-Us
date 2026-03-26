@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 11938fd1c3f38eb45aac86da9a4e9729
+timeCreated: 1551982858
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282901
+  packageName: The Toby Foliage Engine / Light
+  packageVersion: 1.1.0
+  assetPath: Assets/Toby Fredson/The Toby Foliage Engine/(TTFE)_Demo/Prefabs/Prefabs_Helpers/MaterialCube.prefab
+  uploadId: 759151

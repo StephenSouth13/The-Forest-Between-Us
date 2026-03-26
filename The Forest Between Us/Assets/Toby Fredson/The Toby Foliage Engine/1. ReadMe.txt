@@ -1,0 +1,69 @@
+ ○ Summary
+
+
+  Simple yet intricate, TTFEL’s single-pivot system mimics multi-pivot foliage motion, inspired by Pivot Painter.
+
+
+  Bring your game worlds to life with the Toby Foliage Engine - Light (TTFEL), a streamlined shader solution for stunning, wind-swept foliage.
+
+
+  The Toby Foliage Engine - Light (TTFEL) delivers optimized, realistic wind and plant shading with a user-friendly interface. These Amplify Shader Editor-crafted shaders integrate seamlessly with PBR shading, using mesh-based vertex volumes for dynamic wind effects customizable via material settings. Perfect for game foliage, TTFEL balances performance and quality. There is no need for complex conversion steps, as the shaders streamline the process.
+
+
+ ○ Limitations
+
+
+  The Light version offers essential features with a single wind type. Amplify shader functions are unavailable, requiring code-based shader access. Upgrade to the full version for all features: The Toby Foliage Engine
+
+
+  * Purchase the vegetation assets pack separately: Vegetation Pack - Toby Foliage Engine Assets
+
+
+  x Static batching is not supported.
+  x Only the latest LTS Unity versions are officially supported.
+  x GPU instancing is not supported out of the box and requires third-party tools
+
+
+ ○ Features
+
+
+  - "Gentle Breeze" wind type. The global features such as wind and seasons can be adjusted using the "(TTFE) Global Controller".
+  - Automatic wind system and adjustable wind mask volumes (mask can be defined in the material settings, (can't be visualized via wind mask)).
+  - Branch bending system (basic).
+  - Trunk bending (basic).
+  - Realistic wind behavior.
+  - Fast and performant, good optimization.
+  - Real-time season control including random color (basic).
+  - Self-shading (faux-mobile shading (vertex color not supported)).
+  - PBR shading.
+  - Cutting-edge deferred translucency system with automatic shadow occlusion through the groundbreaking, "Translucency AO" feature. It supports Built-in, URP, and HDRP, additional to the diffusion profile in HDRP.
+  - Specular backface occlusion.
+  - Translucency Fluffiness (makes fuzzy-looking grass (HDRP only)).
+  - "Simple Cliff Masked" shader.
+  - Three example scenes.
+  - Original assets.
+
+ X Unavailable features (only accessible in full version)
+
+
+  - "Strong Wind" type (more realistic wind).
+  - Trunk and branch bending system (Full).
+  - Real-time season control + snow (Full).
+  - Additional Terrain shader that supports snow control (Experimental NEW).
+  - All TTFE shaders now support the snow feature.
+  - Self-shading (supports vertex color).
+  - Amplify Shader functions.
+  - Debug vertex colors.
+  - Visualize wind mask editing.
+  - Additional shaders.
+  - "Uber Cliff" shader.
+  - Additional shading and wind settings.
+  - Complete example scenes that are showcased in the video.
+
+○ Feedback
+
+
+  For questions follow the Unity discusions thread or contact me via email:
+
+  - https://discussions.unity.com/t/the-toby-foliage-engine/943171
+  - florianalexandru05@gmail.com

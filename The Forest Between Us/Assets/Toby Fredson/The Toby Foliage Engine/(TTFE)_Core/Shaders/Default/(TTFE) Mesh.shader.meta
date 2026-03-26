@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: f4785d4487b747542b5955296c3cea7e
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282901
+  packageName: The Toby Foliage Engine / Light
+  packageVersion: 1.1.0
+  assetPath: Assets/Toby Fredson/The Toby Foliage Engine/(TTFE)_Core/Shaders/Default/(TTFE)
+    Mesh.shader
+  uploadId: 759151

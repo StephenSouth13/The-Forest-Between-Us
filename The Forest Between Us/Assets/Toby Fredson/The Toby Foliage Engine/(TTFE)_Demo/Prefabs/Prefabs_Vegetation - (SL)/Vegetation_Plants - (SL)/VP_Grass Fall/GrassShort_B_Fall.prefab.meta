@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2a848622621cfee49802d284e2216eb1
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282901
+  packageName: The Toby Foliage Engine / Light
+  packageVersion: 1.1.0
+  assetPath: Assets/Toby Fredson/The Toby Foliage Engine/(TTFE)_Demo/Prefabs/Prefabs_Vegetation
+    - (SL)/Vegetation_Plants - (SL)/VP_Grass Fall/GrassShort_B_Fall.prefab
+  uploadId: 759151

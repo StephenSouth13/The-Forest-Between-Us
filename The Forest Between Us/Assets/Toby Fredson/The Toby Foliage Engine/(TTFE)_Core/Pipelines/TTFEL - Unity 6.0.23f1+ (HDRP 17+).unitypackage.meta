@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e50e117070c3910488c3c0fb2fce62b0
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282901
+  packageName: The Toby Foliage Engine / Light
+  packageVersion: 1.1.0
+  assetPath: Assets/Toby Fredson/The Toby Foliage Engine/(TTFE)_Core/Pipelines/TTFEL
+    - Unity 6.0.23f1+ (HDRP 17+).unitypackage
+  uploadId: 759151

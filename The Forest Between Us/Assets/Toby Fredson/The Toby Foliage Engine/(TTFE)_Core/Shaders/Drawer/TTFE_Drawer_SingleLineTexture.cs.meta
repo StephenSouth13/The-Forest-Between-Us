@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 2edb1b41e0ee75b4cbdf728dbbe0b751
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282901
+  packageName: The Toby Foliage Engine / Light
+  packageVersion: 1.1.0
+  assetPath: Assets/Toby Fredson/The Toby Foliage Engine/(TTFE)_Core/Shaders/Drawer/TTFE_Drawer_SingleLineTexture.cs
+  uploadId: 759151

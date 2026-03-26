@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: c1cb3b45e46f56344bd04812bf9e5659
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282901
+  packageName: The Toby Foliage Engine / Light
+  packageVersion: 1.1.0
+  assetPath: Assets/Toby Fredson/The Toby Foliage Engine/(TTFE)_Core/Shaders/Drawer/TTFE_DrawerTitle.cs
+  uploadId: 759151

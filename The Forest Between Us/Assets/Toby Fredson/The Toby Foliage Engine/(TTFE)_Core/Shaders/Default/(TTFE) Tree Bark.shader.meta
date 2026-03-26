@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: afdb1e1f380186d438f4f923b2100101
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282901
+  packageName: The Toby Foliage Engine / Light
+  packageVersion: 1.1.0
+  assetPath: Assets/Toby Fredson/The Toby Foliage Engine/(TTFE)_Core/Shaders/Default/(TTFE)
+    Tree Bark.shader
+  uploadId: 759151

@@ -1,0 +1,39 @@
+﻿Version 1.1.0
+
+ Changes
+
+ - Complete package overhaul and optimization.
+ - Complete UI overhaul.
+ - Improved wind (Gentle Phase).
+ - Additional options for wind and shading.
+ - Additional nature prefabs.
+ - Additional learning example scenes.
+ - Changed translucency to a more basic type.
+ - Improved specular and "Specular Backface Occlusion".
+ - Updated global controller scripts
+
+ Fixes
+
+ - Fixed global controller lag issues.
+ - Fixed seasonal color glitch.
+ - Fixed translucency glitching bug in Built-in.
+ - Added optional shaders and fixes for Built-in.
+
+------------------
+
+Version 1.0.1b
+
+ - Updated and fixed broken URP template for Unity 6
+------------------
+
+Version 1.0.1
+
+ Changes
+
+ - Added basic trunk bending.
+ - Updated SRP pipeline installation.
+------------------
+
+Version 1.0.0
+
+First Release

@@ -1,0 +1,5 @@
+Season color locked, it can't be changed with the (TTFE) GLOBAL CONTROLLER slider.
+
+Useful for having dry or different-colored trees in any season.
+
+Set "Dry Leaves - Scale and Offset" to "0,0" to achieve this (default values are "1,1").

@@ -1,0 +1,1 @@
+Only available in the built-in (Light) version with limited functionality. Terrain shaders have been removed in TTFE -light SRP; please purchase the full version to access these shaders.

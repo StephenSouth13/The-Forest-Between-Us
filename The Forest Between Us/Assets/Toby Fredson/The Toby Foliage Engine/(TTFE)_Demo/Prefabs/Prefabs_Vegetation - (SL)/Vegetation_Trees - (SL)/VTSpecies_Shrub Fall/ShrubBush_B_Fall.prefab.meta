@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a192326c8750cae4b8c6d271de322ec9
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282901
+  packageName: The Toby Foliage Engine / Light
+  packageVersion: 1.1.0
+  assetPath: Assets/Toby Fredson/The Toby Foliage Engine/(TTFE)_Demo/Prefabs/Prefabs_Vegetation
+    - (SL)/Vegetation_Trees - (SL)/VTSpecies_Shrub Fall/ShrubBush_B_Fall.prefab
+  uploadId: 759151
