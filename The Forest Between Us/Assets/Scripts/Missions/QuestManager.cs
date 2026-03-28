@@ -1,44 +1,91 @@
 using UnityEngine;
-using System.Collections.Generic; // Phải có dòng này mới dùng được List
-using TMPro; // Nếu bạn dùng TextMeshPro để hiện chữ nhiệm vụ
+using TMPro; // Use TextMeshPro for high-quality text
 
 public class QuestManager : MonoBehaviour
 {
     public static QuestManager instance;
 
-    [Header("Data")]
-    public List<QuestData> allQuests; // Danh sách 30 file QuestData của bạn
+    [Header("Current Progress")]
     public QuestData activeQuest;
+    private int currentStepIndex = 0;
 
-    [Header("UI")]
-    public TextMeshProUGUI questTitleText;
-    public TextMeshProUGUI questDescText;
+    [Header("UI Reference")]
+    public TextMeshProUGUI titleText;
+    public TextMeshProUGUI objectiveText;
+    public TextMeshProUGUI storyOverlay; // For the cinematic intro
 
-    private void Awake()
+    void Awake()
     {
-        instance = this;
+        if (instance == null) instance = this;
     }
 
-    public void ActivateQuestForDay(int day)
+    void Start()
     {
-        // Tìm nhiệm vụ có dayRequired khớp với ngày hiện tại
-        activeQuest = allQuests.Find(q => q.dayRequired == day);
+        if (activeQuest != null) InitializeQuest(activeQuest);
+    }
 
-        if (activeQuest != null)
+    public void InitializeQuest(QuestData newQuest)
+    {
+        activeQuest = newQuest;
+        currentStepIndex = 0;
+        
+        // Reset all steps to 0 for a fresh start
+        foreach (var step in activeQuest.steps) {
+            step.currentAmount = 0;
+            step.isFinished = false;
+        }
+
+        UpdateUI();
+        Debug.Log("Quest Started: " + activeQuest.questTitle);
+    }
+
+    // This is the CORE function. Call this from other scripts!
+    // Example: QuestManager.instance.AdvanceStep(StepType.Collect, 1);
+    public void AdvanceStep(StepType type, int amount = 1)
+    {
+        if (activeQuest == null || currentStepIndex >= activeQuest.steps.Count) return;
+
+        QuestStep currentStep = activeQuest.steps[currentStepIndex];
+
+        // Check if the action matches the current requirement
+        if (currentStep.type == type && !currentStep.isFinished)
         {
-            ShowQuestOnUI(activeQuest);
+            currentStep.currentAmount += amount;
+
+            if (currentStep.currentAmount >= currentStep.targetAmount)
+            {
+                currentStep.isFinished = true;
+                currentStepIndex++; // Move to the NEXT step in the list
+                
+                if (currentStepIndex >= activeQuest.steps.Count)
+                {
+                    CompleteQuest();
+                }
+            }
+            UpdateUI();
+        }
+    }
+
+    void UpdateUI()
+    {
+        titleText.text = activeQuest.questTitle.ToUpper();
+
+        if (currentStepIndex < activeQuest.steps.Count)
+        {
+            var s = activeQuest.steps[currentStepIndex];
+            // Shows: "Find the Radio (0/1)"
+            objectiveText.text = $"- {s.description} ({s.currentAmount}/{s.targetAmount})";
         }
         else
         {
-            Debug.LogWarning("Không tìm thấy nhiệm vụ cho ngày: " + day);
+            objectiveText.text = "Day Objectives Completed.";
         }
     }
 
-    void ShowQuestOnUI(QuestData quest)
+    void CompleteQuest()
     {
-        if (questTitleText != null) questTitleText.text = quest.questName;
-        if (questDescText != null) questDescText.text = quest.description;
-        
-        Debug.Log("Nhiệm vụ mới: " + quest.questName);
+        activeQuest.isCompleted = true;
+        Debug.Log("Day " + activeQuest.dayID + " successfully finished!");
+        // Logic to transition to the next day or show a summary screen
     }
 }

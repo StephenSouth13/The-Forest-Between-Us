@@ -1,22 +1,40 @@
 using UnityEngine;
+using System.Collections.Generic;
 
-// Dòng này giúp bạn chuột phải trong Project -> Create -> Quest System -> Quest để tạo nhiệm vụ mới
-[CreateAssetMenu(fileName = "Day_01_Quest", menuName = "Quest System/Quest")]
+[CreateAssetMenu(fileName = "Day_XX_Quest", menuName = "Quest System/Quest Data")]
 public class QuestData : ScriptableObject
 {
-    [Header("Thời điểm xuất hiện")]
-    public int dayRequired; // Nhiệm vụ này dành cho ngày thứ mấy? (1 đến 30)
-
-    [Header("Thông tin nhiệm vụ")]
-    public string questName;        // Tên nhiệm vụ (vd: Tìm nguồn nước)
+    [Header("Quest Identity")]
+    public int dayID;               // The day this quest appears (1-30)
+    public string questTitle;       // Example: "Static Echoes"
+    
     [TextArea(3, 10)]
-    public string description;      // Mô tả chi tiết
+    public string storyIntro;       // Narrative text shown at start of day
 
-    [Header("Điều kiện hoàn thành")]
-    public ItemData targetItem;     // Vật phẩm cần nhặt (nếu có)
-    public int requiredAmount;      // Số lượng cần (vd: nhặt 5 cành củi)
-    public int currentAmount;       // Số lượng hiện tại đang có
+    [Header("Objectives List")]
+    public List<QuestStep> steps = new List<QuestStep>();
 
-    [HideInInspector]
-    public bool isCompleted;        // Đánh dấu đã xong chưa
+    [Header("Moral Alignment")]
+    public int karmaImpact;         // Positive for Happy Ending, Negative for Bad
+
+    [HideInInspector] public bool isCompleted;
+}
+
+[System.Serializable]
+public class QuestStep
+{
+    public string description;      // Example: "Find the old Radio"
+    public StepType type;           // What does the player need to do?
+    public int targetAmount = 1;    // How many (e.g., collect 5 wood)
+    public int currentAmount = 0;   
+    public bool isFinished;         // Is THIS specific step done?
+}
+
+public enum StepType 
+{ 
+    Movement,    // Walking/Running/Jumping
+    Collect,     // Picking up items
+    Interaction, // Pressing E on objects (Radio, Door, etc.)
+    ReachTarget, // Going to a specific area (Trigger Zone)
+    Survival     // Staying alive or using the Radio to repel threats
 }

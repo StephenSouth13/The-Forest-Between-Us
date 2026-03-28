@@ -239,7 +239,7 @@ Material:
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
     - _SEASONSETTINGS: 0
-    - _SeasonChangeGlobal: -0.2
+    - _SeasonChangeGlobal: -2
     - _SeasonChnageA: 0
     - _SeasonChnageB: 0
     - _SeasonVertexColorR: 0
@@ -299,7 +299,8 @@ Material:
     - _AlbedoColor: {r: 1, g: 1, b: 1, a: 0}
     - _AlebedoColor: {r: 0.6603774, g: 0.6572624, b: 0.6572624, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DiffusionProfile_Asset: {r: -6.657358e-23, g: -1.3791966e+22, b: 0.0000007915066, a: -3.7838825e-28}
+    - _DiffusionProfile_Asset: {r: -6.657358e-23, g: -1.3791966e+22, b: 0.0000007915066,
+        a: -3.7838825e-28}
     - _DoubleSidedConstants: {r: 1, g: 1, b: 1, a: 0}
     - _DryLeafColor: {r: 0.8509804, g: 0.5647059, b: 0.25882354, a: 0}
     - _Dryleafcolor: {r: 0.5568628, g: 0.37306848, b: 0.17647055, a: 0}

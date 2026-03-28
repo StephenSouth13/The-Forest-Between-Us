@@ -564,7 +564,7 @@ Material:
     - _SPECPOWER: 1
     - _SSSFalloff: 0
     - _ScaleA: 0.4
-    - _SeasonChangeGlobal: -0.2
+    - _SeasonChangeGlobal: -2
     - _SeasonVertexColorR: 0
     - _SecondaryFactor: 0.64
     - _SelfShading: 0
@@ -770,7 +770,8 @@ Material:
     - _Color0: {r: 0.7647059, g: 0.7647059, b: 0.7647059, a: 0}
     - _Color1: {r: 0.8867924, g: 0.8867924, b: 0.8867924, a: 1}
     - _Color2: {r: 1, g: 1, b: 1, a: 1}
-    - _DiffusionProfile_Asset: {r: -3.9369874e-16, g: -5.6120005e+31, b: 5.7279957e-35, a: 3.0976948e+12}
+    - _DiffusionProfile_Asset: {r: -3.9369874e-16, g: -5.6120005e+31, b: 5.7279957e-35,
+        a: 3.0976948e+12}
     - _DoubleSidedConstants: {r: 1, g: 1, b: 1, a: 0}
     - _DryLeafColor: {r: 0.9137255, g: 0.78431374, b: 0.5411765, a: 0}
     - _Emcolor: {r: 1, g: 0, b: 0.39090347, a: 0}

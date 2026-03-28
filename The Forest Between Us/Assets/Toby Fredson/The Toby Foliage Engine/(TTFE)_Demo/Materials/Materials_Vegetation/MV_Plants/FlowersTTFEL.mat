@@ -345,7 +345,7 @@ Material:
     - _SSSMapOffset: 0.1
     - _SSSMapScale: 1
     - _Scale: 0
-    - _SeasonChangeGlobal: -0.2
+    - _SeasonChangeGlobal: -2
     - _SeasonVertexColorR: 1
     - _SelfShading: 0
     - _SelfShadingVertexColor: 1
@@ -448,7 +448,8 @@ Material:
     m_Colors:
     - _AlbedoColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DiffusionProfile_Asset: {r: -3.9369874e-16, g: -5.6120005e+31, b: 5.7279957e-35, a: 3.0976948e+12}
+    - _DiffusionProfile_Asset: {r: -3.9369874e-16, g: -5.6120005e+31, b: 5.7279957e-35,
+        a: 3.0976948e+12}
     - _DoubleSidedConstants: {r: 1, g: 1, b: 1, a: 0}
     - _DryLeafColor: {r: 0.8113208, g: 0.7331671, b: 0.53960484, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}

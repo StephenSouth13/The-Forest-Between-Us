@@ -869,7 +869,7 @@ Material:
     - _SSSSteps: 64
     - _SSSStrength: 0.5
     - _ScaleA: 0.4
-    - _SeasonChangeGlobal: -0.2
+    - _SeasonChangeGlobal: -2
     - _SeasonChangeGlobal1: 0.24
     - _SeasonVertexColorR: 0
     - _SeasonVertexColorR1: 0
@@ -1174,7 +1174,8 @@ Material:
     - _xxx2: 12.69
     - _xxxangle: 0
     m_Colors:
-    - Diffusion_Profile_Asset: {r: -3.9369874e-16, g: -5.6120005e+31, b: 5.7279957e-35, a: 3.0976948e+12}
+    - Diffusion_Profile_Asset: {r: -3.9369874e-16, g: -5.6120005e+31, b: 5.7279957e-35,
+        a: 3.0976948e+12}
     - _ASEOutlineColor: {r: 0, g: 0, b: 0, a: 0}
     - _AlbedoColor: {r: 1, g: 0.9241655, b: 0.8443396, a: 1}
     - _Albedocolor: {r: 0.7924528, g: 0.7924528, b: 0.7924528, a: 0}
@@ -1188,7 +1189,8 @@ Material:
     - _DetailMaskRemap: {r: 0, g: 0, b: 0, a: 0}
     - _DetailMeshRemap: {r: 0, g: 0, b: 0, a: 0}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
-    - _DiffusionProfile_Asset: {r: -3.9369874e-16, g: -5.6120005e+31, b: 5.7279957e-35, a: 3.0976948e+12}
+    - _DiffusionProfile_Asset: {r: -3.9369874e-16, g: -5.6120005e+31, b: 5.7279957e-35,
+        a: 3.0976948e+12}
     - _DoubleSidedConstants: {r: 1, g: 1, b: 1, a: 0}
     - _DryLeafColor: {r: 0.9137255, g: 0.785491, b: 0.5411765, a: 0}
     - _DryLeafColor1: {r: 0.7924528, g: 0.5406975, b: 0.2728727, a: 0}

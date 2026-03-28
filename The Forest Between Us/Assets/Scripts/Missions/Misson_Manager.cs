@@ -1,41 +1,33 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Misson_Manager : MonoBehaviour
 {
-    public static Misson_Manager instance;
-
-    [Header("Time Settings")]
     public int currentDay = 1;
-    public float timeMultiplier = 1f; // Tốc độ trôi thời gian
-    private float timer;
-    public float secondsPerDay = 300f; // 5 phút một ngày
+    
+    [Header("Quest Database")]
+    // Kéo tất cả các file QuestData (Day_01, Day_02...) vào đây trong Inspector
+    public List<QuestData> allQuests = new List<QuestData>();
 
-    private void Awake()
+    void Start()
     {
-        if (instance == null) instance = this;
+        UpdateDailyQuest();
     }
 
-    void Update()
+    public void UpdateDailyQuest()
     {
-        // Chạy thời gian: Time.deltaTime là thời gian thực giữa các khung hình
-        timer += Time.deltaTime * timeMultiplier;
-
-        if (timer >= secondsPerDay)
+        // Kiểm tra xem ngày hiện tại có nằm trong danh sách không
+        if (currentDay <= allQuests.Count)
         {
-            NextDay();
-            timer = 0;
+            // Lấy dữ liệu Quest của ngày tương ứng (Index bắt đầu từ 0 nên lấy currentDay - 1)
+            QuestData questToday = allQuests[currentDay - 1];
+            
+            // Đưa cả GÓI dữ liệu này cho QuestManager xử lý
+            QuestManager.instance.InitializeQuest(questToday);
         }
-    }
-
-    void NextDay()
-    {
-        currentDay++;
-        Debug.Log("Chào mừng ngày thứ: " + currentDay);
-
-        // Gọi QuestManager để cập nhật nhiệm vụ mới
-        if (Quest_Manager.instance != null)
+        else
         {
-            Quest_Manager.instance.ActivateQuestForDay(currentDay);
+            Debug.Log("No more quests available for Day " + currentDay);
         }
     }
 }
