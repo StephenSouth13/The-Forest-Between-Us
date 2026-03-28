@@ -1,5 +1,5 @@
 using UnityEngine;
-using TMPro; // Use TextMeshPro for high-quality text
+using TMPro;
 
 public class QuestManager : MonoBehaviour
 {
@@ -12,7 +12,7 @@ public class QuestManager : MonoBehaviour
     [Header("UI Reference")]
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI objectiveText;
-    public TextMeshProUGUI storyOverlay; // For the cinematic intro
+    public TextMeshProUGUI storyOverlay; 
 
     void Awake()
     {
@@ -29,7 +29,7 @@ public class QuestManager : MonoBehaviour
         activeQuest = newQuest;
         currentStepIndex = 0;
         
-        // Reset all steps to 0 for a fresh start
+        // Reset progress in Data
         foreach (var step in activeQuest.steps) {
             step.currentAmount = 0;
             step.isFinished = false;
@@ -39,15 +39,19 @@ public class QuestManager : MonoBehaviour
         Debug.Log("Quest Started: " + activeQuest.questTitle);
     }
 
-    // This is the CORE function. Call this from other scripts!
-    // Example: QuestManager.instance.AdvanceStep(StepType.Collect, 1);
-    public void AdvanceStep(StepType type, int amount = 1)
+    // --- NEW FUNCTION: Needed for Tutorial distance tracking ---
+    public void UpdateObjectiveText(string customText)
+    {
+        objectiveText.text = customText;
+    }
+
+    // --- UPDATED: Changed 'int amount' to 'float amount' ---
+    public void AdvanceStep(StepType type, float amount = 1f)
     {
         if (activeQuest == null || currentStepIndex >= activeQuest.steps.Count) return;
 
         QuestStep currentStep = activeQuest.steps[currentStepIndex];
 
-        // Check if the action matches the current requirement
         if (currentStep.type == type && !currentStep.isFinished)
         {
             currentStep.currentAmount += amount;
@@ -55,7 +59,7 @@ public class QuestManager : MonoBehaviour
             if (currentStep.currentAmount >= currentStep.targetAmount)
             {
                 currentStep.isFinished = true;
-                currentStepIndex++; // Move to the NEXT step in the list
+                currentStepIndex++; 
                 
                 if (currentStepIndex >= activeQuest.steps.Count)
                 {
@@ -68,13 +72,15 @@ public class QuestManager : MonoBehaviour
 
     void UpdateUI()
     {
+        if (activeQuest == null) return;
+
         titleText.text = activeQuest.questTitle.ToUpper();
 
         if (currentStepIndex < activeQuest.steps.Count)
         {
             var s = activeQuest.steps[currentStepIndex];
-            // Shows: "Find the Radio (0/1)"
-            objectiveText.text = $"- {s.description} ({s.currentAmount}/{s.targetAmount})";
+            // Uses Mathf.RoundToInt so "99.8/100m" looks like "100/100m"
+            objectiveText.text = $"- {s.description} ({Mathf.RoundToInt(s.currentAmount)}/{s.targetAmount})";
         }
         else
         {
@@ -85,7 +91,6 @@ public class QuestManager : MonoBehaviour
     void CompleteQuest()
     {
         activeQuest.isCompleted = true;
-        Debug.Log("Day " + activeQuest.dayID + " successfully finished!");
-        // Logic to transition to the next day or show a summary screen
+        Debug.Log("Quest Finished!");
     }
 }
