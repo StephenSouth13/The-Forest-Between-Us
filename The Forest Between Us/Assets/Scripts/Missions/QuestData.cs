@@ -5,17 +5,17 @@ using System.Collections.Generic;
 public class QuestData : ScriptableObject
 {
     [Header("Quest Identity")]
-    public int dayID;               // The day this quest appears (1-30)
-    public string questTitle;       // Example: "Static Echoes"
+    public int dayID;               
+    public string questTitle;       
     
     [TextArea(3, 10)]
-    public string storyIntro;       // Narrative text shown at start of day
+    public string storyIntro;       
 
     [Header("Objectives List")]
     public List<QuestStep> steps = new List<QuestStep>();
 
     [Header("Moral Alignment")]
-    public int karmaImpact;         // Positive for Happy Ending, Negative for Bad
+    public int karmaImpact;         
 
     [HideInInspector] public bool isCompleted;
 }
@@ -23,18 +23,18 @@ public class QuestData : ScriptableObject
 [System.Serializable]
 public class QuestStep
 {
-    public string description;      // Example: "Find the old Radio"
-    public StepType type;           // What does the player need to do?
-    public int targetAmount = 1;    // How many (e.g., collect 5 wood)
-    public int currentAmount = 0;   
-    public bool isFinished;         // Is THIS specific step done?
+    public string description;      
+    public StepType type;           
+    public float targetAmount = 1;  // Đổi thành float để đo được cả Mét (m)
+    public float currentAmount = 0;   
+    public bool isFinished;         
 }
 
 public enum StepType 
 { 
-    Movement,    // Walking/Running/Jumping
-    Collect,     // Picking up items
-    Interaction, // Pressing E on objects (Radio, Door, etc.)
-    ReachTarget, // Going to a specific area (Trigger Zone)
-    Survival     // Staying alive or using the Radio to repel threats
+    Movement,    
+    Collect,     
+    Interaction, 
+    ReachTarget, 
+    Survival     
 }
