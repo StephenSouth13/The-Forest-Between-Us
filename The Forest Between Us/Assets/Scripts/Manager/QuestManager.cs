@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class QuestManager : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class QuestManager : MonoBehaviour
     [Header("UI Reference")]
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI objectiveText;
-    public TextMeshProUGUI storyOverlay; 
+    public TextMeshProUGUI storyOverlay; // Kéo Text dẫn truyện vào đây
 
     void Awake()
     {
@@ -35,17 +36,27 @@ public class QuestManager : MonoBehaviour
             step.isFinished = false;
         }
 
+        // --- MỚI: Xử lý Story Overlay (Dẫn truyện) ---
+        if (storyOverlay != null && !string.IsNullOrEmpty(newQuest.storyIntro)) {
+            storyOverlay.text = newQuest.storyIntro;
+            storyOverlay.gameObject.SetActive(true);
+            // Tắt chữ dẫn truyện sau 5 giây để bắt đầu hiện nhiệm vụ
+            Invoke("HideStoryOverlay", 5f);
+        }
+
         UpdateUI();
         Debug.Log("Quest Started: " + activeQuest.questTitle);
     }
 
-    // --- NEW FUNCTION: Needed for Tutorial distance tracking ---
-    public void UpdateObjectiveText(string customText)
-    {
-        objectiveText.text = customText;
+    void HideStoryOverlay() {
+        if (storyOverlay != null) storyOverlay.gameObject.SetActive(false);
     }
 
-    // --- UPDATED: Changed 'int amount' to 'float amount' ---
+    public void UpdateObjectiveText(string customText)
+    {
+        if (objectiveText != null) objectiveText.text = customText;
+    }
+
     public void AdvanceStep(StepType type, float amount = 1f)
     {
         if (activeQuest == null || currentStepIndex >= activeQuest.steps.Count) return;
@@ -70,16 +81,15 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    void UpdateUI()
+    public void UpdateUI() // Đổi thành public để TutorialManager có thể gọi
     {
-        if (activeQuest == null) return;
+        if (activeQuest == null || titleText == null || objectiveText == null) return;
 
         titleText.text = activeQuest.questTitle.ToUpper();
 
         if (currentStepIndex < activeQuest.steps.Count)
         {
             var s = activeQuest.steps[currentStepIndex];
-            // Uses Mathf.RoundToInt so "99.8/100m" looks like "100/100m"
             objectiveText.text = $"- {s.description} ({Mathf.RoundToInt(s.currentAmount)}/{s.targetAmount})";
         }
         else
