@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+// File này dùng để định nghĩa CẤU TRÚC dữ liệu, không chứa logic điều khiển UI
 [CreateAssetMenu(fileName = "Day_XX_Quest", menuName = "Quest System/Quest Data")]
 public class QuestData : ScriptableObject
 {
@@ -25,7 +26,7 @@ public class QuestStep
 {
     public string description;      
     public StepType type;           
-    public float targetAmount = 1;  // Đổi thành float để đo được cả Mét (m)
+    public float targetAmount = 1;  
     public float currentAmount = 0;   
     public bool isFinished;         
 }

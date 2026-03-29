@@ -7,17 +7,14 @@ public class TutorialManager : MonoBehaviour
     public static TutorialManager instance;
 
     [Header("UI Keys Setup")]
-    public GameObject keysPanel; // Cái Panel chứa 8 cái ảnh nút bấm
-    // Kéo các Object Image từ Hierarchy vào đây
+    public GameObject keysPanel; 
     public Image imgW, imgA, imgS, imgD, imgSpace, imgShift, imgC, imgX;
-    public Color activeColor = Color.green; // Màu khi bấm xong
+    public Color activeColor = Color.green; 
 
-    [Header("Distance Tracking")]
-    public Transform playerTransform; // Kéo PlayerArmature vào đây
-    public float requiredDistance = 100f;
-    
-    private Vector3 lastPosition;
-    private float totalDistanceMoved = 0f;
+    [Header("Goal Tracking (Mốc mục tiêu)")]
+    public Transform playerTransform; 
+    public Transform goalTransform;     // Kéo Object đích đến (ví dụ: Đài Radio) vào đây
+    public float finishDistance = 3f;   // Khoảng cách đủ gần để tính là tới nơi
 
     [Header("Status Flags")]
     private bool w, a, s, d, space, shift, c, x;
@@ -27,8 +24,7 @@ public class TutorialManager : MonoBehaviour
     void Start()
     {
         instance = this;
-        if (playerTransform != null) lastPosition = playerTransform.position;
-        keysPanel.SetActive(true); // Hiện bảng nút ngay khi vào game
+        if (keysPanel != null) keysPanel.SetActive(true); 
     }
 
     void Update()
@@ -41,13 +37,12 @@ public class TutorialManager : MonoBehaviour
         }
         else
         {
-            TrackPlayerDistance();
+            TrackDistanceToGoal();
         }
     }
 
     void CheckKeyInputs()
     {
-        // Kiểm tra từng phím một
         if (Input.GetKeyDown(KeyCode.W)) { w = true; imgW.color = activeColor; }
         if (Input.GetKeyDown(KeyCode.A)) { a = true; imgA.color = activeColor; }
         if (Input.GetKeyDown(KeyCode.S)) { s = true; imgS.color = activeColor; }
@@ -57,29 +52,26 @@ public class TutorialManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C)) { c = true; imgC.color = activeColor; }
         if (Input.GetKeyDown(KeyCode.X)) { x = true; imgX.color = activeColor; }
 
-        // Khi bấm đủ 8 phím
         if (w && a && s && d && space && shift && c && x)
         {
             keysDone = true;
-            Debug.Log("Keys Mastered! Start running 100m.");
-            // Báo cho QuestManager xong Step 0 (Bấm nút)
+            Debug.Log("Keys Mastered! Now reach the target.");
+            // Báo QuestManager xong bước bấm nút
             QuestManager.instance.AdvanceStep(StepType.Movement, 1);
         }
     }
 
-    void TrackPlayerDistance()
+    void TrackDistanceToGoal()
     {
-        if (playerTransform == null) return;
+        if (playerTransform == null || goalTransform == null) return;
 
-        // Tính quãng đường di chuyển giữa các frame
-        float distanceThisFrame = Vector3.Distance(playerTransform.position, lastPosition);
-        totalDistanceMoved += distanceThisFrame;
-        lastPosition = playerTransform.position;
+        // Tính khoảng cách hiện tại giữa người chơi và đích
+        float distanceToGoal = Vector3.Distance(playerTransform.position, goalTransform.position);
 
-        // Cập nhật con số 0/100m lên màn hình thông qua QuestManager
-        if (totalDistanceMoved < requiredDistance)
+        if (distanceToGoal > finishDistance)
         {
-            string distText = $"Travel: {Mathf.RoundToInt(totalDistanceMoved)}/{requiredDistance}m";
+            // Hiện lên màn hình: "Reach the Radio Station: 85m"
+            string distText = $"Reach the Radio Station: {Mathf.RoundToInt(distanceToGoal)}m away";
             QuestManager.instance.UpdateObjectiveText(distText);
         }
         else
@@ -91,10 +83,10 @@ public class TutorialManager : MonoBehaviour
     void FinishTutorial()
     {
         tutorialComplete = true;
-        keysPanel.SetActive(false); // Ẩn bộ nút đi cho sạch màn hình
+        if (keysPanel != null) keysPanel.SetActive(false); 
         
-        // Báo cho QuestManager xong Step 1 (Chạy 100m)
+        // Báo cho QuestManager xong bước di chuyển đến đích
         QuestManager.instance.AdvanceStep(StepType.Movement, 1);
-        Debug.Log("Tutorial Finished Successfully!");
+        Debug.Log("Arrived at destination! Tutorial Complete.");
     }
 }

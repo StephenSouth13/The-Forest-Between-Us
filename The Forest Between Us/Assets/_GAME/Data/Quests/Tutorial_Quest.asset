@@ -13,8 +13,19 @@ MonoBehaviour:
   m_Name: Tutorial_Quest
   m_EditorClassIdentifier: Assembly-CSharp::QuestData
   dayID: 0
-  questTitle: 
-  storyIntro: 
-  steps: []
+  questTitle: THE AWAKENING
+  storyIntro: 'Day 0: The forest is silent. Too silent. I need to check the signal
+    before the storm hits..'
+  steps:
+  - description: Master controls
+    type: 0
+    targetAmount: 1
+    currentAmount: 0
+    isFinished: 0
+  - description: Travel 100m to stabilize signal
+    type: 0
+    targetAmount: 100
+    currentAmount: 0
+    isFinished: 0
   karmaImpact: 0
   isCompleted: 0
