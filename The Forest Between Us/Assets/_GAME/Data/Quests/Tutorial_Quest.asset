@@ -22,9 +22,9 @@ MonoBehaviour:
     targetAmount: 1
     currentAmount: 0
     isFinished: 0
-  - description: Travel 100m to stabilize signal
-    type: 0
-    targetAmount: 100
+  - description: Reach the first radio signal
+    type: 3
+    targetAmount: 1
     currentAmount: 0
     isFinished: 0
   karmaImpact: 0

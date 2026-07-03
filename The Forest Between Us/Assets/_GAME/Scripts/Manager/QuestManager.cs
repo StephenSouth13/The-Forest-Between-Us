@@ -1,6 +1,5 @@
 using UnityEngine;
 using TMPro;
-using System.Collections;
 
 public class QuestManager : MonoBehaviour
 {
@@ -8,16 +7,17 @@ public class QuestManager : MonoBehaviour
 
     [Header("Current Progress")]
     public QuestData activeQuest;
-    private int currentStepIndex = 0;
+    private int currentStepIndex;
 
     [Header("UI Reference")]
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI objectiveText;
-    public TextMeshProUGUI storyOverlay; // Kéo Text dẫn truyện vào đây
+    public TextMeshProUGUI storyOverlay;
 
     void Awake()
     {
         if (instance == null) instance = this;
+        else Destroy(gameObject);
     }
 
     void Start()
@@ -29,26 +29,28 @@ public class QuestManager : MonoBehaviour
     {
         activeQuest = newQuest;
         currentStepIndex = 0;
-        
-        // Reset progress in Data
-        foreach (var step in activeQuest.steps) {
+
+        if (activeQuest == null) return;
+
+        foreach (QuestStep step in activeQuest.steps)
+        {
             step.currentAmount = 0;
             step.isFinished = false;
         }
 
-        // --- MỚI: Xử lý Story Overlay (Dẫn truyện) ---
-        if (storyOverlay != null && !string.IsNullOrEmpty(newQuest.storyIntro)) {
+        if (storyOverlay != null && !string.IsNullOrEmpty(newQuest.storyIntro))
+        {
             storyOverlay.text = newQuest.storyIntro;
             storyOverlay.gameObject.SetActive(true);
-            // Tắt chữ dẫn truyện sau 5 giây để bắt đầu hiện nhiệm vụ
-            Invoke("HideStoryOverlay", 5f);
+            Invoke(nameof(HideStoryOverlay), 5f);
         }
 
         UpdateUI();
-        Debug.Log("Quest Started: " + activeQuest.questTitle);
+        Debug.Log("Quest started: " + activeQuest.questTitle);
     }
 
-    void HideStoryOverlay() {
+    void HideStoryOverlay()
+    {
         if (storyOverlay != null) storyOverlay.gameObject.SetActive(false);
     }
 
@@ -63,25 +65,26 @@ public class QuestManager : MonoBehaviour
 
         QuestStep currentStep = activeQuest.steps[currentStepIndex];
 
-        if (currentStep.type == type && !currentStep.isFinished)
-        {
-            currentStep.currentAmount += amount;
+        if (currentStep.type != type || currentStep.isFinished) return;
 
-            if (currentStep.currentAmount >= currentStep.targetAmount)
+        currentStep.currentAmount += amount;
+
+        if (currentStep.currentAmount >= currentStep.targetAmount)
+        {
+            currentStep.isFinished = true;
+            currentStepIndex++;
+
+            if (currentStepIndex >= activeQuest.steps.Count)
             {
-                currentStep.isFinished = true;
-                currentStepIndex++; 
-                
-                if (currentStepIndex >= activeQuest.steps.Count)
-                {
-                    CompleteQuest();
-                }
+                CompleteQuest();
+                return;
             }
-            UpdateUI();
         }
+
+        UpdateUI();
     }
 
-    public void UpdateUI() // Đổi thành public để TutorialManager có thể gọi
+    public void UpdateUI()
     {
         if (activeQuest == null || titleText == null || objectiveText == null) return;
 
@@ -89,18 +92,19 @@ public class QuestManager : MonoBehaviour
 
         if (currentStepIndex < activeQuest.steps.Count)
         {
-            var s = activeQuest.steps[currentStepIndex];
-            objectiveText.text = $"- {s.description} ({Mathf.RoundToInt(s.currentAmount)}/{s.targetAmount})";
+            QuestStep step = activeQuest.steps[currentStepIndex];
+            objectiveText.text = $"- {step.description} ({Mathf.RoundToInt(step.currentAmount)}/{step.targetAmount})";
         }
         else
         {
-            objectiveText.text = "Day Objectives Completed.";
+            objectiveText.text = "Day objectives completed.";
         }
     }
 
     void CompleteQuest()
     {
         activeQuest.isCompleted = true;
-        Debug.Log("Quest Finished!");
+        UpdateUI();
+        Debug.Log("Quest finished: " + activeQuest.questTitle);
     }
 }
