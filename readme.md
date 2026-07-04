@@ -1,80 +1,108 @@
+# The Forest Between Us
 
-# 🍉 The Forest Between Us (Episode 1: The First Frequency)
+Episode 1: The First Frequency
 
-[![Unity](<https://img.shields.io/badge/Unity-2022.3%20LTS-blue.svg?style=flat&logo=unity>)](https://unity.com/)
-[![Render Pipeline](<https://img.shields.io/badge/Render%20Pipeline-URP%2FHDRP-lightgrey.svg>)]()
-[![Modeler](https://img.shields.io/badge/Blender-4.1-orange.svg?logo=blender)](https://www.blender.org/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)]()
+## Tổng Quan
 
-> **The Forest Between Us** là một tựa game thuộc thể loại **Action-Survival Adventure / Psychological Thriller** góc nhìn thứ ba, kết hợp độc đáo giữa yếu tố khoa học viễn tưởng (Sci-fi) hiện đại năm 2026 và huyền sử Việt Nam: **Sự tích Mai An Tiêm & Quả dưa hấu**.
+`The Forest Between Us` là game 3D Unity thuộc hướng action-survival adventure pha psychological thriller, lấy cảm hứng từ truyện dân gian Mai An Tiêm và sự tích quả dưa hấu. Dự án đang được dựng trên Unity `6000.3.12f1`, dùng scene chính `Home` và `Tutorial`.
 
----
+Nhân vật chính là Stephen, một kỹ sư công nghệ kiệt sức. Sau khi đọc lại truyện Mai An Tiêm lúc nửa đêm, Stephen bị kéo khỏi phòng ngủ bởi tín hiệu radio dị thường đúng `03:00 AM`. Anh tỉnh dậy trên một hòn đảo mù sương, nơi ký ức dân gian, nhiễu sóng vô tuyến và nỗi sợ sinh tồn bị trộn lại thành một vùng không gian méo mó.
 
-## 📖 Cốt Truyện & Ý Tưởng Đột Phá (The Concept)
+## Cốt Truyện
 
-Không đi theo lối mòn của các game sinh tồn truyền thống (tai nạn máy bay, rơi tàu sáo rỗng), trò chơi khai thác góc nhìn tâm lý học lập dị:
+Stephen không bị rơi máy bay hay trôi dạt theo kiểu sinh tồn quen thuộc. Anh bị kéo vào một "vùng ký ức" được kích hoạt bởi chiếc radio cũ. Trên đảo, những dấu vết của Mai An Tiêm xuất hiện qua tần số radio, hạt dưa màu đen, quả dưa hắc hóa và các cột mốc dẫn đường.
 
-* **Hồi 1: Dị Thường Trong Phòng Ngủ:** Nhân vật chính (**Stephen**) – một kỹ sư công nghệ kiệt sức sau ngày dài làm việc – trở về phòng ngủ vào đêm muộn. Anh mở cuốn truyện cổ tích thời thơ ấu *Sự tích Quả dưa hấu* ra đọc trước khi tắt đèn. Vào đúng `03:00 AM`, một vùng từ trường kỳ bí kích hoạt chiếc đài Audio rỉ sét cổ đại (`SM_Radio`) trên bàn. Một làn sương hắc hóa (`Black Volumetric Fog`) tràn ra từ màng loa, nuốt chửng cuốn truyện và toàn bộ thực tại của căn phòng vào hư vô.
-* **Hồi 2: Thức Tỉnh Tại Vùng Ký Ức:** Stephen mở mắt ra và thấy mình dạt vào một **Hòn Đảo Hoang** biệt lập, bao phủ bởi sương mù từ trường dày đặc. Toàn bộ hòn đảo và quái thú chính là "vùng không gian bóp méo" được hiện thực hóa từ nỗi sợ và ký ức cuốn truyện cổ tích bị hắc hóa. Cách duy nhất để sống sót là lắng nghe tần số vô tuyến phát ra từ chiếc đài cũ – tiếng vọng ngàn năm của Mai An Tiêm.
+Vòng lặp chính dự kiến kéo dài 3 ngày 2 đêm:
 
----
+1. Tutorial: Stephen tỉnh dậy trên bãi cát, học di chuyển, tìm tín hiệu radio đầu tiên.
+2. Ngày 1: tìm dấu vết dưa hấu đen, học cách định vị trong sương mù và tránh mối nguy ban đêm.
+3. Ngày 2: thu thập tài nguyên, dựng trại, chế tạo công cụ thô sơ.
+4. Ngày 3: tới trạm relay/ăng-ten cũ, sửa tín hiệu và mở lựa chọn kết thúc.
 
-## 🎮 Hệ Thống Nhiệm Vụ & Vòng Lặp Sinh Tồn (3 Ngày 2 Đêm)
+Hai hướng kết thúc chính:
 
-### 🛠️ Giai Đoạn Hướng Dẫn (Tutorial)
+- Chấp nhận tín hiệu: Stephen tin vào radio và mắc kẹt trong vòng lặp.
+- Phá radio: đảo tan biến, Stephen tỉnh lại, nhưng dấu vết nước biển và hạt dưa đen vẫn còn.
 
-* **Thức tỉnh:** Stephen tỉnh dậy trên bãi cát với lượng Máu (`Health`) và Thể lực (`Stamina`) ở mức báo động do ảnh hưởng của tà vụ. Hệ thống hướng dẫn các phím di chuyển cơ bản `W, A, S, D`.
-* **Vô tuyến đầu tiên:** Người chơi tiến lại gần bờ biển, nhấn phím `[F]` tương tác nhặt chiếc đài `SM_Radio` và quả dưa hấu hắc hóa đầu tiên dạt vào bờ để kích hoạt mạch truyện chính.
+## Trạng Thái Hiện Tại
 
-### 🔴 Ngày 1: Cát và Sóng Nhiễu (The Sand & The Static)
+Dự án đã có nền tảng tutorial khoảng 70%:
 
-* **Nhiệm vụ:** Tìm kiếm các hạt mầm/quả dưa hấu sọc đen trên cát để cắm mốc lộ trình xuyên sương mù.
-* **Thử thách ban đêm (Đêm 1):** Bầy chim đột biến (`Swarm`) đi săn. Người chơi hoàn toàn chưa có vũ khí, phải tận dụng phím `[C]` (Ngồi) hoặc `[V]` (Nằm rạp) ẩn nấp trong thảm thực vật rậm rạp để trốn tránh tầm nhìn quái thú.
+- Có scene `Home.unity` cho menu.
+- Có scene `Tutorial.unity` với player, UI tutorial, quest UI và mục tiêu radio.
+- Có `QuestData` dạng ScriptableObject tại `Assets/_GAME/Data/Quests/Tutorial_Quest.asset`.
+- Có `QuestManager` quản lý quest tuyến tính theo step.
+- Có `TutorialManager` kiểm tra các phím `WASD`, `Space`, `Shift`, `C`, `X`, sau đó chuyển sang bước tìm radio.
+- Có `QuestTrigger` để trigger objective khi player đi vào vùng.
+- Có inventory cơ bản gồm `ItemData`, `ItemObject`, `InventorySlot`, `InventoryManager`.
 
-### 🔴 Ngày 2: Thu Hoạch & Dựng Trại (The Harvest & The Huts)
+Đã chỉnh lại logic tutorial để bước thứ hai là `ReachTarget` thay vì cộng nhầm `Movement`, đồng thời `finishDistance` trong scene tutorial được đưa về `3m`.
 
-* **Nhiệm vụ:** Đi sâu vào lòng đảo, chặt tre, bẻ đá chế tạo vũ khí thô sơ. Thu hoạch dưa hấu để thiết lập hệ thống cờ định vị `Trail Flags`.
-* **Thử thách ban đêm (Đêm 2):** Bảo vệ Căn cứ tạm thời trước sự tấn công hung hãn của dã thú (`Bear`). Người chơi phải dùng lửa hoặc vũ khí tự chế để sinh tồn chủ động.
-
-### 🔴 Ngày 3: Trạm Chuyển Tiếp & Phân Nhánh Kết Cục (The Relay Station)
-
-* **Nhiệm vụ:** Di chuyển lên vách đá cao nhất, giải câu đố môi trường để sửa chữa bộ mạch của Tháp Ăng-ten cũ từ thời chiến. Kích hoạt phát tín hiệu tổng lực.
-
----
-
-## 🚪 Hệ Thống 2 Cái Kết (Multi-Endings)
-
-Khi sửa xong máy phát ở cuối Ngày 3, đài vô tuyến rít lên và đêm tối ập xuống ngay lập tức. Giọng nói lạnh lùng của An Tiêm vang lên: *"Lựa chọn là ở ngươi."* Người chơi có 30 giây để đưa ra quyết định thông qua Diegetic UI:
-
-* **Ending A (The Submissive - Chấp nhận vòng lặp):** Người chơi chọn tin vào đài phát, ngồi im chờ cứu hộ. Luồng sáng rọi xuống không phải trực thăng mà là mắt của Chúa tể loài Swarm khổng lồ lao xuống nuốt chửng Stephen. Bạn bị kẹt lại vĩnh viễn, trở thành thực thể bị lưu đày tiếp theo.
-* **Ending B (The Rebel - Kẻ nổi loạn):** Người chơi dùng đá đập nát chiếc đài vô tuyến. Sóng nhiễu tắt ngấm, toàn bộ hòn đảo và quái vật tan biến như tro bụi. Stephen giật mình tỉnh dậy trên giường ngủ, mồ hôi nhễ nhại, đồng hồ chỉ `03:01 AM`. Tuy nhiên, bên cạnh giường, chiếc đài cổ đã vỡ đôi và trên sàn nhà vẫn còn nguyên vẹn một vệt nước biển cùng vài hạt dưa hấu màu đen.
-
----
-
-## 🛠️ Core Mechanics (Cơ Chế Game Độc Bản)
-
-* **Hệ thống Định vị Dưa Hấu (Watermelon Trail Flags):** Thay vì các điểm định vị UI thông thường, người chơi rạch các ký hiệu cổ lên quả dưa hấu 3D để làm mốc đường mòn. Sử dụng cơ chế mã màu phát sáng (`Emission Shader`) vào ban đêm để phân loại khu vực: **Đỏ** (Nguy hiểm), **Xanh** (Tài nguyên), **Tím** (Trạm Radio).
-* **Di Chuyển Ẩn Nấp Chiến Thuật:** Quản lý trọng tâm Camera (`Cinemachine`) linh hoạt khi chuyển đổi tư thế di chuyển qua phím Crouch `[C]` và Prone `[V]`.
-* **Kiến Trúc Dữ Liệu Tối Ưu (System Architecture):** Toàn bộ thực thể vật phẩm, tiến trình ngày đêm, vị trí các quả dưa hấu đã cắm trên map đều được quản lý bằng cấu hình DBML, đồng bộ hóa chặt chẽ qua hệ thống `SaveLoadManager` cục bộ giúp tối ưu RAM tối đa.
-
----
-
-## 📂 Cấu Trúc Thư Mục Dự Án (Project Structure)
+## Cấu Trúc Dự Án
 
 ```text
-The-Forest-Between-Us/
-│
+The Forest Between Us/
 ├── Assets/
-│   ├── _Project/
-│   │   ├── Animations/       # Animator Controller (Humanoid BlendTrees for Crouch/Prone)
-│   │   ├── Audio/            # SFX_Static_Noise & Voice Acting Lines
-│   │   ├── Prefabs/          # Watermelon_Flag, SM_Radio, Player_Stephen
-│   │   ├── Scenes/           # Scene_01_Bedroom, Scene_02_Island
-│   │   ├── Scripts/          # CharacterController, SaveLoadManager, RadioFrequencyAnchor
-│   │   └── Shaders/          # Custom URP Lit Shaders for Corrupted Veins (Emission)
-│   │
-│   └── Plugins/              # Cinemachine, Toby Foliage Engine, Volumetric Fog
-│
-├── DBDiagram/                # File mã nguồn ERD .dbml quản lý cơ sở dữ liệu lưu trữ
-└── README.md                 # Tài liệu hướng dẫn dự án
+│   ├── _GAME/
+│   │   ├── Data/
+│   │   │   └── Quests/
+│   │   └── Scripts/
+│   │       ├── Home/
+│   │       ├── Inventory/
+│   │       ├── Manager/
+│   │       ├── Missions/
+│   │       ├── Player/
+│   │       └── Triggers/
+│   ├── Art/
+│   ├── Audio/
+│   ├── Features/
+│   ├── Models/
+│   ├── Scenes/
+│   ├── StarterAssets/
+│   ├── Toby Fredson/
+│   └── UI/
+├── Packages/
+├── ProjectSettings/
+├── DEVELOPMENT_ROADMAP.md
+└── readme.md
 ```
+
+Nguyên tắc sắp xếp:
+
+- Code gameplay tự viết đặt trong `Assets/_GAME/Scripts`.
+- Data gameplay tự viết đặt trong `Assets/_GAME/Data`.
+- Asset từ package, demo, foliage, starter asset giữ nguyên thư mục gốc để tránh mất dependency.
+- Khi move file Unity, luôn move cả `.meta` để giữ GUID.
+
+## Hướng Code Tiếp Theo
+
+Ưu tiên 1 là hoàn thiện vòng tutorial:
+
+- Gắn player thật với `StarterAssets ThirdPersonController`.
+- Tạo interaction raycast/trigger để nhặt radio bằng phím `F`.
+- Sau khi nhặt radio, gọi `QuestManager.AdvanceStep(StepType.Interaction, 1)`.
+- Thêm UI prompt nhỏ: "Press F - Pick up Radio".
+- Chốt quest tutorial bằng cutscene ngắn hoặc transition sang Day 1.
+
+Ưu tiên 2 là tách hệ thống gameplay:
+
+- `PlayerInteraction`: phát hiện object có `Interactable`.
+- `PlayerStats`: health, stamina, hunger/thirst nếu cần.
+- `RadioController`: bật/tắt nhiễu, phát voice line, định hướng nhiệm vụ.
+- `DayNightManager`: điều khiển ngày, đêm, fog, enemy spawn.
+- `SaveLoadManager`: lưu quest progress, inventory, vị trí player.
+
+Ưu tiên 3 là thiết kế nhiệm vụ theo dữ liệu:
+
+- Mỗi ngày là một `QuestData`.
+- Mỗi mục tiêu dùng `StepType`: `Movement`, `ReachTarget`, `Collect`, `Interaction`, `Survival`.
+- Trigger trong scene chỉ báo tiến độ, không tự chứa logic truyện.
+- Radio là "người dẫn chuyện" chính, UI chỉ hỗ trợ.
+
+## Ghi Chú Kỹ Thuật
+
+- Unity version: `6000.3.12f1`.
+- Cinemachine, Input System, URP/HDRP packages đều đã có trong manifest.
+- `Assets/Scripts/Packages` hiện là code package/demo, chưa gom vào `_GAME`.
+- `Assets/_Recovery` chứa scene recovery rất lớn, chỉ dùng khi cần cứu scene.
+- `EditorBuildSettings.asset` hiện vẫn chứa scene mẫu cũ từ package; khi build thật nên cập nhật lại về `Home` và `Tutorial`.
