@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,23 +6,36 @@ public class TutorialManager : MonoBehaviour
 {
     public static TutorialManager instance;
 
-    [Header("UI Keys Setup")]
+    [Header("Controls Panel")]
     public GameObject keysPanel;
-    public Image imgW, imgA, imgS, imgD, imgSpace, imgShift, imgC, imgX;
     public Color activeColor = Color.green;
+    public bool hidePromptWhenPressed = true;
+    public float promptFadeDuration = 0.2f;
+
+    [Header("Legacy Key Images")]
+    public Image imgW, imgA, imgS, imgD, imgSpace, imgShift, imgC, imgX, imgTab, imgB, imgF;
+
+    [Header("Custom Key Prompts")]
+    public List<TutorialKeyPrompt> keyPrompts = new List<TutorialKeyPrompt>();
 
     [Header("Goal Tracking")]
     public Transform playerTransform;
     public Transform goalTransform;
     public float finishDistance = 3f;
+    public string reachRadioObjective = "Reach the radio signal.";
 
-    private bool w, a, s, d, space, shift, c, x;
-    private bool keysDone;
+    private readonly List<TutorialKeyPrompt> activePrompts = new List<TutorialKeyPrompt>();
+    private bool controlsDone;
     private bool tutorialComplete;
+
+    void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
-        instance = this;
+        BuildPromptList();
         if (keysPanel != null) keysPanel.SetActive(true);
     }
 
@@ -29,9 +43,10 @@ public class TutorialManager : MonoBehaviour
     {
         if (tutorialComplete) return;
 
-        if (!keysDone)
+        if (!controlsDone)
         {
             CheckKeyInputs();
+            UpdatePromptFades();
         }
         else
         {
@@ -39,29 +54,90 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    void CheckKeyInputs()
+    void BuildPromptList()
     {
-        if (Input.GetKeyDown(KeyCode.W)) { w = true; SetKeyActive(imgW); }
-        if (Input.GetKeyDown(KeyCode.A)) { a = true; SetKeyActive(imgA); }
-        if (Input.GetKeyDown(KeyCode.S)) { s = true; SetKeyActive(imgS); }
-        if (Input.GetKeyDown(KeyCode.D)) { d = true; SetKeyActive(imgD); }
-        if (Input.GetKeyDown(KeyCode.Space)) { space = true; SetKeyActive(imgSpace); }
-        if (Input.GetKeyDown(KeyCode.LeftShift)) { shift = true; SetKeyActive(imgShift); }
-        if (Input.GetKeyDown(KeyCode.C)) { c = true; SetKeyActive(imgC); }
-        if (Input.GetKeyDown(KeyCode.X)) { x = true; SetKeyActive(imgX); }
+        activePrompts.Clear();
 
-        if (w && a && s && d && space && shift && c && x)
+        if (keyPrompts.Count > 0)
         {
-            keysDone = true;
-            Debug.Log("Keys mastered. Radio signal is now active.");
-            QuestManager.instance?.AdvanceStep(StepType.Movement, 1);
-            Misson_Manager.instance?.ActivateRadio();
+            activePrompts.AddRange(keyPrompts);
+        }
+        else
+        {
+            AddLegacyPrompt(KeyCode.W, imgW);
+            AddLegacyPrompt(KeyCode.A, imgA);
+            AddLegacyPrompt(KeyCode.S, imgS);
+            AddLegacyPrompt(KeyCode.D, imgD);
+            AddLegacyPrompt(KeyCode.Space, imgSpace);
+            AddLegacyPrompt(KeyCode.LeftShift, imgShift);
+            AddLegacyPrompt(KeyCode.C, imgC);
+            AddLegacyPrompt(KeyCode.X, imgX);
+            AddLegacyPrompt(KeyCode.Tab, imgTab);
+            AddLegacyPrompt(KeyCode.B, imgB);
+            AddLegacyPrompt(KeyCode.F, imgF);
+        }
+
+        foreach (TutorialKeyPrompt prompt in activePrompts)
+        {
+            prompt.Initialize();
         }
     }
 
-    void SetKeyActive(Image image)
+    void AddLegacyPrompt(KeyCode keyCode, Image image)
     {
-        if (image != null) image.color = activeColor;
+        activePrompts.Add(new TutorialKeyPrompt
+        {
+            keyCode = keyCode,
+            promptObject = image != null ? image.gameObject : null,
+            promptGraphic = image,
+            completedColor = activeColor
+        });
+    }
+
+    void CheckKeyInputs()
+    {
+        bool allComplete = activePrompts.Count > 0;
+
+        foreach (TutorialKeyPrompt prompt in activePrompts)
+        {
+            if (!prompt.IsComplete && Input.GetKeyDown(prompt.keyCode))
+            {
+                prompt.MarkComplete(hidePromptWhenPressed, promptFadeDuration);
+            }
+
+            if (!prompt.IsComplete) allComplete = false;
+        }
+
+        if (allComplete)
+        {
+            CompleteControlsTutorial();
+        }
+    }
+
+    void UpdatePromptFades()
+    {
+        foreach (TutorialKeyPrompt prompt in activePrompts)
+        {
+            prompt.UpdateFade(Time.unscaledDeltaTime);
+        }
+    }
+
+    void CompleteControlsTutorial()
+    {
+        controlsDone = true;
+
+        foreach (TutorialKeyPrompt prompt in activePrompts)
+        {
+            prompt.HideImmediate();
+        }
+
+        if (keysPanel != null) keysPanel.SetActive(false);
+
+        QuestManager.instance?.AdvanceStep(StepType.Movement, 1);
+        QuestManager.instance?.UpdateObjectiveText(reachRadioObjective);
+        Misson_Manager.instance?.ActivateRadio();
+
+        Debug.Log("Tutorial controls complete. Reach the radio signal.");
     }
 
     void TrackDistanceToGoal()
@@ -73,7 +149,7 @@ public class TutorialManager : MonoBehaviour
         if (distanceToGoal > finishDistance)
         {
             QuestManager.instance?.UpdateObjectiveText(
-                $"Reach the Radio Station: {Mathf.RoundToInt(distanceToGoal)}m away");
+                $"{reachRadioObjective} {Mathf.RoundToInt(distanceToGoal)}m");
         }
         else
         {
@@ -84,9 +160,74 @@ public class TutorialManager : MonoBehaviour
     void FinishTutorial()
     {
         tutorialComplete = true;
-        if (keysPanel != null) keysPanel.SetActive(false);
-
         QuestManager.instance?.AdvanceStep(StepType.ReachTarget, 1);
         Debug.Log("Arrived at the first radio signal. Tutorial complete.");
+    }
+}
+
+[System.Serializable]
+public class TutorialKeyPrompt
+{
+    public KeyCode keyCode;
+    public GameObject promptObject;
+    public Graphic promptGraphic;
+    public CanvasGroup canvasGroup;
+    public Color completedColor = Color.green;
+
+    public bool IsComplete { get; private set; }
+
+    private bool fading;
+    private float fadeTimer;
+    private float fadeDuration = 0.2f;
+
+    public void Initialize()
+    {
+        IsComplete = false;
+        fading = false;
+        fadeTimer = 0f;
+
+        if (promptObject != null) promptObject.SetActive(true);
+        if (canvasGroup != null) canvasGroup.alpha = 1f;
+    }
+
+    public void MarkComplete(bool hideWhenPressed, float duration)
+    {
+        IsComplete = true;
+
+        if (promptGraphic != null) promptGraphic.color = completedColor;
+
+        if (!hideWhenPressed)
+        {
+            return;
+        }
+
+        fadeDuration = Mathf.Max(0.01f, duration);
+        fading = true;
+        fadeTimer = 0f;
+
+        if (canvasGroup == null)
+        {
+            HideImmediate();
+        }
+    }
+
+    public void UpdateFade(float deltaTime)
+    {
+        if (!fading || canvasGroup == null) return;
+
+        fadeTimer += deltaTime;
+        canvasGroup.alpha = Mathf.Clamp01(1f - fadeTimer / fadeDuration);
+
+        if (fadeTimer >= fadeDuration)
+        {
+            HideImmediate();
+        }
+    }
+
+    public void HideImmediate()
+    {
+        fading = false;
+        if (canvasGroup != null) canvasGroup.alpha = 0f;
+        if (promptObject != null) promptObject.SetActive(false);
     }
 }
