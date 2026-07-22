@@ -135,7 +135,7 @@ public class TutorialManager : MonoBehaviour
 
         QuestManager.instance?.AdvanceStep(StepType.Movement, 1);
         QuestManager.instance?.UpdateObjectiveText(reachRadioObjective);
-        Misson_Manager.instance?.ActivateRadio();
+        MissionManager.instance?.ActivateRadio();
 
         Debug.Log("Tutorial controls complete. Reach the radio signal.");
     }

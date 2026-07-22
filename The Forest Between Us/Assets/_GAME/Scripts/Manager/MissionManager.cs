@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class Misson_Manager : MonoBehaviour
+public class MissionManager : MonoBehaviour
 {
-    public static Misson_Manager instance;
+    public static MissionManager instance;
     public int currentDay = 1;
     
     [Header("Quest Database")]
@@ -12,8 +12,10 @@ public class Misson_Manager : MonoBehaviour
     [Header("Tutorial Objects")]
     public GameObject radioObject; // Kéo cái Radio 3D vào đây
 
-    void Awake() {
-        instance = this;
+    void Awake()
+    {
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
     }
 
     void Start()
@@ -26,7 +28,13 @@ public class Misson_Manager : MonoBehaviour
 
     public void UpdateDailyQuest()
     {
-        if (currentDay <= allQuests.Count)
+        if (QuestManager.instance == null)
+        {
+            Debug.LogWarning("QuestManager is missing. Cannot initialize daily quest.");
+            return;
+        }
+
+        if (currentDay > 0 && currentDay <= allQuests.Count)
         {
             QuestData questToday = allQuests[currentDay - 1];
             QuestManager.instance.InitializeQuest(questToday);

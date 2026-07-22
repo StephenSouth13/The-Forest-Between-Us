@@ -20,11 +20,14 @@ public class InventorySlot : MonoBehaviour
 
         if (item != null)
         {
-            iconDisplay.sprite = item.icon; 
-            iconDisplay.enabled = true;
+            if (iconDisplay != null)
+            {
+                iconDisplay.sprite = item.icon;
+                iconDisplay.enabled = true;
+            }
             
             // Chỉ hiện số lượng nếu món đồ có thể cộng dồn và số lượng > 1
-            countText.text = (item.isStackable && amount > 1) ? amount.ToString() : "";
+            if (countText != null) countText.text = (item.isStackable && amount > 1) ? amount.ToString() : "";
         }
         else
         {
@@ -37,9 +40,13 @@ public class InventorySlot : MonoBehaviour
     {
         currentItem = null;
         currentCount = 0;
-        iconDisplay.enabled = false;
-        iconDisplay.sprite = null;
-        countText.text = "";
+        if (iconDisplay != null)
+        {
+            iconDisplay.enabled = false;
+            iconDisplay.sprite = null;
+        }
+
+        if (countText != null) countText.text = "";
     }
 
     // --- Các hàm hỗ trợ cho InventoryManager ---

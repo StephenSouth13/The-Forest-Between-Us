@@ -17,15 +17,15 @@ Prototype hiện đã có nền tảng tutorial khoảng 70-75% ở mức code v
 - Player tag đã có trong `TagManager.asset`.
 
 Chưa hoàn chỉnh:
-- Quest data tutorial hiện chỉ có 2 bước: `Movement` và `ReachTarget`; chưa có bước `Interaction` cho nhặt radio.
+- Quest data tutorial đã có 3 bước `Movement`, `ReachTarget`, `Interaction`, nhưng cần verify trong Unity Inspector sau khi mở project.
 - `RadioInteractable` tồn tại ở code nhưng chưa thấy được gắn vào object trong `Tutorial.unity`.
-- `Misson_Manager` tồn tại ở code nhưng chưa thấy được gắn trong `Tutorial.unity`, nên luồng `ActivateRadio()` có thể chưa chạy thật trong scene.
+- `MissionManager` tồn tại ở code nhưng chưa thấy được gắn trong `Tutorial.unity`, nên luồng `ActivateRadio()` có thể chưa chạy thật trong scene.
 - `InventoryManager` chưa thấy được gắn trong scene tutorial.
 - Prompt interaction trong `PlayerInteraction` chưa được nối UI trong scene (`promptPanel` và `promptText` đang null).
 - `PlayerPostureController` có code nhưng animator chưa được nối, chỉ đổi capsule height.
 - Stamina/survival hiện mới là UI mock, chưa có `PlayerStats` gameplay thật.
 - Radio chưa có controller riêng cho static audio, voice line, frequency, rumble, dẫn hướng.
-- Build settings vẫn đang trỏ scene sample/package cũ, chưa trỏ `Home` và `Tutorial`.
+- Build settings đã được chỉnh về `Home` và `Tutorial`, cần verify lại trong Unity Editor.
 
 ## Đối chiếu với roadmap
 
@@ -58,11 +58,12 @@ Trạng thái: core chạy được, data thiếu một bước quan trọng.
 - `Tutorial_Quest.asset` hiện có:
   - `Movement`: Master controls.
   - `ReachTarget`: Reach the first radio signal.
+  - `Interaction`: Pick up the radio.
 - Roadmap yêu cầu 3 bước:
   - `Movement`
   - `ReachTarget`
   - `Interaction`
-- Cần thêm step `Interaction` vào `Tutorial_Quest.asset`, nếu không `RadioInteractable.AdvanceStep(StepType.Interaction, 1)` sẽ không advance được sau khi đã hoàn tất `ReachTarget`.
+- Cần verify step `Interaction` trong Inspector để đảm bảo `RadioInteractable.AdvanceStep(StepType.Interaction, 1)` chạy đúng sau khi đã hoàn tất `ReachTarget`.
 
 ### Radio
 
@@ -88,7 +89,7 @@ Trạng thái: mới có mầm hệ thống.
 
 ## Ưu tiên tiếp theo
 
-1. Trong `Tutorial_Quest.asset`, thêm step thứ ba:
+1. Trong `Tutorial_Quest.asset`, verify step thứ ba:
    - description: `Pick up the radio`
    - type: `Interaction`
    - targetAmount: `1`
@@ -97,7 +98,7 @@ Trạng thái: mới có mầm hệ thống.
    - prompt: `Pick up Radio`
    - objectToHide: radio object hoặc để mặc định tự hide gameObject.
 
-3. Gắn hoặc tạo `Misson_Manager` trong scene:
+3. Gắn hoặc tạo `MissionManager` trong scene:
    - allQuests[0] = `Tutorial_Quest.asset`
    - radioObject = radio object đang cần bật sau khi học phím.
 
@@ -111,7 +112,7 @@ Trạng thái: mới có mầm hệ thống.
    - chuyển objective sang nhiệm vụ ngày 1
    - hoặc trigger cutscene ngắn.
 
-6. Cập nhật Build Settings:
+6. Verify Build Settings:
    - `Assets/Scenes/Home.unity`
    - `Assets/Scenes/Tutorial.unity`
 

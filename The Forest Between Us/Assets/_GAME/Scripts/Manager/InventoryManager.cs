@@ -32,15 +32,21 @@ public class InventoryManager : MonoBehaviour
     {
         if (newItem == null || amount <= 0) return;
 
+        int remainingAmount = amount;
+
         if (newItem.isStackable)
         {
             foreach (InventorySlot slot in allSlots)
             {
                 if (!slot.IsEmpty() && slot.GetItem() == newItem && slot.GetCount() < newItem.maxStackSize)
                 {
-                    int nextCount = Mathf.Min(slot.GetCount() + amount, newItem.maxStackSize);
+                    int spaceLeft = newItem.maxStackSize - slot.GetCount();
+                    int amountToAdd = Mathf.Min(remainingAmount, spaceLeft);
+                    int nextCount = slot.GetCount() + amountToAdd;
                     slot.UpdateSlot(newItem, nextCount);
-                    return;
+                    remainingAmount -= amountToAdd;
+
+                    if (remainingAmount <= 0) return;
                 }
             }
         }
@@ -49,13 +55,15 @@ public class InventoryManager : MonoBehaviour
         {
             if (slot.IsEmpty())
             {
-                int slotAmount = newItem.isStackable ? Mathf.Min(amount, newItem.maxStackSize) : amount;
+                int slotAmount = newItem.isStackable ? Mathf.Min(remainingAmount, newItem.maxStackSize) : remainingAmount;
                 slot.UpdateSlot(newItem, slotAmount);
-                return;
+                remainingAmount -= slotAmount;
+
+                if (remainingAmount <= 0) return;
             }
         }
 
-        Debug.Log("Inventory is full. Cannot pick up: " + newItem.itemName);
+        Debug.Log($"Inventory is full. Could not pick up {remainingAmount}x {newItem.itemName}.");
     }
 
     public void FilterInventory(int categoryIndex)

@@ -27,5 +27,10 @@ MonoBehaviour:
     targetAmount: 1
     currentAmount: 0
     isFinished: 0
+  - description: Pick up the radio
+    type: 2
+    targetAmount: 1
+    currentAmount: 0
+    isFinished: 0
   karmaImpact: 0
   isCompleted: 0

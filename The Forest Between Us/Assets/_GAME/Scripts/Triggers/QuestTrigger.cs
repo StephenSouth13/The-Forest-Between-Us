@@ -13,6 +13,12 @@ public class QuestTrigger : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
+            if (QuestManager.instance == null)
+            {
+                Debug.LogWarning("QuestManager is missing. Cannot advance quest trigger.");
+                return;
+            }
+
             QuestManager.instance.AdvanceStep(typeToAdvance,amount);
             Debug.Log($"Objective Updated: {typeToAdvance}");
             if (destroyOnActivation) Destroy(gameObject);
