@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
-public class InventorySlot : MonoBehaviour
+public class InventorySlot : MonoBehaviour, IPointerClickHandler
 {
     [Header("UI References")]
     public Image iconDisplay;       // Kéo Image con vào đây
@@ -53,4 +54,19 @@ public class InventorySlot : MonoBehaviour
     public bool IsEmpty() => currentItem == null;
     public ItemData GetItem() => currentItem;
     public int GetCount() => currentCount;
+
+    // Click trái: dùng 1 item. Click phải: thả 1 item ra thế giới
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (IsEmpty() || InventoryManager.instance == null) return;
+
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            InventoryManager.instance.UseItem(this);
+        }
+        else if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            InventoryManager.instance.DropItem(this, 1);
+        }
+    }
 }
