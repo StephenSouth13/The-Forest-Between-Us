@@ -126,10 +126,10 @@ TextureImporter:
       name: Banner_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 168
-        width: 1024
-        height: 856
+        x: 3
+        y: 4
+        width: 837
+        height: 878
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
