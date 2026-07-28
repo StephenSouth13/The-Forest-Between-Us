@@ -22,6 +22,10 @@ public class PlayerPostureController : MonoBehaviour
     private bool isCrouching;
     private bool isProne;
 
+    public bool IsCrouching => isCrouching;
+    public bool IsProne => isProne;
+
+
     void Awake()
     {
         characterController = GetComponent<CharacterController>();

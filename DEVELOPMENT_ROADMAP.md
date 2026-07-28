@@ -1,58 +1,36 @@
-# Development Roadmap
+# Development Roadmap: Complete 30-Day Campaign & 5 Multi-Endings
 
-## Mục Tiêu Gần Nhất
+## 📜 Kịch Bản Chi Tiết 30 Ngày (5 Hồi Gameplay)
 
-Hoàn thiện tutorial thành một vòng chơi đầy đủ: spawn nhân vật, học phím, đi tới radio, nhặt radio, nhận tín hiệu Mai An Tiêm, mở nhiệm vụ ngày 1.
+- **HỒI 1: KHỞI ĐẦU BÍ ẨN (Ngày 1 - 3)**: Nhập môn sinh tồn, nhặt đài Radio 01, hái Dưa Hấu Hạt Đen, học phím bấm & né tránh.
+- **HỒI 2: CHIẾN ĐẤU & KHÁNG CỰ (Ngày 4 - 10: 7 Ngày Chiến Đấu)**: Mở khóa Nỏ Tần Số, chống chịu 2 đợt Trăng Máu Quái Vực (**Wave Defense 01 & 02**), săn Miniboss Shadow Berserker.
+- **HỒI 3: KHÁM PHÁ CỔ ĐẠI (Ngày 11 - 20: 10 Ngày Thám Hiểm)**: Phế tích Mai An Tiêm, giải đố mạch điện cổ đại, diệt quái bay Shadow Drakes, thu thập 4 Chìa Khóa Tần Số Trụ Vũ Trụ.
+- **HỒI 4: ĐẠI CHIẾN RANH GIỚI (Ngày 21 - 29: 9 Ngày Cố Thủ)**: Xây pháo đài vô tuyến, đại chiến Trùm Cổ Đại **Void Leviathan**.
+- **HỒI 5: NGÀY PHÁN QUYẾT (Ngày 30)**: Lựa chọn 1 trong 5 Cái Kết Vận Mệnh (True Ending, Mai An Tiem Echo, Dark King, Sacrifice, Time Loop Secret).
 
-## Checklist Code
+---
 
-1. Player
-   - Dùng `StarterAssets/ThirdPersonController` làm nền.
-   - Gắn tag `Player`.
-   - Kiểm tra `TutorialManager.playerTransform` đang trỏ đúng player.
-   - Thêm `PlayerInteraction` để raycast từ camera hoặc trigger vùng gần.
+## 🛠️ Bộ Mã Nguồn C# Đã Viết Sẵn Cho 30 Ngày
 
-2. Interaction
-   - Chuẩn hóa interface `Interactable`.
-   - `ItemObject` dùng cho vật phẩm thường.
-   - Tạo `RadioInteractable` riêng cho radio để vừa nhặt vừa gọi quest/story.
-   - Phím chính: `F`.
+1. [Campaign30DaysManager.cs](file:///d:/VTC_Academy/game3d/The-Forest-Between-Us/The%20Forest%20Between%20Us/Assets/_GAME/Scripts/Manager/Campaign30DaysManager.cs): Khai báo 100% dữ liệu Nhiệm vụ, Cốt truyện, Mục tiêu, đợt Quái cho toàn bộ Ngày 1 đến Ngày 30.
+2. [DayManager.cs](file:///d:/VTC_Academy/game3d/The-Forest-Between-Us/The%20Forest%20Between%20Us/Assets/_GAME/Scripts/Manager/DayManager.cs): Quản lý chu kỳ 30 ngày, đổi thời gian Ngày/Đêm, ánh sáng và sương mù.
+3. [CombatManager.cs](file:///d:/VTC_Academy/game3d/The-Forest-Between-Us/The%20Forest%20Between%20Us/Assets/_GAME/Scripts/Combat/CombatManager.cs): Tấn công vũ khí (Nỏ, Cận chiến), spawn đợt quái tràn vào (Wave Defense).
+4. [EndingManager.cs](file:///d:/VTC_Academy/game3d/The-Forest-Between-Us/The%20Forest%20Between%20Us/Assets/_GAME/Scripts/Manager/EndingManager.cs) & [EndingUIController.cs](file:///d:/VTC_Academy/game3d/The-Forest-Between-Us/The%20Forest%20Between%20Us/Assets/_GAME/Scripts/UI/EndingUIController.cs): Quản lý 5 Kết thúc khác nhau (Ending 1 đến Ending 5).
+5. [Campaign30DaysSetupTool.cs](file:///d:/VTC_Academy/game3d/The-Forest-Between-Us/The%20Forest%20Between%20Us/Assets/_GAME/Scripts/Editor/Campaign30DaysSetupTool.cs): Tool 1-Click tự động gắn toàn bộ Manager vào Unity Editor.
 
-3. Quest
-   - Tutorial nên có 3 bước:
-     - `Movement`: master controls.
-     - `ReachTarget`: reach first radio signal.
-     - `Interaction`: pick up the radio.
-   - `QuestTrigger` chỉ dùng cho vùng đến nơi.
-   - Collect/item interaction nên gọi quest từ object được nhặt.
+---
 
-4. Radio
-   - Radio là "la bàn truyện", không chỉ là item.
-   - Radio phát static khi gần objective.
-   - Voice line của Mai An Tiêm chỉ bật khi quest đổi step.
-   - Về sau radio có thể rung, đổi tần số, hoặc sai lệch khi có enemy.
+## 🎮 Hướng Dẫn Chi Tiết Thao Tác Trong Unity Editor (Dành Cho Bạn)
 
-5. Survival
-   - Ngày 1: stamina + crouch/prone để né nguy hiểm.
-   - Ngày 2: inventory + craft thô sơ.
-   - Ngày 3: puzzle + ending choice.
+### **BƯỚC 1: TỰ ĐỘNG THIẾT LẬP (1-CLICK SETUP)**
+1. Mở dự án Unity của bạn tại `d:\VTC_Academy\game3d\The-Forest-Between-Us\The Forest Between Us`.
+2. Trên thanh menu trên cùng của Unity, chọn **`Tools > Forest Between Us > Setup 30-Day Campaign`**.
+3. Unity sẽ tự động tạo GameObject `GameManagers` và gắn đầy đủ `Campaign30DaysManager`, `DayManager`, `CombatManager`, `EndingManager`, `QuestManager`, `MissionManager`.
 
-## Gợi Ý Góc Nhìn Nhiệm Vụ
+### **BƯỚC 2: GẮN KÍCH HOẠT UI (Tùy chọn)**
+1. Mở menu **`Tools > Forest Between Us > Setup Inventory UI`** (để tạo Backpack UI).
+2. Kéo đèn `Directional Light` trong Scene vào ô `directionalLight` của component `DayManager`.
 
-Nên giữ góc nhìn thứ ba, camera thấp và hơi lệch vai khi đi trong rừng. Khi radio phát tín hiệu, camera có thể siết FOV nhẹ hoặc thêm camera rumble rất nhỏ để tạo cảm giác tín hiệu đang kéo player đi.
-
-UI nhiệm vụ nên ít chữ. Hãy để radio, ánh sáng emission trên dưa hấu và fog dẫn đường. Quest text chỉ nên là nhắc ngắn như:
-
-- Reach the radio signal.
-- Follow the black seeds.
-- Hide until the swarm passes.
-- Keep the fire alive.
-- Restore the relay circuit.
-
-## Rủi Ro Cần Xử Lý
-
-- `Misson_Manager` đang sai chính tả tên class/file; nên đổi thành `MissionManager` khi chưa có nhiều scene/prefab phụ thuộc.
-- Singleton hiện đủ dùng cho prototype, nhưng về sau nên có `GameSession` hoặc `ServiceLocator` nhẹ.
-- Inventory hiện chưa xử lý phần dư khi nhặt số lượng vượt `maxStackSize`.
-- Scene `Tutorial.unity` rất lớn, nên tránh sửa thủ công bằng text nếu không cần.
-- Build settings đang trỏ tới scene sample cũ, cần cập nhật trước khi build demo.
+### **BƯỚC 3: NHẤN PLAY CHƠI VÀ TEST GAME!**
+1. Bấm nút **PLAY (▶️)** trong Unity.
+2. Game sẽ tự động nạp **Ngày 1** và nhảy lần lượt đến **Ngày 30** khi bạn hoàn thành nhiệm vụ!
