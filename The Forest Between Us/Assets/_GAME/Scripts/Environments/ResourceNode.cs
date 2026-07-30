@@ -81,6 +81,21 @@ public class ResourceNode : MonoBehaviour, Interactable
             return;
         }
 
+        // Quy tắc Bảo Vệ Môi Trường: Giới hạn chặt cây mỗi ngày
+        if (resourceType == ResourceType.Tree && DayManager.instance != null)
+        {
+            if (!DayManager.instance.CanChopTree())
+            {
+                string msg = $"🌱 HÔM NAY BẠN ĐÃ CHẶT ĐỦ {DayManager.instance.maxTreesAllowedPerDay} CÂY!\nVì quy tắc bảo vệ môi trường, bạn dừng chặt cây và chờ sang ngày mới.";
+                if (RadioDialogueUIController.instance != null)
+                {
+                    RadioDialogueUIController.instance.ShowSubtitle("🌱 QUY TẮC BẢO VỆ MÔI TRƯỜNG", msg, 5f);
+                }
+                Debug.LogWarning(msg);
+                return;
+            }
+        }
+
         // Chặt / Hái / Đập
         currentHits--;
 
@@ -112,6 +127,12 @@ public class ResourceNode : MonoBehaviour, Interactable
 
     void HarvestComplete()
     {
+        // Ghi nhận chặt cây nếu thuộc loại Cây
+        if (resourceType == ResourceType.Tree && DayManager.instance != null)
+        {
+            DayManager.instance.RegisterTreeChopped();
+        }
+
         int amountToDrop = Random.Range(dropAmountMin, dropAmountMax + 1);
 
         if (dropItemData != null && InventoryManager.instance != null)

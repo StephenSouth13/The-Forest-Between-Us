@@ -16,11 +16,20 @@ public class DayManager : MonoBehaviour
     public AnimationCurve lightIntensityCurve;
     public float currentTimeOfDay = 0.25f; // 0.0 = Midnight, 0.5 = Noon, 1.0 = Midnight
 
-    [Header("Fog Settings")]
-    public Color dayFogColor = new Color(0.8f, 0.8f, 0.8f);
-    public Color nightFogColor = new Color(0.05f, 0.05f, 0.1f);
-    public float dayFogDensity = 0.01f;
-    public float nightFogDensity = 0.05f;
+    [Header("Environmental Protection (Quy Tắc Bảo Vệ Môi Trường)")]
+    public int maxTreesAllowedPerDay = 5; // Tối đa 5 cây / ngày
+    public int treesChoppedToday = 0;
+
+    public bool CanChopTree()
+    {
+        return treesChoppedToday < maxTreesAllowedPerDay;
+    }
+
+    public void RegisterTreeChopped()
+    {
+        treesChoppedToday++;
+        Debug.Log($"🌱 [Bảo Vệ Môi Trường] Đã chặt {treesChoppedToday}/{maxTreesAllowedPerDay} cây trong Ngày {currentDay}.");
+    }
 
     public event Action<int> OnDayChanged;
     public event Action OnNightStarted;
@@ -91,7 +100,8 @@ public class DayManager : MonoBehaviour
         }
 
         currentDay++;
-        Debug.Log($"Advanced to Day {currentDay}");
+        treesChoppedToday = 0; // Reset số lượng cây đã chặt cho ngày mới
+        Debug.Log($"Advanced to Day {currentDay}. Reset tree chopping limit for environmental protection.");
 
         OnDayChanged?.Invoke(currentDay);
 

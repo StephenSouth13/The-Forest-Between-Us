@@ -93,6 +93,19 @@ public class RadioDialogueUIController : MonoBehaviour
         PlayDialogue(lines);
     }
 
+    public void ShowSubtitle(string speaker, string message, float duration = 5f)
+    {
+        List<DialogueLine> lines = new List<DialogueLine>()
+        {
+            new DialogueLine
+            {
+                speakerName = speaker,
+                messageText = message
+            }
+        };
+        PlayDialogue(lines);
+    }
+
     public void PlayDialogue(List<DialogueLine> lines)
     {
         currentLines = lines;
