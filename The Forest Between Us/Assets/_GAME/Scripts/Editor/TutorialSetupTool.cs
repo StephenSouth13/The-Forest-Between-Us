@@ -57,6 +57,13 @@ public static class TutorialSetupTool
         // 9. Setup Radio Dialogue Subtitles Panel (Bottom Center)
         RadioDialogueUIController dialogueUI = GetOrCreateUIComponent<RadioDialogueUIController>("RadioDialogueUIController", canvas.transform);
 
+        // 10. Setup Recipe Book UI (L Key Survival Library)
+        RecipeBookUIController recipeBookUI = GetOrCreateUIComponent<RecipeBookUIController>("RecipeBookUIController", canvas.transform);
+        recipeBookUI.toggleKey = KeyCode.L;
+
+        // 11. Setup Player Respawn Manager (Checkpoint & Death Handling)
+        PlayerRespawnManager respawnManager = GetOrCreateComponent<PlayerRespawnManager>("PlayerRespawnManager");
+
         // Link SM_Radio & Ensure Interactable Component
         GameObject radioGO = GameObject.Find("SM_Radio");
         if (radioGO != null)
