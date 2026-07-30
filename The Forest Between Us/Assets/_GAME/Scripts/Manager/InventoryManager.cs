@@ -190,6 +190,20 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
+        // Xử lý Thuốc Kháng Sinh, Trà Cảm Cúm & Thuốc Chống Muỗi
+        if (item.itemName.Contains("Kháng Sinh") || item.itemName.Contains("Antibiotic"))
+        {
+            PlayerDiseaseManager.instance?.CureMosquitoDisease();
+        }
+        if (item.itemName.Contains("Cảm Cúm") || item.itemName.Contains("Flu") || item.itemName.Contains("Trà Dược"))
+        {
+            PlayerDiseaseManager.instance?.CureFlu();
+        }
+        if (item.itemName.Contains("Chống Muỗi") || item.itemName.Contains("Repellent"))
+        {
+            PlayerDiseaseManager.instance?.ApplyRepellent(300f);
+        }
+
         ItemData emptyVariant = item.emptyBottleVariant;
 
         if (RemoveItemFromSlot(slot, 1))

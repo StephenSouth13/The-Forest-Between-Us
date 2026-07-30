@@ -1,36 +1,56 @@
-# Development Roadmap: Complete 30-Day Campaign & 5 Multi-Endings
+# 🌲 Development Roadmap: The Forest Between Us
 
-## 📜 Kịch Bản Chi Tiết 30 Ngày (5 Hồi Gameplay)
+## 📜 TỔNG QUAN KỊCH BẢN 30 NGÀY (SEASON 1 & BẮT ĐẦU DÀI HẠN)
 
-- **HỒI 1: KHỞI ĐẦU BÍ ẨN (Ngày 1 - 3)**: Nhập môn sinh tồn, nhặt đài Radio 01, hái Dưa Hấu Hạt Đen, học phím bấm & né tránh.
-- **HỒI 2: CHIẾN ĐẤU & KHÁNG CỰ (Ngày 4 - 10: 7 Ngày Chiến Đấu)**: Mở khóa Nỏ Tần Số, chống chịu 2 đợt Trăng Máu Quái Vực (**Wave Defense 01 & 02**), săn Miniboss Shadow Berserker.
-- **HỒI 3: KHÁM PHÁ CỔ ĐẠI (Ngày 11 - 20: 10 Ngày Thám Hiểm)**: Phế tích Mai An Tiêm, giải đố mạch điện cổ đại, diệt quái bay Shadow Drakes, thu thập 4 Chìa Khóa Tần Số Trụ Vũ Trụ.
-- **HỒI 4: ĐẠI CHIẾN RANH GIỚI (Ngày 21 - 29: 9 Ngày Cố Thủ)**: Xây pháo đài vô tuyến, đại chiến Trùm Cổ Đại **Void Leviathan**.
-- **HỒI 5: NGÀY PHÁN QUYẾT (Ngày 30)**: Lựa chọn 1 trong 5 Cái Kết Vận Mệnh (True Ending, Mai An Tiem Echo, Dark King, Sacrifice, Time Loop Secret).
+Dự án game 3D sinh tồn được cấu trúc theo lộ trình các Season phát triển dài hạn:
 
 ---
 
-## 🛠️ Bộ Mã Nguồn C# Đã Viết Sẵn Cho 30 Ngày
+## 🌟 SEASON 1: "SỰ IM LẶNG CỦA RỪNG & BÍ MẬT TẦN SỐ" (30 NGÀY)
 
-1. [Campaign30DaysManager.cs](file:///d:/VTC_Academy/game3d/The-Forest-Between-Us/The%20Forest%20Between%20Us/Assets/_GAME/Scripts/Manager/Campaign30DaysManager.cs): Khai báo 100% dữ liệu Nhiệm vụ, Cốt truyện, Mục tiêu, đợt Quái cho toàn bộ Ngày 1 đến Ngày 30.
-2. [DayManager.cs](file:///d:/VTC_Academy/game3d/The-Forest-Between-Us/The%20Forest%20Between%20Us/Assets/_GAME/Scripts/Manager/DayManager.cs): Quản lý chu kỳ 30 ngày, đổi thời gian Ngày/Đêm, ánh sáng và sương mù.
-3. [CombatManager.cs](file:///d:/VTC_Academy/game3d/The-Forest-Between-Us/The%20Forest%20Between%20Us/Assets/_GAME/Scripts/Combat/CombatManager.cs): Tấn công vũ khí (Nỏ, Cận chiến), spawn đợt quái tràn vào (Wave Defense).
-4. [EndingManager.cs](file:///d:/VTC_Academy/game3d/The-Forest-Between-Us/The%20Forest%20Between%20Us/Assets/_GAME/Scripts/Manager/EndingManager.cs) & [EndingUIController.cs](file:///d:/VTC_Academy/game3d/The-Forest-Between-Us/The%20Forest%20Between%20Us/Assets/_GAME/Scripts/UI/EndingUIController.cs): Quản lý 5 Kết thúc khác nhau (Ending 1 đến Ending 5).
-5. [Campaign30DaysSetupTool.cs](file:///d:/VTC_Academy/game3d/The-Forest-Between-Us/The%20Forest%20Between%20Us/Assets/_GAME/Scripts/Editor/Campaign30DaysSetupTool.cs): Tool 1-Click tự động gắn toàn bộ Manager vào Unity Editor.
+### 📌 Giai Đoạn 1: Nhập Môn Sinh Tồn Cơ Bản (Ngày 1 - 7)
+- Quản lý chỉ số Vitals (Máu, Đói, Khát, Thể Lực, Giấc Ngủ).
+- Khai thác tài nguyên tuân thủ **Quy Tắc Bảo Vệ Môi Trường (Tối đa 5 cây/ngày)**, cây tự động mọc lại sau 90s.
+- Bôi thuốc chống muỗi tránh **Bệnh Sốt Rét / Sốt Xuất Huyết** (`MosquitoZone`).
+- Đuổi gió sương đêm bằng Đống Lửa Trại, nhóm củi sưởi ấm.
+- **Mục tiêu cốt truyện:** Sửa đài Vô Tuyến 01 để nhận tín hiệu vô tuyến từ **Mai An Tiêm**.
+
+### 📌 Giai Đoạn 2: Nông Nghiệp, Thuần Hóa & Căn Cứ (Ngày 8 - 14)
+- Chế tạo Nồi Nấu Ăn kim loại, Ô đất trồng trọt `BerrySeed` tưới nước thu hoạch nông sản.
+- Đặt Bẫy Lồng săn bắt thỏ/lợn rừng, cho Thỏ ăn Trái cây 3 lần để **Thuần Hóa Pet đi theo**.
+- Thổ Dân K'Nu thân thiện ban ngày $\rightarrow$ Bị **Hắc Hóa ban đêm** do sương mù độc.
+
+### 📌 Giai Đoạn 3: Y Tế, Sửa Chữa & Nâng Cấp Trang Bị (Ngày 15 - 22)
+- Nấu **Thuốc Kháng Sinh Tự Chế** (2x Thảo Dược + 1x Nấm + 1x Nước Suối) chữa khỏi Sốt Rét.
+- Nấu **Trà Cảm Cúm Gừng** chữa khỏi bệnh ho cảm lạnh.
+- Thao tác trên 3 Bàn Chế Tạo: **Sửa chữa trang bị hỏng**, **Nâng cấp Rìu Thép Lvl 2**, **Đập bỏ lấy 50% nguyên liệu**.
+
+### 📌 Giai Đoạn 4: Ngày Phán Quyết & Lựa Chọn Kết Thúc (Ngày 23 - 30)
+- Trăng Máu rực đỏ, quái càn quét căn cứ.
+- Ngày 30: Đưa ra lựa chọn trốn thoát HOẶC đi sâu vào **Lõi Vùng Đứt Gãy (Dẫn vào Season 2)**.
 
 ---
 
-## 🎮 Hướng Dẫn Chi Tiết Thao Tác Trong Unity Editor (Dành Cho Bạn)
+## 🔮 BẢN ĐỒ PHÁT TRIỂN CÁC SEASON TIẾP THEO (BEYOND SEASON 1)
 
-### **BƯỚC 1: TỰ ĐỘNG THIẾT LẬP (1-CLICK SETUP)**
-1. Mở dự án Unity của bạn tại `d:\VTC_Academy\game3d\The-Forest-Between-Us\The Forest Between Us`.
-2. Trên thanh menu trên cùng của Unity, chọn **`Tools > Forest Between Us > Setup 30-Day Campaign`**.
-3. Unity sẽ tự động tạo GameObject `GameManagers` và gắn đầy đủ `Campaign30DaysManager`, `DayManager`, `CombatManager`, `EndingManager`, `QuestManager`, `MissionManager`.
+### 🌋 SEASON 2: "Lõi Vùng Đứt Gãy & Hang Động Địa Ngầm" (The Underground Core)
+- Thám hiểm hang sâu dưới lòng đất, quản lý bình Oxy & Mặt nạ lọc khí.
+- Đuốc Tần Số & Pin Vô Tuyến, đối đầu quái mù săn bằng âm thanh.
 
-### **BƯỚC 2: GẮN KÍCH HOẠT UI (Tùy chọn)**
-1. Mở menu **`Tools > Forest Between Us > Setup Inventory UI`** (để tạo Backpack UI).
-2. Kéo đèn `Directional Light` trong Scene vào ô `directionalLight` của component `DayManager`.
+### 🌊 SEASON 3: "Hải Đảo & Đại Dương Đứt Gãy" (The Shattered Isles)
+- Đóng bè thuyền vượt biển, ướp muối bảo quản thực phẩm không bị thối rữa.
+- Bão biển & khám phá các hòn đảo hoang dã rải rác.
 
-### **BƯỚC 3: NHẤN PLAY CHƠI VÀ TEST GAME!**
-1. Bấm nút **PLAY (▶️)** trong Unity.
-2. Game sẽ tự động nạp **Ngày 1** và nhảy lần lượt đến **Ngày 30** khi bạn hoàn thành nhiệm vụ!
+### ♾️ ENDLESS SANDBOX MODE (Sinh Tồn Vô Hạn)
+- Tùy chỉnh độ khó, xây đại căn cứ pháo đài phòng thủ wave quái đêm vô tận.
+
+---
+
+## 🛠️ BỘ CÔNG CỤ 1-CLICK EDITOR TOOLS TRONG UNITY
+
+1. **`Tools > Forest Between Us > Convert Selected Objects to Choppable Trees`**: Biến cây 3D được chọn thành Cây chặt mọc lại.
+2. **`Tools > Forest Between Us > Auto Detect & Convert ALL Trees in Scene`**: Tự động quét và kích hoạt tính năng chặt cây cho toàn bộ cây trong Scene.
+3. **`Tools > Forest Between Us > Setup Harvest & Resource System`**: Tạo Nồi Nấu, Ô Đất, Ổ Muỗi, Lửa Trại, Dược Phẩm.
+4. **`Tools > Forest Between Us > Setup Repair, Upgrade & Salvage Workbenches`**: Tạo 3 Bàn Sửa/Nâng/Đập.
+5. **`Tools > Forest Between Us > Setup AI, Animals, Natives & Traps`**: Sinh Thỏ Rừng, Lợn Rừng, Thổ Dân K'Nu & Bẫy.
+6. **`Tools > Forest Between Us > Setup 30-Day Campaign`**: Nạp Quản lý 30 Ngày.

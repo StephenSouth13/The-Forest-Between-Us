@@ -239,6 +239,27 @@ public class RecipeBookUIController : MonoBehaviour
             },
             new RecipeData
             {
+                recipeName = "💊 Thuốc Kháng Sinh Tự Chế (Antibiotic)",
+                category = "Y Tế & Thuốc",
+                description = "Thuốc kháng sinh cô đọng từ dược liệu rừng. ĐẶC TRỊ CHỮA KHỎI BỆNH SỐT RÉT DO MUỖI ĐỐT & HỒI +35 MÁU.",
+                ingredients = "• 2x Thảo Dược Rừng\n• 1x Nấm Rừng Tươi\n• 1x Nước Suối\n• 🛠️ Yêu cầu: Nồi Nấu Ăn"
+            },
+            new RecipeData
+            {
+                recipeName = "🍵 Trà Cảm Cúm Gừng & Thảo Dược",
+                category = "Y Tế & Thuốc",
+                description = "Trà nóng giải cảm lạnh. CHỮA KHỎI BỆNH CẢM CÚM, HỒI +25 THỂ LỰC & +20 MÁU.",
+                ingredients = "• 2x Thảo Dược Rừng\n• 1x Trái Cây Rừng\n• 1x Nước Suối\n• 🛠️ Yêu cầu: Nồi Nấu Ăn"
+            },
+            new RecipeData
+            {
+                recipeName = "🧴 Thuốc Bôi Chống Muỗi (Repellent)",
+                category = "Y Tế & Thuốc",
+                description = "Thuốc cao bôi thảo dược. BẢO VỆ NHÂN VẬT KHỎI MUỖI ĐỐT TRONG 5 PHÚT (300 giây).",
+                ingredients = "• 2x Thảo Dược Rừng\n• 1x Nhựa Cây"
+            },
+            new RecipeData
+            {
                 recipeName = "🍖 Thịt Nướng Chín Sốt Nấm",
                 category = "Ẩm Thực (+60 Đói)",
                 description = "Thịt nướng chín thơm nức trên lửa trại. Hồi +60 Đói, +30 Máu, không gây ngộ độc.",

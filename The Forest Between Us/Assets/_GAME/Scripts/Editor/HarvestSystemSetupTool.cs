@@ -21,7 +21,7 @@ public class HarvestSystemSetupTool
         ItemData spoiledFood = GetOrCreateItem("Item_SpoiledFood", "Trái Cây / Đồ Ăn Thối", ItemType.Food, true, 20, true, -15f, 0f, -20f, 0.2f);
         ItemData wildBerry = GetOrCreateItem("Item_WildBerry", "Trái Cây Rừng", ItemType.Food, true, 20, true, 25f, 15f, 10f, 0.2f);
         wildBerry.canSpoil = true;
-        wildBerry.spoilTimeSeconds = 180f; // 3 phút thối hỏng
+        wildBerry.spoilTimeSeconds = 180f;
         wildBerry.spoiledItemResult = spoiledFood;
         EditorUtility.SetDirty(wildBerry);
 
@@ -46,9 +46,8 @@ public class HarvestSystemSetupTool
         EditorUtility.SetDirty(emptyBottle);
         EditorUtility.SetDirty(fullWaterBottle);
 
-        // Raw & Cooked Food
         ItemData rawMeat = GetOrCreateItem("Item_RawMeat", "Thịt Sống", ItemType.Food, true, 20, true, 15f, 0f, -25f, 0.5f);
-        rawMeat.isRawFood = true; // Ăn sống bị ngộ độc
+        rawMeat.isRawFood = true;
         rawMeat.canSpoil = true;
         rawMeat.spoilTimeSeconds = 120f;
         rawMeat.spoiledItemResult = spoiledFood;
@@ -56,29 +55,26 @@ public class HarvestSystemSetupTool
 
         ItemData cookedMeat = GetOrCreateItem("Item_CookedMeat", "Thịt Nướng Chín", ItemType.Food, true, 20, true, 60f, 0f, 25f, 0.5f);
 
-        // Herbs & Culinary Ingredients
         ItemData herbalPlant = GetOrCreateItem("Item_HerbalPlant", "Thảo Dược Rừng", ItemType.Consumable, true, 30, true, 5f, 10f, 15f, 0.1f);
-        ItemData mushroom = GetOrCreateItem("Item_ForestMushroom", "Nấm Rừng tươi", ItemType.Food, true, 30, true, 15f, 5f, 5f, 0.1f);
+        ItemData mushroom = GetOrCreateItem("Item_ForestMushroom", "Nấm Rừng Tươi", ItemType.Food, true, 30, true, 15f, 5f, 5f, 0.1f);
 
-        // Advanced Culinary Dishes (Súp & Trà)
         ItemData heartyStew = GetOrCreateItem("Item_HeartyStew", "Thịt Hầm Thảo Mộc", ItemType.Consumable, true, 10, true, 75f, 20f, 45f, 0.8f);
-        ItemData detoxTea = GetOrCreateItem("Item_DetoxTea", "Trà Thảo Dược Giải Độc", ItemType.Consumable, true, 10, true, 0f, 55f, 30f, 0.4f);
+        ItemData detoxTea = GetOrCreateItem("Item_DetoxTea", "Trà Cảm Cúm Gừng & Thảo Dược", ItemType.Consumable, true, 10, true, 0f, 55f, 30f, 0.4f);
 
-        // Cooking Pot Fixture Item
-        ItemData cookingPotItem = GetOrCreateItem("Item_CookingPot", "Nồi Nấu Ăn Kim Loại", ItemType.Tool, false, 1, false, 0, 0, 0, 4.0f);
+        // 💊 Thuốc Kháng Sinh & Thuốc Chống Muỗi
+        ItemData diyAntibiotic = GetOrCreateItem("Item_DIYAntibiotic", "Thuốc Kháng Sinh Tự Chế", ItemType.Consumable, true, 10, true, 0f, 10f, 35f, 0.2f);
+        ItemData mosquitoRepellent = GetOrCreateItem("Item_MosquitoRepellent", "Thuốc Bôi Chống Muỗi", ItemType.Consumable, true, 5, true, 0f, 0f, 0f, 0.3f);
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        // 3. Setup Manager Spoilage
+        // 3. Setup Managers
         GameObject managerObj = GameObject.Find("GameManagers");
         if (managerObj == null) managerObj = new GameObject("GameManagers");
-        if (managerObj.GetComponent<FoodSpoilageManager>() == null)
-        {
-            managerObj.AddComponent<FoodSpoilageManager>();
-        }
+        if (managerObj.GetComponent<FoodSpoilageManager>() == null) managerObj.AddComponent<FoodSpoilageManager>();
+        if (managerObj.GetComponent<PlayerDiseaseManager>() == null) managerObj.AddComponent<PlayerDiseaseManager>();
 
-        // 4. Tìm vị trí Player để đặt các điểm mẫu
+        // 4. Tìm vị trí Player
         Vector3 centerPos = Vector3.zero;
         GameObject player = GameObject.FindWithTag("Player");
         if (player == null && Camera.main != null) player = Camera.main.gameObject;
@@ -99,26 +95,30 @@ public class HarvestSystemSetupTool
         CreateResourceNode(container.transform, "ResourceNode_BerryBush_Sample", centerPos + new Vector3(-3f, 0f, 3f),
             ResourceType.BerryBush, "Bụi Quả Rừng", 1, wildBerry, 1, 3, 45f, PrimitiveType.Sphere, new Vector3(1.2f, 1.2f, 1.2f), new Color(0.8f, 0.1f, 0.2f));
 
-        // 💧 Bể Tích Trữ Nước Suối (Water Collector & Water Bottle Refill)
+        // 💧 Bể Nước Suối
         CreateWaterCollector(container.transform, "WaterCollector_Sample", centerPos + new Vector3(0f, 0f, 5f), emptyBottle, fullWaterBottle);
 
-        // 🌾 Ô Đất Trồng Trọt (Farming Plot)
+        // 🌾 Ô Đất Trồng Trọt
         CreateFarmingPlot(container.transform, "FarmingPlot_Sample", centerPos + new Vector3(-4f, 0f, -2f), berrySeed, wildBerry);
 
-        // 🔥 Đống Lửa Trại (Campfire) + 🍲 Nồi Nấu Ăn (Cooking Pot)
+        // 🔥 Đống Lửa Trại & 🍲 Nồi Nấu Ăn (Có Thuốc Kháng Sinh)
         Campfire fireComp = CreateCampfire(container.transform, "Campfire_Sample", centerPos + new Vector3(2f, 0f, -3f), woodItem, rawMeat, cookedMeat);
-        CreateCookingPot(container.transform, "CookingPot_Sample", centerPos + new Vector3(2f, 0.6f, -3f), fireComp, fullWaterBottle, rawMeat, herbalPlant, mushroom, heartyStew, detoxTea);
+        CreateCookingPot(container.transform, "CookingPot_Sample", centerPos + new Vector3(2f, 0.6f, -3f), fireComp, fullWaterBottle, rawMeat, herbalPlant, mushroom, heartyStew, detoxTea, diyAntibiotic);
+
+        // 🦟 Ổ Muỗi (Mosquito Zone)
+        CreateMosquitoZone(container.transform, "MosquitoZone_Sample", centerPos + new Vector3(7f, 0f, 2f));
 
         EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
 
-        Debug.Log("<b>[Forest Between Us] SUCCESS!</b> Configured Full Survival, Culinary Cooking & Recipe Book Integration!");
+        Debug.Log("<b>[Forest Between Us] SUCCESS!</b> Configured Mosquito Diseases, Cold/Flu, DIY Antibiotic Crafting & Repellent System!");
         EditorUtility.DisplayDialog("Thành Công!",
-            "Đã cài đặt thành công Trọn Bộ Hệ Thống Nấu Ăn & Ẩm Thực Sinh Tồn:\n\n" +
-            "1. 🥩 Thịt Sống: Ăn trực tiếp bị tác dụng phụ ngộ độc (-25 Máu / -20 Thể Lực).\n" +
-            "2. 🍲 Nồi Nấu Ăn (Cooking Pot): Đặt trên đống lửa trại để mở khóa các công thức hầm súp cao cấp.\n" +
-            "3. 📖 Thư Viện (Phím L): Đã cập nhật công thức Nồi Nấu, Súp Nấm (+40 Đói), Thịt Hầm Thảo Mộc (+75 Đói), Trà Giải Độc (+50 Khát).\n" +
-            "4. 🎒 Giới Hạn Trọng Lượng Balo (30kg) & Thực Phẩm Thối Rữa (Food Spoilage).\n\n" +
-            "Tất cả các node mẫu (Nồi Nấu, Lửa Trại, Bể Nước, Ô Đất) đã sẵn sàng trong Scene!", "OK");
+            "Đã cài đặt thành công Trọn Bộ Hệ Thống Bệnh Tật & Dược Phẩm Kháng Sinh Tự Chế:\n\n" +
+            "1. 🦟 Bệnh Sốt Rét Do Muỗi Đốt (Mosquito Disease): Gặp ổ muỗi không bôi thuốc sẽ bị sốt rét, trừ máu (-1.2 HP/s) & kiệt sức.\n" +
+            "2. 🤒 Bệnh Cảm Cúm (Flu / Cold): Bị dầm mưa / sương đêm sẽ ho tiếng ho audio & mất máu liên tục.\n" +
+            "3. 💊 Thuốc Kháng Sinh Tự Chế (DIY Antibiotic): Nấu 2x Thảo Dược + 1x Nấm Rừng + 1x Nước Suối trong Nồi Nấu để ĐẶC TRỊ KHỎI SỐT RÉT!\n" +
+            "4. 🍵 Trà Cảm Cúm Gừng & Thảo Dược: Nấu đun sôi trong Nồi Nấu để CHỮA KHỎI CẢM CÚM!\n" +
+            "5. 🧴 Thuốc Bôi Chống Muỗi (Repellent): Bôi lên người để kháng muỗi đốt trong 5 phút.\n\n" +
+            "Ổ Muỗi Mẫu 'MosquitoZone_Sample' đã được đặt tại vùng đầm lầy cạnh nhân vật!", "OK");
     }
 
     static ItemData GetOrCreateItem(string assetName, string itemName, ItemType category, bool stackable, int maxStack, bool consumable, float hunger = 0, float thirst = 0, float health = 0, float weight = 1.0f)
@@ -299,7 +299,7 @@ public class HarvestSystemSetupTool
         return fire;
     }
 
-    static void CreateCookingPot(Transform parent, string goName, Vector3 pos, Campfire campfire, ItemData water, ItemData rawMeat, ItemData herb, ItemData mushroom, ItemData stew, ItemData tea)
+    static void CreateCookingPot(Transform parent, string goName, Vector3 pos, Campfire campfire, ItemData water, ItemData rawMeat, ItemData herb, ItemData mushroom, ItemData stew, ItemData tea, ItemData antibiotic)
     {
         GameObject go = GameObject.Find(goName);
         if (go == null)
@@ -316,7 +316,7 @@ public class HarvestSystemSetupTool
         if (rend != null)
         {
             rend.sharedMaterial = new Material(Shader.Find("Standard"));
-            rend.sharedMaterial.color = new Color(0.15f, 0.15f, 0.18f); // Dark Iron Pot
+            rend.sharedMaterial.color = new Color(0.15f, 0.15f, 0.18f);
         }
 
         CookingPot pot = go.GetComponent<CookingPot>();
@@ -330,7 +330,40 @@ public class HarvestSystemSetupTool
         pot.mushroomItem = mushroom;
         pot.heartyStewItem = stew;
         pot.detoxTeaItem = tea;
+        pot.antibioticItem = antibiotic;
 
         EditorUtility.SetDirty(pot);
+    }
+
+    static void CreateMosquitoZone(Transform parent, string goName, Vector3 pos)
+    {
+        GameObject go = GameObject.Find(goName);
+        if (go == null)
+        {
+            go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            go.name = goName;
+            Undo.RegisterCreatedObjectUndo(go, $"Create {goName}");
+        }
+        go.transform.SetParent(parent);
+        go.transform.position = pos;
+        go.transform.localScale = new Vector3(8f, 4f, 8f);
+
+        SphereCollider col = go.GetComponent<SphereCollider>();
+        if (col != null) col.isTrigger = true;
+
+        Renderer rend = go.GetComponent<Renderer>();
+        if (rend != null)
+        {
+            rend.sharedMaterial = new Material(Shader.Find("Standard"));
+            rend.sharedMaterial.color = new Color(0.1f, 0.8f, 0.2f, 0.3f);
+        }
+
+        MosquitoZone mZone = go.GetComponent<MosquitoZone>();
+        if (mZone == null) mZone = go.AddComponent<MosquitoZone>();
+
+        mZone.zoneName = "Vùng Đầm Lầy Sương Ẩm (Ổ Muỗi)";
+        mZone.biteIntervalSeconds = 4f;
+
+        EditorUtility.SetDirty(mZone);
     }
 }
