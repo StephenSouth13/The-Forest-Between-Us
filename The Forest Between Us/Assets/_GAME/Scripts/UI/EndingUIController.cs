@@ -53,9 +53,9 @@ public class EndingUIController : MonoBehaviour
 
     void OnRestartClicked()
     {
-        if (SceneTransitionManager.instance != null)
+        if (SceneTransitionManager.Instance != null)
         {
-            SceneTransitionManager.instance.TransitionToScene("Home");
+            SceneTransitionManager.Instance.LoadScene("Home");
         }
         else
         {

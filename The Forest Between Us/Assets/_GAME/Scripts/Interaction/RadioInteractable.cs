@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RadioInteractable : MonoBehaviour, Interactable
 {
-    public string prompt = "Pick up Radio";
+    public string prompt = "Nhặt Đài Radio 01 [F]";
     public bool destroyAfterPickup = false;
     public GameObject objectToHide;
 
@@ -14,7 +14,12 @@ public class RadioInteractable : MonoBehaviour, Interactable
     public void OnInteract()
     {
         QuestManager.instance?.AdvanceStep(StepType.Interaction, 1);
-        QuestManager.instance?.UpdateObjectiveText("Radio signal acquired.");
+        QuestManager.instance?.UpdateObjectiveText("🎯 Tín hiệu vô tuyến đã được kết nối.");
+
+        if (RadioDialogueUIController.instance != null)
+        {
+            RadioDialogueUIController.instance.StartRadioDialogueSequence();
+        }
 
         if (objectToHide != null)
         {

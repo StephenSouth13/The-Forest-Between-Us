@@ -120,9 +120,9 @@ public class EndingManager : MonoBehaviour
 
     void ReturnToMainMenu()
     {
-        if (SceneTransitionManager.instance != null)
+        if (SceneTransitionManager.Instance != null)
         {
-            SceneTransitionManager.instance.TransitionToScene("Home");
+            SceneTransitionManager.Instance.LoadScene("Home");
         }
         else
         {

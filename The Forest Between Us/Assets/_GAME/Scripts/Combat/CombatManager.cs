@@ -77,7 +77,7 @@ public class CombatManager : MonoBehaviour
         Rigidbody rb = bolt.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.velocity = firePoint.forward * boltSpeed;
+            rb.linearVelocity = firePoint.forward * boltSpeed;
         }
 
         Debug.Log("Fired frequency crossbow bolt!");

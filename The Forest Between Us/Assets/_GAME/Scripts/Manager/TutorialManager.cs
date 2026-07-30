@@ -8,9 +8,11 @@ public class TutorialManager : MonoBehaviour
 
     [Header("Controls Panel")]
     public GameObject keysPanel;
-    public Color activeColor = Color.green;
+    public Color activeColor = new Color(0.2f, 1f, 0.6f, 1f); // Sleek Neon Cyan-Green
     public bool hidePromptWhenPressed = true;
-    public float promptFadeDuration = 0.2f;
+    public float promptFadeDuration = 0.35f;
+    public bool enableBreathingPulse = true;
+    public bool playAudioFeedback = true;
 
     [Header("Legacy Key Images")]
     public Image imgW, imgA, imgS, imgD, imgSpace, imgShift, imgC, imgX, imgTab, imgB, imgF;
@@ -18,25 +20,46 @@ public class TutorialManager : MonoBehaviour
     [Header("Custom Key Prompts")]
     public List<TutorialKeyPrompt> keyPrompts = new List<TutorialKeyPrompt>();
 
-    [Header("Goal Tracking")]
+    [Header("Goal Tracking & 3D Waypoint")]
     public Transform playerTransform;
     public Transform goalTransform;
     public float finishDistance = 3f;
     public string reachRadioObjective = "Reach the radio signal.";
+    public GameObject waypointMarkerPrefab;
 
     private readonly List<TutorialKeyPrompt> activePrompts = new List<TutorialKeyPrompt>();
     private bool controlsDone;
     private bool tutorialComplete;
+    private AudioSource audioSource;
 
     void Awake()
     {
         instance = this;
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+            audioSource.spatialBlend = 0f;
+        }
     }
 
     void Start()
     {
         BuildPromptList();
         if (keysPanel != null) keysPanel.SetActive(true);
+
+        if (playerTransform == null)
+        {
+            GameObject p = GameObject.FindWithTag("Player");
+            if (p != null) playerTransform = p.transform;
+        }
+
+        if (goalTransform == null)
+        {
+            GameObject r = GameObject.Find("SM_Radio");
+            if (r != null) goalTransform = r.transform;
+        }
     }
 
     void Update()
@@ -46,7 +69,7 @@ public class TutorialManager : MonoBehaviour
         if (!controlsDone)
         {
             CheckKeyInputs();
-            UpdatePromptFades();
+            UpdatePromptAnimations();
         }
         else
         {
@@ -79,16 +102,17 @@ public class TutorialManager : MonoBehaviour
 
         foreach (TutorialKeyPrompt prompt in activePrompts)
         {
-            prompt.Initialize();
+            prompt.Initialize(activeColor);
         }
     }
 
     void AddLegacyPrompt(KeyCode keyCode, Image image)
     {
+        if (image == null) return;
         activePrompts.Add(new TutorialKeyPrompt
         {
             keyCode = keyCode,
-            promptObject = image != null ? image.gameObject : null,
+            promptObject = image.gameObject,
             promptGraphic = image,
             completedColor = activeColor
         });
@@ -103,6 +127,7 @@ public class TutorialManager : MonoBehaviour
             if (!prompt.IsComplete && Input.GetKeyDown(prompt.keyCode))
             {
                 prompt.MarkComplete(hidePromptWhenPressed, promptFadeDuration);
+                if (playAudioFeedback) PlayKeyClickSFX();
             }
 
             if (!prompt.IsComplete) allComplete = false;
@@ -114,17 +139,20 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    void UpdatePromptFades()
+    void UpdatePromptAnimations()
     {
+        float time = Time.unscaledTime;
         foreach (TutorialKeyPrompt prompt in activePrompts)
         {
-            prompt.UpdateFade(Time.unscaledDeltaTime);
+            prompt.UpdateAnimation(Time.unscaledDeltaTime, time, enableBreathingPulse);
         }
     }
 
     void CompleteControlsTutorial()
     {
         controlsDone = true;
+
+        if (playAudioFeedback) PlayCompletionChimeSFX();
 
         foreach (TutorialKeyPrompt prompt in activePrompts)
         {
@@ -134,7 +162,7 @@ public class TutorialManager : MonoBehaviour
         if (keysPanel != null) keysPanel.SetActive(false);
 
         QuestManager.instance?.AdvanceStep(StepType.Movement, 1);
-        QuestManager.instance?.UpdateObjectiveText(reachRadioObjective);
+        QuestManager.instance?.UpdateObjectiveText($"🎯 {reachRadioObjective}");
         MissionManager.instance?.ActivateRadio();
 
         Debug.Log("Tutorial controls complete. Reach the radio signal.");
@@ -142,6 +170,9 @@ public class TutorialManager : MonoBehaviour
 
     void TrackDistanceToGoal()
     {
+        if (playerTransform == null && Camera.main != null)
+            playerTransform = Camera.main.transform;
+
         if (playerTransform == null || goalTransform == null) return;
 
         float distanceToGoal = Vector3.Distance(playerTransform.position, goalTransform.position);
@@ -149,7 +180,7 @@ public class TutorialManager : MonoBehaviour
         if (distanceToGoal > finishDistance)
         {
             QuestManager.instance?.UpdateObjectiveText(
-                $"{reachRadioObjective} {Mathf.RoundToInt(distanceToGoal)}m");
+                $"🎯 {reachRadioObjective} ({Mathf.RoundToInt(distanceToGoal)}m)");
         }
         else
         {
@@ -160,8 +191,61 @@ public class TutorialManager : MonoBehaviour
     void FinishTutorial()
     {
         tutorialComplete = true;
+        if (playAudioFeedback) PlayCompletionChimeSFX();
         QuestManager.instance?.AdvanceStep(StepType.ReachTarget, 1);
         Debug.Log("Arrived at the first radio signal. Tutorial complete.");
+    }
+
+    // Sound Synthesizers for Instant AAA Audio Feedback without needing external assets
+    void PlayKeyClickSFX()
+    {
+        if (audioSource == null) return;
+        AudioClip clip = CreateToneClip(880f, 0.08f, 0.25f);
+        audioSource.PlayOneShot(clip);
+    }
+
+    void PlayCompletionChimeSFX()
+    {
+        if (audioSource == null) return;
+        AudioClip clip = CreateChordClip(new float[] { 523.25f, 659.25f, 783.99f, 1046.50f }, 0.4f, 0.3f);
+        audioSource.PlayOneShot(clip);
+    }
+
+    AudioClip CreateToneClip(float frequency, float duration, float volume)
+    {
+        int sampleRate = 44100;
+        int samples = (int)(sampleRate * duration);
+        float[] data = new float[samples];
+        for (int i = 0; i < samples; i++)
+        {
+            float t = (float)i / sampleRate;
+            float envelope = Mathf.Clamp01(1f - t / duration);
+            data[i] = Mathf.Sin(2f * Mathf.PI * frequency * t) * envelope * volume;
+        }
+        AudioClip clip = AudioClip.Create("KeySFX", samples, 1, sampleRate, false);
+        clip.SetData(data, 0);
+        return clip;
+    }
+
+    AudioClip CreateChordClip(float[] frequencies, float duration, float volume)
+    {
+        int sampleRate = 44100;
+        int samples = (int)(sampleRate * duration);
+        float[] data = new float[samples];
+        for (int i = 0; i < samples; i++)
+        {
+            float t = (float)i / sampleRate;
+            float envelope = Mathf.Clamp01(1f - t / duration);
+            float mix = 0f;
+            foreach (float f in frequencies)
+            {
+                mix += Mathf.Sin(2f * Mathf.PI * f * t);
+            }
+            data[i] = (mix / frequencies.Length) * envelope * volume;
+        }
+        AudioClip clip = AudioClip.Create("ChimeSFX", samples, 1, sampleRate, false);
+        clip.SetData(data, 0);
+        return clip;
     }
 }
 
@@ -172,22 +256,36 @@ public class TutorialKeyPrompt
     public GameObject promptObject;
     public Graphic promptGraphic;
     public CanvasGroup canvasGroup;
-    public Color completedColor = Color.green;
+    public Color completedColor = new Color(0.2f, 1f, 0.6f, 1f);
 
     public bool IsComplete { get; private set; }
 
     private bool fading;
     private float fadeTimer;
-    private float fadeDuration = 0.2f;
+    private float fadeDuration = 0.35f;
 
-    public void Initialize()
+    private Vector3 originalScale = Vector3.one;
+    private RectTransform rectTransform;
+    private Color originalColor = Color.white;
+    private float punchScaleFactor = 1f;
+
+    public void Initialize(Color defaultActiveColor)
     {
         IsComplete = false;
         fading = false;
         fadeTimer = 0f;
+        punchScaleFactor = 1f;
 
-        if (promptObject != null) promptObject.SetActive(true);
+        if (promptObject != null)
+        {
+            promptObject.SetActive(true);
+            rectTransform = promptObject.GetComponent<RectTransform>();
+            if (rectTransform != null) originalScale = rectTransform.localScale;
+        }
+
         if (canvasGroup != null) canvasGroup.alpha = 1f;
+        if (promptGraphic != null) originalColor = promptGraphic.color;
+        if (completedColor == Color.green) completedColor = defaultActiveColor;
     }
 
     public void MarkComplete(bool hideWhenPressed, float duration)
@@ -195,11 +293,9 @@ public class TutorialKeyPrompt
         IsComplete = true;
 
         if (promptGraphic != null) promptGraphic.color = completedColor;
+        punchScaleFactor = 1.35f; // Instant Punch Bounce Effect
 
-        if (!hideWhenPressed)
-        {
-            return;
-        }
+        if (!hideWhenPressed) return;
 
         fadeDuration = Mathf.Max(0.01f, duration);
         fading = true;
@@ -211,16 +307,34 @@ public class TutorialKeyPrompt
         }
     }
 
-    public void UpdateFade(float deltaTime)
+    public void UpdateAnimation(float deltaTime, float globalTime, bool breathingPulse)
     {
-        if (!fading || canvasGroup == null) return;
+        if (promptObject == null || !promptObject.activeSelf) return;
 
-        fadeTimer += deltaTime;
-        canvasGroup.alpha = Mathf.Clamp01(1f - fadeTimer / fadeDuration);
-
-        if (fadeTimer >= fadeDuration)
+        // Smooth Punch Scale decay
+        if (punchScaleFactor > 1f)
         {
-            HideImmediate();
+            punchScaleFactor = Mathf.Lerp(punchScaleFactor, 1f, deltaTime * 12f);
+        }
+
+        // Apply scale & breathing pulse effect
+        if (rectTransform != null)
+        {
+            float pulse = (breathingPulse && !IsComplete) ? Mathf.Sin(globalTime * 4f) * 0.05f : 0f;
+            rectTransform.localScale = originalScale * (punchScaleFactor + pulse);
+        }
+
+        // Fade out transition when completed
+        if (fading && canvasGroup != null)
+        {
+            fadeTimer += deltaTime;
+            float progress = Mathf.Clamp01(fadeTimer / fadeDuration);
+            canvasGroup.alpha = Mathf.Lerp(1f, 0f, progress);
+
+            if (fadeTimer >= fadeDuration)
+            {
+                HideImmediate();
+            }
         }
     }
 
@@ -231,3 +345,4 @@ public class TutorialKeyPrompt
         if (promptObject != null) promptObject.SetActive(false);
     }
 }
+

@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a985523937ef10449a4ff51d2c4f9b81, type: 3}
+  m_Name: Default Transition Settings
+  m_EditorClassIdentifier: Assembly-CSharp::SceneTransitionSettings
+  fadeColor: {r: 0, g: 0, b: 0, a: 1}
+  fadeDuration: 0.6
+  fadeEase:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  useCinematicBars: 1
+  barsHeightRatio: 0.1
+  barsDuration: 0.5
+  minDisplaySeconds: 1.5
+  defaultBackgrounds: []
+  sceneBackgrounds: []
+  tips:
+  - "M\u1EB9o: Nh\u1EA5n F \u0111\u1EC3 t\u01B0\u01A1ng t\xE1c v\u1EDBi v\u1EADt
+    th\u1EC3 xung quanh."
+  - "M\u1EB9o: Nh\u1EA5n B \u0111\u1EC3 m\u1EDF balo v\xE0 xem v\u1EADt ph\u1EA9m
+    \u0111\xE3 thu th\u1EADp."
+  - "Khu r\u1EEBng lu\xF4n thay \u0111\u1ED5i... h\xE3y quan s\xE1t k\u1EF9 m\u1ECDi
+    ng\xF3c ng\xE1ch."
+  - "\u0110ang chu\u1EA9n b\u1ECB c\u1EA3nh ti\u1EBFp theo..."
+  tipInterval: 3

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -73,15 +73,18 @@ namespace DevionGames
 
 		private static bool AxisDefined (string axisName)
 		{
-			SerializedObject serializedObject = new SerializedObject (AssetDatabase.LoadAllAssetsAtPath ("ProjectSettings/InputManager.asset") [0]);
-			SerializedProperty axesProperty = serializedObject.FindProperty ("m_Axes");
+			Object[] assets = AssetDatabase.LoadAllAssetsAtPath ("ProjectSettings/InputManager.asset");
+			if (assets == null || assets.Length == 0 || assets[0] == null) return false;
 
-			axesProperty.Next (true);
-			axesProperty.Next (true);
-			while (axesProperty.Next (false)) {
-				SerializedProperty axis = axesProperty.Copy ();
-				axis.Next (true);
-				if (axis.stringValue == axisName)
+			SerializedObject serializedObject = new SerializedObject (assets[0]);
+			SerializedProperty axesProperty = serializedObject.FindProperty ("m_Axes");
+			if (axesProperty == null || !axesProperty.isArray) return false;
+
+			for (int i = 0; i < axesProperty.arraySize; i++)
+			{
+				SerializedProperty axis = axesProperty.GetArrayElementAtIndex(i);
+				SerializedProperty nameProp = axis.FindPropertyRelative("m_Name");
+				if (nameProp != null && nameProp.stringValue == axisName)
 					return true;
 			}
 			return false;

@@ -86,19 +86,24 @@ public class QuestManager : MonoBehaviour
 
     public void UpdateUI()
     {
-        if (activeQuest == null || titleText == null || objectiveText == null) return;
+        if (activeQuest == null) return;
 
-        titleText.text = activeQuest.questTitle.ToUpper();
+        if (titleText != null) titleText.text = activeQuest.questTitle.ToUpper();
 
+        string descStr = "";
         if (currentStepIndex < activeQuest.steps.Count)
         {
             QuestStep step = activeQuest.steps[currentStepIndex];
-            objectiveText.text = $"- {step.description} ({Mathf.RoundToInt(step.currentAmount)}/{step.targetAmount})";
+            descStr = $"- {step.description} ({Mathf.RoundToInt(step.currentAmount)}/{step.targetAmount})";
+            if (objectiveText != null) objectiveText.text = descStr;
         }
         else
         {
-            objectiveText.text = "Day objectives completed.";
+            descStr = "Nhiệm vụ hôm nay đã hoàn thành.";
+            if (objectiveText != null) objectiveText.text = descStr;
         }
+
+        CircularSurvivalHUD.instance?.SetQuestObjective($"🎯 {activeQuest.questTitle}", descStr);
     }
 
     void CompleteQuest()

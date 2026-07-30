@@ -130,6 +130,11 @@ public class SceneTransitionManager : MonoBehaviour
         StartCoroutine(TransitionRoutine(sceneName, overrideSettings != null ? overrideSettings : settings));
     }
 
+    public void TransitionToScene(string sceneName, SceneTransitionSettings overrideSettings = null)
+    {
+        LoadScene(sceneName, overrideSettings);
+    }
+
     IEnumerator TransitionRoutine(string sceneName, SceneTransitionSettings s)
     {
         isTransitioning = true;
