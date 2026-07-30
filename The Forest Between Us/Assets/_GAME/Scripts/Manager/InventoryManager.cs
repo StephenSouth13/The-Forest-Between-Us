@@ -34,9 +34,47 @@ public class InventoryManager : MonoBehaviour
         allSlots.AddRange(slotContainer.GetComponentsInChildren<InventorySlot>(true));
     }
 
-    public void PickUpItem(ItemData newItem, int amount)
+    [Header("Backpack Capacity Settings")]
+    public float maxWeightCapacity = 30.0f; // Sức chứa trọng lượng tối đa của Balo (30 kg)
+
+    public float GetTotalWeight()
     {
-        if (newItem == null || amount <= 0) return;
+        RefreshSlots();
+        float total = 0f;
+        foreach (InventorySlot slot in allSlots)
+        {
+            if (!slot.IsEmpty() && slot.GetItem() != null)
+            {
+                total += slot.GetItem().itemWeight * slot.GetCount();
+            }
+        }
+        return total;
+    }
+
+    public bool IsInventoryFull()
+    {
+        RefreshSlots();
+        foreach (InventorySlot slot in allSlots)
+        {
+            if (slot.IsEmpty()) return false;
+        }
+        return true;
+    }
+
+    public bool PickUpItem(ItemData newItem, int amount)
+    {
+        if (newItem == null || amount <= 0) return false;
+
+        RefreshSlots();
+
+        // 1. Kiểm tra Giới Hạn Trọng Lượng Balo (Weight Capacity Limit)
+        float currentWeight = GetTotalWeight();
+        float addedWeight = newItem.itemWeight * amount;
+        if (currentWeight + addedWeight > maxWeightCapacity)
+        {
+            Debug.LogWarning($"⚠️ QUÁ TẢI TRỌNG LƯỢNG! ({currentWeight + addedWeight:F1} / {maxWeightCapacity:F1} kg). Không thể nhặt thêm {newItem.itemName}.");
+            return false;
+        }
 
         int remainingAmount = amount;
 
@@ -52,7 +90,7 @@ public class InventoryManager : MonoBehaviour
                     slot.UpdateSlot(newItem, nextCount);
                     remainingAmount -= amountToAdd;
 
-                    if (remainingAmount <= 0) return;
+                    if (remainingAmount <= 0) return true;
                 }
             }
         }
@@ -65,11 +103,12 @@ public class InventoryManager : MonoBehaviour
                 slot.UpdateSlot(newItem, slotAmount);
                 remainingAmount -= slotAmount;
 
-                if (remainingAmount <= 0) return;
+                if (remainingAmount <= 0) return true;
             }
         }
 
-        Debug.Log($"Inventory is full. Could not pick up {remainingAmount}x {newItem.itemName}.");
+        Debug.LogWarning($"⚠️ BẢNG Ô BALO ĐÃ ĐẦY! Không thể chứa thêm {remainingAmount}x {newItem.itemName}.");
+        return false;
     }
 
     public bool HasItem(ItemData item, int amount)
@@ -130,9 +169,39 @@ public class InventoryManager : MonoBehaviour
         if (slot == null || slot.IsEmpty()) return;
 
         ItemData item = slot.GetItem();
+
+        // Xử lý tiêu thụ (Ăn trái cây, uống nước, dùng thuốc)
+        if (item.isConsumable && PlayerStatsManager.instance != null)
+        {
+            if (item.isRawFood)
+            {
+                PlayerStatsManager.instance.EatFood(item.hungerRestore > 0 ? item.hungerRestore : 15f);
+                PlayerStatsManager.instance.TakeDamage(25f);
+                PlayerStatsManager.instance.RestSleep(-20f);
+                Debug.LogWarning($"🤢 ⚠️ ĐÃ ĂN {item.itemName.ToUpper()} SỐNG! Bị ngộ độc thực phẩm (-25 Máu / -20 Thể Lực)!");
+            }
+            else
+            {
+                if (item.hungerRestore > 0) PlayerStatsManager.instance.EatFood(item.hungerRestore);
+                if (item.thirstRestore > 0) PlayerStatsManager.instance.DrinkWater(item.thirstRestore);
+                if (item.healthRestore > 0) PlayerStatsManager.instance.Heal(item.healthRestore);
+                if (item.staminaRestore > 0) PlayerStatsManager.instance.RestSleep(item.staminaRestore);
+                Debug.Log($"🍎 Đã dùng {item.itemName}: +{item.hungerRestore} Đói / +{item.thirstRestore} Khát");
+            }
+        }
+
+        ItemData emptyVariant = item.emptyBottleVariant;
+
         if (RemoveItemFromSlot(slot, 1))
         {
             OnItemUsed?.Invoke(item, 1);
+
+            // Uống bình nước đầy -> Trả lại vỏ bình nước rỗng vào Balo
+            if (item.isFullWaterBottle && emptyVariant != null)
+            {
+                PickUpItem(emptyVariant, 1);
+                Debug.Log($"🍼 Đã trả vỏ {emptyVariant.itemName} vào Balo!");
+            }
         }
     }
 

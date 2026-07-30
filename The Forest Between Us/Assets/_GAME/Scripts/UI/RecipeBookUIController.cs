@@ -211,6 +211,41 @@ public class RecipeBookUIController : MonoBehaviour
         {
             new RecipeData
             {
+                recipeName = "🍲 Nồi Nấu Ăn (Cooking Pot)",
+                category = "Dụng Cụ Nấu Nướng",
+                description = "Nồi kim loại đặt lên đống lửa trại để mở khóa các công thức hầm súp và nấu ăn cao cấp.",
+                ingredients = "• 3x Đá Cuội\n• 2x Thanh Kim Loại / Sắt"
+            },
+            new RecipeData
+            {
+                recipeName = "🥩 Thịt Hầm Thảo Mộc",
+                category = "Ẩm Thực (+75 Đói)",
+                description = "Món thịt hầm dinh dưỡng cao chế biến trong Nồi Nấu. Hồi +75 Đói, +45 Máu, +30 Thể Lực.",
+                ingredients = "• 1x Thịt Sống\n• 1x Nước Suối\n• 1x Thảo Dược Rừng\n• 🛠️ Yêu cầu: Nồi Nấu Ăn"
+            },
+            new RecipeData
+            {
+                recipeName = "🥣 Súp Nấm & Rau Rừng",
+                category = "Ẩm Thực (+40 Đói)",
+                description = "Súp rau nóng hổi thanh lọc cơ thể. Hồi +40 Đói, +35 Khát, +25 Máu.",
+                ingredients = "• 1x Nước Suối\n• 2x Nấm Rừng\n• 1x Thảo Dược Rừng\n• 🛠️ Yêu cầu: Nồi Nấu Ăn"
+            },
+            new RecipeData
+            {
+                recipeName = "🍵 Trà Thảo Dược Giải Độc",
+                category = "Ẩm Thực (+50 Khát)",
+                description = "Trà thảo dược đun sôi giúp giải sạch độc ngộ độc thực phẩm và hồi +50 Khát, +30 Máu.",
+                ingredients = "• 1x Nước Suối\n• 2x Thảo Dược Rừng\n• 🛠️ Yêu cầu: Nồi Nấu Ăn"
+            },
+            new RecipeData
+            {
+                recipeName = "🍖 Thịt Nướng Chín Sốt Nấm",
+                category = "Ẩm Thực (+60 Đói)",
+                description = "Thịt nướng chín thơm nức trên lửa trại. Hồi +60 Đói, +30 Máu, không gây ngộ độc.",
+                ingredients = "• 1x Thịt Sống\n• 1x Nấm Rừng\n• 🛠️ Yêu cầu: Đống Lửa Trại"
+            },
+            new RecipeData
+            {
                 recipeName = "🪵 Đuốc Tần Số",
                 category = "Dụng Cụ",
                 description = "Xua tan sương mù độc và phát quang khu vực xung quanh đêm tối.",
