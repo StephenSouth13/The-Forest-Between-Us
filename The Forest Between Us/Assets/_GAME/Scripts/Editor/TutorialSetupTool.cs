@@ -92,6 +92,10 @@ public static class TutorialSetupTool
         EditorUtility.SetDirty(waypointArrow);
         EditorUtility.SetDirty(circularHUD);
         EditorUtility.SetDirty(fullMapUI);
+        EditorUtility.SetDirty(pauseUI);
+        EditorUtility.SetDirty(dialogueUI);
+        EditorUtility.SetDirty(recipeBookUI);
+        EditorUtility.SetDirty(respawnManager);
         EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
 
         Debug.Log("[TutorialSetupTool] HOÀN TẤT ĐỒNG BỘ 100% CÀI ĐẶT UI & ĐIỀU KHIỂN!\n" +

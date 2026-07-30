@@ -16,13 +16,16 @@ public class RecipeBookUIController : MonoBehaviour
 
     [Header("Custom UI Asset Slots (Kéo Thả Sprite Của Bạn Vào Đây)")]
     public Sprite bookBackgroundSprite;
+    public Sprite recipeButtonSprite;
     public Sprite craftButtonSprite;
 
     [Header("UI Element References")]
     public TextMeshProUGUI selectedRecipeTitle;
+    public TextMeshProUGUI selectedRecipeCategory;
     public TextMeshProUGUI selectedRecipeDesc;
     public TextMeshProUGUI selectedRecipeIngredients;
     public Button craftButton;
+    public Transform recipeListContainer;
 
     private AudioSource audioSource;
     private Vector3 originalScale = Vector3.one;
@@ -35,7 +38,6 @@ public class RecipeBookUIController : MonoBehaviour
         public string category; // Weapon, Tool, Armor, Survival
         public string description;
         public string ingredients;
-        public ItemData resultItem;
     }
 
     private List<RecipeData> recipesList = new List<RecipeData>();
@@ -68,6 +70,9 @@ public class RecipeBookUIController : MonoBehaviour
             originalScale = bookPanel.transform.localScale;
             bookPanel.SetActive(!startHidden);
         }
+
+        PopulateRecipeList();
+        if (recipesList.Count > 0) SelectRecipe(recipesList[0]);
 
         if (craftButton != null) craftButton.onClick.AddListener(OnCraftButtonClicked);
     }
@@ -111,7 +116,7 @@ public class RecipeBookUIController : MonoBehaviour
         if (isOpening)
         {
             AnimateOpen();
-            SelectRecipe(recipesList.Count > 0 ? recipesList[0] : null);
+            SelectRecipe(selectedRecipe ?? (recipesList.Count > 0 ? recipesList[0] : null));
 
             if (controlCursor)
             {
@@ -133,26 +138,23 @@ public class RecipeBookUIController : MonoBehaviour
         }
     }
 
-    void SelectRecipe(RecipeData recipe)
+    public void SelectRecipe(RecipeData recipe)
     {
         selectedRecipe = recipe;
         if (selectedRecipe == null) return;
 
         if (selectedRecipeTitle != null) selectedRecipeTitle.text = selectedRecipe.recipeName;
+        if (selectedRecipeCategory != null) selectedRecipeCategory.text = $"DANH MỤC: {selectedRecipe.category.ToUpper()}";
         if (selectedRecipeDesc != null) selectedRecipeDesc.text = selectedRecipe.description;
-        if (selectedRecipeIngredients != null) selectedRecipeIngredients.text = $"<b>NGUYÊN LIỆU CẦN:</b>\n{selectedRecipe.ingredients}";
+        if (selectedRecipeIngredients != null) selectedRecipeIngredients.text = $"<b>NGUYÊN LIỆU CẦN CHẾ TẠO:</b>\n{selectedRecipe.ingredients}";
     }
 
     void OnCraftButtonClicked()
     {
         if (selectedRecipe == null) return;
 
-        Debug.Log($"Crafting Item: {selectedRecipe.recipeName}");
-        if (PlayerStatsManager.instance != null)
-        {
-            // Simple craft feedback
-            PlayPageTurnSFX();
-        }
+        Debug.Log($"[Crafting] Successfully Crafted: {selectedRecipe.recipeName}");
+        if (playAudioOnToggle) PlayPageTurnSFX();
     }
 
     void AnimateOpen()
@@ -210,46 +212,88 @@ public class RecipeBookUIController : MonoBehaviour
             new RecipeData
             {
                 recipeName = "🪵 Đuốc Tần Số",
-                category = "Tool",
+                category = "Dụng Cụ",
                 description = "Xua tan sương mù độc và phát quang khu vực xung quanh đêm tối.",
                 ingredients = "• 2x Gỗ\n• 1x Nhựa Phát Quang"
             },
             new RecipeData
             {
                 recipeName = "🏹 Nỏ Tần Số",
-                category = "Weapon",
+                category = "Vũ Khí",
                 description = "Vũ khí tầm xa bắn ra các mũi tên tần số xua đuổi Sinh Thể Bóng Đêm.",
                 ingredients = "• 3x Gỗ\n• 2x Linh Kiện Kim Loại"
             },
             new RecipeData
             {
                 recipeName = "😷 Mặt Nạ Lọc Khí",
-                category = "Survival",
+                category = "Sinh Tồn",
                 description = "Bảo vệ đường hô hấp khi đi vào vùng sương mù độc hại cao độ.",
                 ingredients = "• 2x Vải\n• 1x Lõi Lọc Khí"
             },
             new RecipeData
             {
                 recipeName = "⚡ Bẫy Tần Số",
-                category = "Tool",
+                category = "Dụng Cụ",
                 description = "Đặt bẫy phát sóng làm tê liệt quái vật bóng đêm trong 5 giây.",
                 ingredients = "• 2x Linh Kiện Điện Tử\n• 1x Pin Vô Tuyến"
             },
             new RecipeData
             {
                 recipeName = "🛡️ Giáp Hạt Đen",
-                category = "Armor",
+                category = "Giáp",
                 description = "Giáp bảo vệ làm từ vỏ hạt đen chống chịu sát thương quái càn quét.",
                 ingredients = "• 4x Da Thu Thập\n• 2x Hạt Đen Mai An Tiêm"
             },
             new RecipeData
             {
                 recipeName = "🧪 Thuốc Giải Độc",
-                category = "Survival",
+                category = "Thuốc",
                 description = "Hồi phục lập tức 50 Máu và giải trừ trạng thái nhiễm độc.",
                 ingredients = "• 2x Hạt Dưa Hấu\n• 1x Thảo Dược Rừng"
             }
         };
+    }
+
+    void PopulateRecipeList()
+    {
+        if (recipeListContainer == null) return;
+
+        // Clear existing children
+        foreach (Transform child in recipeListContainer)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (RecipeData recipe in recipesList)
+        {
+            RecipeData r = recipe;
+            GameObject itemGO = new GameObject(r.recipeName, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+            itemGO.transform.SetParent(recipeListContainer, false);
+
+            RectTransform rTransform = itemGO.GetComponent<RectTransform>();
+            rTransform.sizeDelta = new Vector2(0, 42);
+
+            Image img = itemGO.GetComponent<Image>();
+            if (recipeButtonSprite != null) img.sprite = recipeButtonSprite;
+            img.color = new Color(0.12f, 0.18f, 0.25f, 0.9f);
+
+            GameObject textGO = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+            textGO.transform.SetParent(itemGO.transform, false);
+            RectTransform txtRect = textGO.GetComponent<RectTransform>();
+            txtRect.anchorMin = Vector2.zero;
+            txtRect.anchorMax = Vector2.one;
+            txtRect.offsetMin = new Vector2(10, 0);
+            txtRect.offsetMax = new Vector2(-10, 0);
+
+            TextMeshProUGUI txt = textGO.GetComponent<TextMeshProUGUI>();
+            txt.fontSize = 16f;
+            txt.alignment = TextAlignmentOptions.Left;
+            txt.color = Color.white;
+            txt.text = r.recipeName;
+
+            Button btn = itemGO.GetComponent<Button>();
+            btn.onClick.AddListener(() => SelectRecipe(r));
+        }
     }
 
     GameObject CreateFallbackBookPanel()
@@ -257,65 +301,127 @@ public class RecipeBookUIController : MonoBehaviour
         Canvas canvas = Object.FindFirstObjectByType<Canvas>();
         if (canvas == null) return null;
 
+        // 2-Page Book Container
         GameObject panel = new GameObject("RecipeBook_Panel (Runtime)", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
         panel.transform.SetParent(canvas.transform, false);
 
         RectTransform panelRect = panel.GetComponent<RectTransform>();
-        panelRect.anchorMin = new Vector2(0.12f, 0.10f);
-        panelRect.anchorMax = new Vector2(0.88f, 0.90f);
+        panelRect.anchorMin = new Vector2(0.10f, 0.08f);
+        panelRect.anchorMax = new Vector2(0.90f, 0.92f);
         panelRect.offsetMin = Vector2.zero;
         panelRect.offsetMax = Vector2.zero;
 
         Image bg = panel.GetComponent<Image>();
         if (bookBackgroundSprite != null) bg.sprite = bookBackgroundSprite;
-        bg.color = new Color(0.06f, 0.09f, 0.14f, 0.95f);
+        bg.color = new Color(0.05f, 0.08f, 0.13f, 0.96f); // Sleek Cyber Charcoal Book
 
         // Header Title
         GameObject headerGO = new GameObject("HeaderTitle", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
         headerGO.transform.SetParent(panel.transform, false);
         RectTransform headerRect = headerGO.GetComponent<RectTransform>();
-        headerRect.anchorMin = new Vector2(0.05f, 0.88f);
-        headerRect.anchorMax = new Vector2(0.95f, 0.97f);
+        headerRect.anchorMin = new Vector2(0.04f, 0.90f);
+        headerRect.anchorMax = new Vector2(0.96f, 0.98f);
         headerRect.offsetMin = Vector2.zero;
         headerRect.offsetMax = Vector2.zero;
+
         TextMeshProUGUI title = headerGO.GetComponent<TextMeshProUGUI>();
-        title.fontSize = 24f;
+        title.fontSize = 22f;
         title.fontStyle = FontStyles.Bold;
         title.color = new Color(0.2f, 1f, 0.6f);
         title.text = "📖 THƯ VIỆN SÁCH HƯỚNG DẪN CHẾ TẠO (RECIPE BOOK - PHÍM L)";
 
-        // Left Panel - Recipe Title & Desc
-        GameObject leftGO = new GameObject("RecipeInfo", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
-        leftGO.transform.SetParent(panel.transform, false);
-        RectTransform leftRect = leftGO.GetComponent<RectTransform>();
-        leftRect.anchorMin = new Vector2(0.05f, 0.25f);
-        leftRect.anchorMax = new Vector2(0.50f, 0.85f);
+        // LEFT PAGE - Scrollable List Container
+        GameObject leftPageGO = new GameObject("LeftPage_List", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(VerticalLayoutGroup));
+        leftPageGO.transform.SetParent(panel.transform, false);
+        RectTransform leftRect = leftPageGO.GetComponent<RectTransform>();
+        leftRect.anchorMin = new Vector2(0.04f, 0.06f);
+        leftRect.anchorMax = new Vector2(0.48f, 0.88f);
         leftRect.offsetMin = Vector2.zero;
         leftRect.offsetMax = Vector2.zero;
-        selectedRecipeTitle = leftGO.GetComponent<TextMeshProUGUI>();
-        selectedRecipeTitle.fontSize = 20f;
+
+        leftPageGO.GetComponent<Image>().color = new Color(0.03f, 0.05f, 0.08f, 0.5f);
+        recipeListContainer = leftPageGO.transform;
+
+        VerticalLayoutGroup layout = leftPageGO.GetComponent<VerticalLayoutGroup>();
+        layout.spacing = 8;
+        layout.padding = new RectOffset(10, 10, 10, 10);
+        layout.childControlWidth = true;
+        layout.childControlHeight = false;
+        layout.childForceExpandWidth = true;
+
+        // RIGHT PAGE - Detailed Recipe View
+        GameObject rightPageGO = new GameObject("RightPage_Details", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        rightPageGO.transform.SetParent(panel.transform, false);
+        RectTransform rightRect = rightPageGO.GetComponent<RectTransform>();
+        rightRect.anchorMin = new Vector2(0.52f, 0.06f);
+        rightRect.anchorMax = new Vector2(0.96f, 0.88f);
+        rightRect.offsetMin = Vector2.zero;
+        rightRect.offsetMax = Vector2.zero;
+        rightPageGO.GetComponent<Image>().color = new Color(0.03f, 0.05f, 0.08f, 0.5f);
+
+        // Right Title
+        GameObject rTitleGO = new GameObject("RecipeTitle", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+        rTitleGO.transform.SetParent(rightPageGO.transform, false);
+        RectTransform rTitleRect = rTitleGO.GetComponent<RectTransform>();
+        rTitleRect.anchorMin = new Vector2(0.05f, 0.82f);
+        rTitleRect.anchorMax = new Vector2(0.95f, 0.95f);
+        rTitleRect.offsetMin = Vector2.zero;
+        rTitleRect.offsetMax = Vector2.zero;
+
+        selectedRecipeTitle = rTitleGO.GetComponent<TextMeshProUGUI>();
+        selectedRecipeTitle.fontSize = 24f;
+        selectedRecipeTitle.fontStyle = FontStyles.Bold;
         selectedRecipeTitle.color = new Color(1f, 0.85f, 0.2f);
         selectedRecipeTitle.text = "🪵 Đuốc Tần Số";
 
-        // Right Panel - Ingredients
-        GameObject rightGO = new GameObject("RecipeIngredients", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
-        rightGO.transform.SetParent(panel.transform, false);
-        RectTransform rightRect = rightGO.GetComponent<RectTransform>();
-        rightRect.anchorMin = new Vector2(0.55f, 0.35f);
-        rightRect.anchorMax = new Vector2(0.95f, 0.85f);
-        rightRect.offsetMin = Vector2.zero;
-        rightRect.offsetMax = Vector2.zero;
-        selectedRecipeIngredients = rightGO.GetComponent<TextMeshProUGUI>();
+        // Right Category
+        GameObject catGO = new GameObject("RecipeCategory", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+        catGO.transform.SetParent(rightPageGO.transform, false);
+        RectTransform catRect = catGO.GetComponent<RectTransform>();
+        catRect.anchorMin = new Vector2(0.05f, 0.72f);
+        catRect.anchorMax = new Vector2(0.95f, 0.82f);
+        catRect.offsetMin = Vector2.zero;
+        catRect.offsetMax = Vector2.zero;
+
+        selectedRecipeCategory = catGO.GetComponent<TextMeshProUGUI>();
+        selectedRecipeCategory.fontSize = 14f;
+        selectedRecipeCategory.color = new Color(0.2f, 1f, 0.6f);
+        selectedRecipeCategory.text = "DANH MỤC: DỤNG CỤ";
+
+        // Right Desc
+        GameObject descGO = new GameObject("RecipeDesc", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+        descGO.transform.SetParent(rightPageGO.transform, false);
+        RectTransform descRect = descGO.GetComponent<RectTransform>();
+        descRect.anchorMin = new Vector2(0.05f, 0.48f);
+        descRect.anchorMax = new Vector2(0.95f, 0.70f);
+        descRect.offsetMin = Vector2.zero;
+        descRect.offsetMax = Vector2.zero;
+
+        selectedRecipeDesc = descGO.GetComponent<TextMeshProUGUI>();
+        selectedRecipeDesc.fontSize = 15f;
+        selectedRecipeDesc.color = Color.white;
+        selectedRecipeDesc.text = "Xua tan sương mù độc và phát quang khu vực xung quanh.";
+
+        // Right Ingredients
+        GameObject ingGO = new GameObject("RecipeIngredients", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+        ingGO.transform.SetParent(rightPageGO.transform, false);
+        RectTransform ingRect = ingGO.GetComponent<RectTransform>();
+        ingRect.anchorMin = new Vector2(0.05f, 0.22f);
+        ingRect.anchorMax = new Vector2(0.95f, 0.46f);
+        ingRect.offsetMin = Vector2.zero;
+        ingRect.offsetMax = Vector2.zero;
+
+        selectedRecipeIngredients = ingGO.GetComponent<TextMeshProUGUI>();
         selectedRecipeIngredients.fontSize = 16f;
-        selectedRecipeIngredients.color = Color.white;
+        selectedRecipeIngredients.color = new Color(0.9f, 0.9f, 0.9f);
         selectedRecipeIngredients.text = "• 2x Gỗ\n• 1x Nhựa Phát Quang";
 
         // Craft Button
         GameObject craftBtnGO = new GameObject("CraftButton", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
-        craftBtnGO.transform.SetParent(panel.transform, false);
+        craftBtnGO.transform.SetParent(rightPageGO.transform, false);
         RectTransform craftRect = craftBtnGO.GetComponent<RectTransform>();
-        craftRect.anchorMin = new Vector2(0.60f, 0.10f);
-        craftRect.anchorMax = new Vector2(0.90f, 0.25f);
+        craftRect.anchorMin = new Vector2(0.20f, 0.05f);
+        craftRect.anchorMax = new Vector2(0.80f, 0.18f);
         craftRect.offsetMin = Vector2.zero;
         craftRect.offsetMax = Vector2.zero;
 
@@ -335,6 +441,7 @@ public class RecipeBookUIController : MonoBehaviour
 
         TextMeshProUGUI btnTxt = txtGO.GetComponent<TextMeshProUGUI>();
         btnTxt.fontSize = 18f;
+        btnTxt.fontStyle = FontStyles.Bold;
         btnTxt.alignment = TextAlignmentOptions.Center;
         btnTxt.color = Color.white;
         btnTxt.text = "⚡ CHẾ TẠO (CRAFT)";
