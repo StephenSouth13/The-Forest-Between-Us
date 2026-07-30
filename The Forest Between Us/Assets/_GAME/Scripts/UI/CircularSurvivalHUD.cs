@@ -10,6 +10,17 @@ public class CircularSurvivalHUD : MonoBehaviour
     [Header("Position & Persistence")]
     public bool isPersistentAcrossScenes = true;
 
+    [Header("Custom UI Asset Slots (Kéo Thả Sprite Của Bạn Vào Đây)")]
+    public Sprite hudFrameSprite;
+    public Sprite healthArcSprite;
+    public Sprite staminaArcSprite;
+    public Sprite badgeHealthSprite;
+    public Sprite badgeThirstSprite;
+    public Sprite badgeHungerSprite;
+    public Sprite badgeSleepSprite;
+    public Sprite compassPointerSprite;
+    public Sprite questPanelBackgroundSprite;
+
     [Header("UI Element References")]
     public RectTransform hudMainContainer;
     public Image healthArcFill;

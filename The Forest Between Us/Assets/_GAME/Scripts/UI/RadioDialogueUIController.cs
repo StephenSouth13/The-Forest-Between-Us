@@ -8,6 +8,11 @@ public class RadioDialogueUIController : MonoBehaviour
 {
     public static RadioDialogueUIController instance;
 
+    [Header("Custom UI Asset Slots (Kéo Thả Sprite Của Bạn Vào Đây)")]
+    public Sprite dialoguePanelBackgroundSprite;
+    public Sprite speakerBadgeIconSprite;
+    public Sprite nextButtonSprite;
+
     [Header("UI Panel References")]
     public GameObject dialoguePanel;
     public TextMeshProUGUI speakerNameText;

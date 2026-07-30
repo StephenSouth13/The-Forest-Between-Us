@@ -27,6 +27,8 @@ public class BackpackUIController : MonoBehaviour
 
     void Start()
     {
+        EnsureCanvasParent();
+
         if (backpackPanel == null && createFallbackPanel)
         {
             backpackPanel = CreateFallbackPanel();
@@ -36,6 +38,27 @@ public class BackpackUIController : MonoBehaviour
         {
             originalPanelScale = backpackPanel.transform.localScale;
             backpackPanel.SetActive(!startHidden);
+        }
+    }
+
+    void EnsureCanvasParent()
+    {
+        Canvas canvas = GetComponentInParent<Canvas>();
+        if (canvas == null)
+        {
+            canvas = Object.FindFirstObjectByType<Canvas>();
+            if (canvas == null)
+            {
+                GameObject canvasGO = new GameObject("Canvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
+                canvas = canvasGO.GetComponent<Canvas>();
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+                CanvasScaler scaler = canvasGO.GetComponent<CanvasScaler>();
+                scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+                scaler.referenceResolution = new Vector2(1920, 1080);
+            }
+
+            transform.SetParent(canvas.transform, false);
         }
     }
 

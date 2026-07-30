@@ -14,6 +14,15 @@ public class PlayerStatusUI : MonoBehaviour
     public bool controlCursor = true;
     public bool playAudioOnToggle = true;
 
+    [Header("Custom UI Asset Slots (Kéo Thả Sprite Của Bạn Vào Đây)")]
+    public Sprite statusPanelBackgroundSprite;
+    public Sprite statusHeaderIconSprite;
+    public Sprite statIconHealth;
+    public Sprite statIconStamina;
+    public Sprite statIconHunger;
+    public Sprite statIconThirst;
+    public Sprite sliderFillSprite;
+
     [Header("Player Vitals (0 - 100)")]
     [Range(0f, 100f)] public float health = 100f;
     [Range(0f, 100f)] public float stamina = 100f;
@@ -52,6 +61,8 @@ public class PlayerStatusUI : MonoBehaviour
 
     void Start()
     {
+        EnsureCanvasParent();
+
         if (statusPanel == null && createFallbackPanel)
         {
             statusPanel = CreateFallbackPanel();
@@ -64,6 +75,27 @@ public class PlayerStatusUI : MonoBehaviour
         }
 
         Refresh();
+    }
+
+    void EnsureCanvasParent()
+    {
+        Canvas canvas = GetComponentInParent<Canvas>();
+        if (canvas == null)
+        {
+            canvas = Object.FindFirstObjectByType<Canvas>();
+            if (canvas == null)
+            {
+                GameObject canvasGO = new GameObject("Canvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
+                canvas = canvasGO.GetComponent<Canvas>();
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+                CanvasScaler scaler = canvasGO.GetComponent<CanvasScaler>();
+                scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+                scaler.referenceResolution = new Vector2(1920, 1080);
+            }
+
+            transform.SetParent(canvas.transform, false);
+        }
     }
 
     void Update()

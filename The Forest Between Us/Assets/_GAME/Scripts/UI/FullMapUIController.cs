@@ -13,6 +13,11 @@ public class FullMapUIController : MonoBehaviour
     public bool controlCursor = true;
     public bool playAudioOnToggle = true;
 
+    [Header("Custom UI Asset Slots (Kéo Thả Sprite Của Bạn Vào Đây)")]
+    public Sprite mapBackgroundSprite;
+    public Sprite playerMarkerSprite;
+    public Sprite radioMarkerSprite;
+
     [Header("Map Elements")]
     public RectTransform playerMapIcon;
     public RectTransform radioMapIcon;
