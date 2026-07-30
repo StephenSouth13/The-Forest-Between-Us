@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: a12178e3db3263b4e92007ee5f1deef6
+timeCreated: 1510066236
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Scenes/Forest_EnvironmentSample/WindControl_v2.prefab
+  uploadId: 569154

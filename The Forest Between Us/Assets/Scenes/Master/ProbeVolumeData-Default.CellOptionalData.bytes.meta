@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: ae2652575b541a247b9edc7b59f5f3c7
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Scenes/Master/ProbeVolumeData-Default.CellOptionalData.bytes
+  uploadId: 569154

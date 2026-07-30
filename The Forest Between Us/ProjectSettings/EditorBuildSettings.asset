@@ -6,9 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Home.unity
-    guid: bb2ccd2f7c7955642ac02360180cacee
+    path: Assets/Scenes/Master.unity
+    guid: de1f6b2146434174380e7e56fc69579a
   - enabled: 1
-    path: Assets/Scenes/Tutorial.unity
-    guid: 4e4d37f22a816e640bd9d29cd3990d17
+    path: Assets/Scenes/Forest_EnvironmentSample.unity
+    guid: fc1e6a0c2803d9444a02fce99b5b0fb2
+  - enabled: 1
+    path: Assets/Scenes/AudioZones.unity
+    guid: eceab537e1c21674ab0da7b979399c6e
+  - enabled: 1
+    path: Assets/Scenes/Forest_EnvironmentSample_Collisions.unity
+    guid: b113fbf76ecc0f047b63fe945ed1f232
   m_configObjects: {}

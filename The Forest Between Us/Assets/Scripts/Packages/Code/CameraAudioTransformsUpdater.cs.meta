@@ -14,5 +14,5 @@ AssetOrigin:
   productId: 121175
   packageName: 'Book Of The Dead: Environment'
   packageVersion: 1.1
-  assetPath: Assets/Code/CameraAudioTransformsUpdater.cs
+  assetPath: Assets/Scripts/Packages/Code/CameraAudioTransformsUpdater.cs
   uploadId: 569154

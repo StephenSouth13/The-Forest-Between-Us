@@ -16,5 +16,5 @@ AssetOrigin:
   productId: 121175
   packageName: 'Book Of The Dead: Environment'
   packageVersion: 1.1
-  assetPath: Assets/Code/ExternalContent/TerrainEvo3/Code/Editor/TE3BuildStripper.cs
+  assetPath: Assets/Scripts/Packages/Code/ExternalContent/TerrainEvo3/Code/Editor/TE3BuildStripper.cs
   uploadId: 569154

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b7de28d4d9b49d04b9fa0627cf766415
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Scenes/HDTemplateDefaultResources/Scene PostProcess Profile.asset
+  uploadId: 569154

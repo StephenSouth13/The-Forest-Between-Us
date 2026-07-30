@@ -573,7 +573,6 @@ Material:
     - _DoubleSidedNormalMode: 1
     - _Drag: 1
     - _DstBlend: 0
-    - _DstBlend2: 0
     - _EmissiveColorMode: 1
     - _EmissiveExposureWeight: 1
     - _EmissiveIntensity: 1
@@ -589,7 +588,6 @@ Material:
     - _EnableTerrainMode: 0
     - _EnableWind: 4
     - _EnergyConservingSpecularColor: 1
-    - _ExcludeFromTUAndAA: 0
     - _ForceForwardEmissive: 0
     - _FullDetailNormalBlendThreshold: 1
     - _FullDetailNormalBlendWidth: 0.05
@@ -672,7 +670,6 @@ Material:
     - _MASKMAP: 1
     - _MaskMapEncoding: 0
     - _MaterialID: 1
-    - _MaterialTypeMask: 2
     - _Metallic: 0
     - _Metallic0: 0
     - _Metallic1: 0
@@ -707,7 +704,6 @@ Material:
     - _PPDPrimitiveLength: 1
     - _PPDPrimitiveWidth: 1
     - _Parallax: 0.02
-    - _PerPixelSorting: 0
     - _PreRefractionPass: 0
     - _RayTracing: 0
     - _ReceivesSSR: 1
@@ -754,10 +750,10 @@ Material:
     - _StencilRefGBuffer: 10
     - _StencilRefMV: 40
     - _StencilWriteMask: 6
-    - _StencilWriteMaskDepth: 9
+    - _StencilWriteMaskDepth: 8
     - _StencilWriteMaskDistortionVec: 4
-    - _StencilWriteMaskGBuffer: 15
-    - _StencilWriteMaskMV: 41
+    - _StencilWriteMaskGBuffer: 14
+    - _StencilWriteMaskMV: 40
     - _Stiffness: 1
     - _SubsurfaceMask: 1
     - _SubsurfaceMask0: 1
@@ -903,7 +899,6 @@ Material:
     - _UVMappingMaskBlendMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
-  m_AllowLocking: 1
 --- !u!114 &2435940176868271047
 MonoBehaviour:
   m_ObjectHideFlags: 11

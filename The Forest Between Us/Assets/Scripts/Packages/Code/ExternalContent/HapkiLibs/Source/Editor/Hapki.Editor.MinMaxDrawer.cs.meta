@@ -14,5 +14,5 @@ AssetOrigin:
   productId: 121175
   packageName: 'Book Of The Dead: Environment'
   packageVersion: 1.1
-  assetPath: Assets/Code/ExternalContent/HapkiLibs/Source/Editor/Hapki.Editor.MinMaxDrawer.cs
+  assetPath: Assets/Scripts/Packages/Code/ExternalContent/HapkiLibs/Source/Editor/Hapki.Editor.MinMaxDrawer.cs
   uploadId: 569154

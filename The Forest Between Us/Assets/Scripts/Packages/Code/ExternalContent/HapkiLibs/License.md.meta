@@ -10,5 +10,5 @@ AssetOrigin:
   productId: 121175
   packageName: 'Book Of The Dead: Environment'
   packageVersion: 1.1
-  assetPath: Assets/Code/ExternalContent/HapkiLibs/License.md
+  assetPath: Assets/Scripts/Packages/Code/ExternalContent/HapkiLibs/License.md
   uploadId: 569154

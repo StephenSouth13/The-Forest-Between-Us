@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 3a8f6ff2e955e7c42acfe21a51810617
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 4890085278179872738
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121175
+  packageName: 'Book Of The Dead: Environment'
+  packageVersion: 1.1
+  assetPath: Assets/Scenes/Forest_EnvironmentSampleSettings.lighting
+  uploadId: 569154

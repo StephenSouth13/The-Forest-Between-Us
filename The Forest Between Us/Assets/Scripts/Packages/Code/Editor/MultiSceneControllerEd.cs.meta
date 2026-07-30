@@ -15,5 +15,5 @@ AssetOrigin:
   productId: 121175
   packageName: 'Book Of The Dead: Environment'
   packageVersion: 1.1
-  assetPath: Assets/Code/Editor/MultiSceneControllerEd.cs
+  assetPath: Assets/Scripts/Packages/Code/Editor/MultiSceneControllerEd.cs
   uploadId: 569154

@@ -16,5 +16,5 @@ AssetOrigin:
   productId: 121175
   packageName: 'Book Of The Dead: Environment'
   packageVersion: 1.1
-  assetPath: Assets/Code/Editor/BuildTool.cs
+  assetPath: Assets/Scripts/Packages/Code/Editor/BuildTool.cs
   uploadId: 569154
