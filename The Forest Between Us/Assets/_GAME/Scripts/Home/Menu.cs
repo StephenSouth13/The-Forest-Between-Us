@@ -11,7 +11,7 @@ using UnityEngine.UI;
 /// Bao gồm: nhạc nền procedural, SFX, animation, New Game, Continue,
 /// Settings, About, HowToPlay – tất cả hoàn chỉnh, sẵn sàng sử dụng.
 /// </summary>
-public class Menu : MonoBehaviour
+public class MainMenuController : MonoBehaviour
 {
     // ─────────────────────────────────────────────────────────────────
     //  Inspector Fields
