@@ -97,7 +97,7 @@ public class AISystemSetupTool
 
         go.transform.SetParent(parent);
         go.transform.position = pos;
-        go.transform.localScale = new Vector3(1f, 1.8f, 1.f);
+        go.transform.localScale = new Vector3(1f, 1.8f, 1.0f);
 
         Renderer rend = go.GetComponent<Renderer>();
         if (rend != null)

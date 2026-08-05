@@ -37,7 +37,6 @@ public class CraftingSystemSetupTool
         brokenAxe.repairIngredientAmount = 1;
 
         steelAxe.itemLevel = 2;
-        steelAxe.harvestPower = 2.5f;
         steelAxe.salvageReturnItem = stoneItem;
         steelAxe.salvageReturnAmount = 1;
 

@@ -16,6 +16,12 @@ public class DayManager : MonoBehaviour
     public AnimationCurve lightIntensityCurve;
     public float currentTimeOfDay = 0.25f; // 0.0 = Midnight, 0.5 = Noon, 1.0 = Midnight
 
+    [Header("Fog Settings")]
+    public Color dayFogColor = new Color(0.5f, 0.6f, 0.7f, 1f);
+    public Color nightFogColor = new Color(0.05f, 0.05f, 0.1f, 1f);
+    public float dayFogDensity = 0.01f;
+    public float nightFogDensity = 0.04f;
+
     [Header("Environmental Protection (Quy Tắc Bảo Vệ Môi Trường)")]
     public int maxTreesAllowedPerDay = 5; // Tối đa 5 cây / ngày
     public int treesChoppedToday = 0;
