@@ -67,8 +67,8 @@ public class MainMenuController : MonoBehaviour
     // ─────────────────────────────────────────────────────────────────
     static Color HC(float r,float g,float b,float a=1f)=>new(r,g,b,a);
     static readonly Color C_ABYSS    = HC(0.016f,0.024f,0.038f);
-    static readonly Color C_PANEL    = HC(0.020f,0.032f,0.048f,0.97f);
-    static readonly Color C_BTN      = HC(0.040f,0.072f,0.088f,0.90f);
+    static readonly Color C_PANEL    = HC(0.055f,0.095f,0.120f,0.97f);  // lighter for visibility
+    static readonly Color C_BTN      = HC(0.080f,0.145f,0.175f,0.95f);  // clearly visible button bg
     static readonly Color C_GREEN    = HC(0.16f, 0.82f, 0.44f);
     static readonly Color C_AMBER    = HC(0.92f, 0.70f, 0.12f);
     static readonly Color C_RED      = HC(0.78f, 0.14f, 0.14f);
@@ -186,6 +186,7 @@ public class MainMenuController : MonoBehaviour
 
     void Start()
     {
+        DestroyOldCanvases(); // must run first
         BuildCanvas();
         BuildBackground();
         BuildFirefliesLayer();
@@ -206,6 +207,21 @@ public class MainMenuController : MonoBehaviour
         StartCoroutine(CoScanlineFloat());
     }
 
+    /// <summary>Destroy any Canvas in the scene that is NOT ours, so nothing covers the menu.</summary>
+    void DestroyOldCanvases()
+    {
+        Canvas[] all = FindObjectsByType<Canvas>(FindObjectsSortMode.None);
+        foreach (Canvas c in all)
+        {
+            // Skip the one we're about to create (name match) and DontDestroyOnLoad ones
+            if (c == null) continue;
+            string n = c.gameObject.name;
+            if (n == "MainMenu_Canvas" || n == "SceneTransitionManager") continue;
+            // Destroy the old scene Canvas and all its UI children
+            Destroy(c.gameObject);
+        }
+    }
+
     // ─────────────────────────────────────────────────────────────────
     //  CANVAS
     // ─────────────────────────────────────────────────────────────────
@@ -213,12 +229,12 @@ public class MainMenuController : MonoBehaviour
     {
         var go = new GameObject("MainMenu_Canvas");
         _cvs = go.AddComponent<Canvas>();
-        _cvs.renderMode = RenderMode.ScreenSpaceOverlay;
-        _cvs.sortingOrder = 200;
+        _cvs.renderMode   = RenderMode.ScreenSpaceOverlay;
+        _cvs.sortingOrder = 9999; // highest possible — on top of everything
         var cs = go.AddComponent<CanvasScaler>();
-        cs.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        cs.uiScaleMode         = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         cs.referenceResolution = new Vector2(1920, 1080);
-        cs.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
+        cs.screenMatchMode     = CanvasScaler.ScreenMatchMode.Expand;
         go.AddComponent<GraphicRaycaster>();
     }
 
