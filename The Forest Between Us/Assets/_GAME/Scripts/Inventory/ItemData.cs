@@ -2,7 +2,8 @@
 using UnityEngine;
 
 // Định nghĩa các loại vật phẩm để làm bộ lọc
-public enum ItemType { All, Weapon, Food, Resource, Consumable, Tool }
+public enum ItemType { All, Weapon, Food, Resource, Consumable, Tool, Equipment }
+public enum EquipmentSlot { None, Head, Chest, Legs, Boots, Weapon }
 
 [CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
 public class ItemData : ScriptableObject
@@ -12,6 +13,11 @@ public class ItemData : ScriptableObject
     public Sprite icon;
     public bool isStackable = true;
     public int maxStackSize = 99;
+
+    [Header("Equipment Stats (Trang Bị)")]
+    public EquipmentSlot equipSlot;
+    public float armorValue = 0f;      // Giảm sát thương nhận vào
+    public float speedBoost = 0f;      // Tăng tốc độ chạy
 
     [Header("Consumable Effects (Ăn / Uống / Hồi Máu)")]
     public bool isConsumable;

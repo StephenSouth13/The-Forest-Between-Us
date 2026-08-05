@@ -3,7 +3,7 @@ using UnityEngine;
 public class SavePointCheckpoint : MonoBehaviour, Interactable
 {
     public string checkpointName = "Trạm Lửa Trại Nhập Môn";
-    public string prompt = "Kích Hoạt Điểm Lưu Campfire [F]";
+    public string prompt = "Kích Hoạt Điểm Lưu Campfire [E]";
     public GameObject activeLightObject;
     public ParticleSystem fireParticle;
 

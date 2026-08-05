@@ -64,7 +64,7 @@ public class FullMapUIController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(toggleKey))
+        if (Input.GetKeyDown(toggleKey) || MobileInputManager.GetMapDown())
         {
             Toggle();
         }

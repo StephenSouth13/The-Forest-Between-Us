@@ -124,7 +124,20 @@ public class PlayerRespawnManager : MonoBehaviour
         // Restore Vitals
         if (PlayerStatsManager.instance != null)
         {
-            PlayerStatsManager.instance.currentHealth = PlayerStatsManager.instance.maxHealth;
+            float hpPercent = 100f;
+            if (GameDirector.instance != null)
+            {
+                hpPercent = GameDirector.instance.respawnHealthPercentage;
+                if (GameDirector.instance.dropItemsOnDeath && InventoryManager.instance != null)
+                {
+                    // Giả lập rớt đồ bằng cách làm rỗng túi (hoặc rơi 1 số slot, ở đây làm đơn giản là clear)
+                    InventoryManager.instance.ClearInventory();
+                    Debug.LogWarning("💀 Bạn đã đánh rơi tất cả vật phẩm khi chết!");
+                }
+                PlayerStatsManager.instance.karma -= GameDirector.instance.respawnKarmaPenalty;
+            }
+
+            PlayerStatsManager.instance.currentHealth = PlayerStatsManager.instance.maxHealth * (hpPercent / 100f);
             PlayerStatsManager.instance.currentStamina = PlayerStatsManager.instance.maxStamina;
             PlayerStatsManager.instance.currentThirst = 80f;
             PlayerStatsManager.instance.currentHunger = 80f;

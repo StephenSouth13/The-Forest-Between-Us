@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerInteraction : MonoBehaviour
 {
     [Header("Input")]
-    public KeyCode interactKey = KeyCode.F;
+    public KeyCode interactKey = KeyCode.E;
 
     [Header("Raycast")]
     public Camera playerCamera;
@@ -15,7 +15,7 @@ public class PlayerInteraction : MonoBehaviour
     [Header("UI")]
     public GameObject promptPanel;
     public TextMeshProUGUI promptText;
-    public string promptFormat = "Press F - {0}";
+    public string promptFormat = "Press E - {0}";
 
     private Interactable currentInteractable;
 

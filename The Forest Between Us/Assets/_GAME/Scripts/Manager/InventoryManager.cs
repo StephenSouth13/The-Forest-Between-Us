@@ -113,19 +113,21 @@ public class InventoryManager : MonoBehaviour
 
     public bool HasItem(ItemData item, int amount)
     {
-        if (item == null || amount <= 0) return false;
+        return GetItemCount(item) >= amount;
+    }
 
+    public int GetItemCount(ItemData item)
+    {
+        if (item == null) return 0;
         int total = 0;
         foreach (InventorySlot slot in allSlots)
         {
             if (!slot.IsEmpty() && slot.GetItem() == item)
             {
                 total += slot.GetCount();
-                if (total >= amount) return true;
             }
         }
-
-        return false;
+        return total;
     }
 
     // Trừ dần từ nhiều slot chứa cùng 1 item, dùng cho craft/quest/tiêu hao không quan tâm slot cụ thể
@@ -169,6 +171,18 @@ public class InventoryManager : MonoBehaviour
         if (slot == null || slot.IsEmpty()) return;
 
         ItemData item = slot.GetItem();
+
+        // Xử lý Trang Bị (Equipment)
+        if (item.category == ItemType.Equipment)
+        {
+            if (PlayerEquipmentManager.instance != null)
+            {
+                PlayerEquipmentManager.instance.EquipItem(item);
+                RemoveItemFromSlot(slot, 1);
+                OnItemUsed?.Invoke(item, 1);
+            }
+            return;
+        }
 
         // Xử lý tiêu thụ (Ăn trái cây, uống nước, dùng thuốc)
         if (item.isConsumable && PlayerStatsManager.instance != null)
@@ -257,6 +271,17 @@ public class InventoryManager : MonoBehaviour
             else
             {
                 slot.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    public void ClearInventory()
+    {
+        foreach (InventorySlot slot in allSlots)
+        {
+            if (!slot.IsEmpty())
+            {
+                slot.ClearSlot();
             }
         }
     }

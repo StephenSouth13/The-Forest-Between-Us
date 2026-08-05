@@ -21,6 +21,7 @@ public static class ItemAndRecipeGeneratorTool
         ItemData waterBottle = CreateItem("Water_Bottle", "Bình Nước Suối", ItemType.Consumable, true, false, 0f, 50f, 5f, 15f);
         ItemData healthPotion = CreateItem("Super_Health_Potion", "Thuốc Hồi Huyết", ItemType.Consumable, true, false, 0f, 10f, 100f, 20f);
         ItemData energyDrink = CreateItem("Super_Energy_Drink", "Nước Tăng Lực", ItemType.Consumable, true, false, 0f, 20f, 10f, 100f);
+        ItemData seashell = CreateItem("Item_Seashell", "Vỏ Sò Biển (Tiền Tệ)", ItemType.Resource, false, false, 0f, 0f, 0f, 0f);
         
         ItemData ironSword = CreateItem("Iron_Sword", "Kiếm Sắt", ItemType.Weapon, false, false, 0f, 0f, 0f, 0f);
         ItemData leatherArmor = CreateItem("Leather_Armor", "Giáp Da", ItemType.Tool, false, false, 0f, 0f, 0f, 0f);

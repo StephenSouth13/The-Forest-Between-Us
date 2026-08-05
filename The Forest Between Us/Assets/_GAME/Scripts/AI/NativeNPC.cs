@@ -30,11 +30,17 @@ public class NativeNPC : MonoBehaviour, Interactable
     private float attackTimer;
     private bool learnedFromNPC = false;
 
+    [Header("Voice Lines")]
+    public AudioClip[] npcVoices;
+    private AudioSource audioSource;
+
     void Start()
     {
         currentHealth = maxHealth;
         agent = GetComponent<NavMeshAgent>();
         npcRenderer = GetComponent<Renderer>();
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.spatialBlend = 1f; // 3D sound
 
         GameObject playerObj = GameObject.FindWithTag("Player");
         if (playerObj != null) playerTransform = playerObj.transform;
@@ -116,7 +122,7 @@ public class NativeNPC : MonoBehaviour, Interactable
     public string GetInteractPrompt()
     {
         if (isCorrupted) return $"⚠️ {npcName} (ĐÃ BỊ HẮC HÓA - ĐANG TẤN CÔNG!)";
-        if (!learnedFromNPC) return $"Trò chuyện & Học kỹ năng với {npcName} (Phím F)";
+        if (!learnedFromNPC) return $"Trò chuyện & Học kỹ năng với {npcName} (Phím E)";
         return $"Nói chuyện với {npcName}";
     }
 
@@ -124,22 +130,54 @@ public class NativeNPC : MonoBehaviour, Interactable
     {
         if (isCorrupted) return;
 
-        // Hiển thị thoại Subtitle
-        if (RadioDialogueUIController.instance != null)
+        PlayRandomVoice();
+
+        if (DialogueChoiceUIController.instance != null)
         {
-            RadioDialogueUIController.instance.ShowSubtitle(npcName, friendlyDialogue, 6f);
+            if (!learnedFromNPC)
+            {
+                DialogueChoiceUIController.instance.ShowChoices(
+                    npcName, friendlyDialogue,
+                    "Xin hãy dạy tôi!", () => {
+                        learnedFromNPC = true;
+                        if (giftItemReward != null && InventoryManager.instance != null)
+                        {
+                            InventoryManager.instance.PickUpItem(giftItemReward, 1);
+                            Debug.Log($"🎓 Bạn đã học kỹ năng và nhận {giftItemReward.itemName}!");
+                        }
+                    },
+                    "Để khi khác.", () => {
+                        Debug.Log("Bạn đã từ chối.");
+                    }
+                );
+            }
+            else
+            {
+                DialogueChoiceUIController.instance.ShowChoices(
+                    npcName, "Rừng sâu rất nguy hiểm. Hãy luôn chuẩn bị đuốc trước khi màn đêm buông xuống.",
+                    "Tôi sẽ nhớ.", () => {},
+                    "", null
+                );
+            }
         }
         else
         {
+            Debug.LogWarning("Missing DialogueChoiceUIController! Fallback to standard console log.");
             Debug.Log($"💬 [{npcName}]: {friendlyDialogue}");
+            if (!learnedFromNPC && giftItemReward != null && InventoryManager.instance != null)
+            {
+                learnedFromNPC = true;
+                InventoryManager.instance.PickUpItem(giftItemReward, 1);
+            }
         }
+    }
 
-        // Chỉ dạy kỹ năng & Tặng quà
-        if (!learnedFromNPC && giftItemReward != null && InventoryManager.instance != null)
+    private void PlayRandomVoice()
+    {
+        if (npcVoices != null && npcVoices.Length > 0 && audioSource != null)
         {
-            learnedFromNPC = true;
-            InventoryManager.instance.PickUpItem(giftItemReward, 1);
-            Debug.Log($"🎓 {npcName} đã truyền dạy cho bạn công thức mới và truyền trao {giftItemReward.itemName}!");
+            AudioClip clip = npcVoices[Random.Range(0, npcVoices.Length)];
+            audioSource.PlayOneShot(clip);
         }
     }
 

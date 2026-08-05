@@ -64,8 +64,18 @@ public class PlayerStatsManager : MonoBehaviour
 
     void HandleVitalsDepletion()
     {
-        currentThirst = Mathf.Clamp(currentThirst - thirstDrainRate * Time.deltaTime, 0f, maxThirst);
-        currentHunger = Mathf.Clamp(currentHunger - hungerDrainRate * Time.deltaTime, 0f, maxHunger);
+        float hDrain = hungerDrainRate;
+        float tDrain = thirstDrainRate;
+        float sDrain = staminaDrainRate; // Actually we use HandleStaminaLogic for stamina drain, but we can scale it there.
+
+        if (GameDirector.instance != null)
+        {
+            hDrain *= GameDirector.instance.globalHungerDepletionRate;
+            tDrain *= GameDirector.instance.globalThirstDepletionRate;
+        }
+
+        currentThirst = Mathf.Clamp(currentThirst - tDrain * Time.deltaTime, 0f, maxThirst);
+        currentHunger = Mathf.Clamp(currentHunger - hDrain * Time.deltaTime, 0f, maxHunger);
         currentSleep = Mathf.Clamp(currentSleep - sleepDrainRate * Time.deltaTime, 0f, maxSleep);
 
         isDehydrated = currentThirst <= 0f;
@@ -137,7 +147,19 @@ public class PlayerStatsManager : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
-        currentHealth = Mathf.Clamp(currentHealth - amount, 0f, maxHealth);
+        float multiplier = 1f;
+        if (GameDirector.instance != null) multiplier = GameDirector.instance.enemyDamageMultiplier;
+        
+        float finalDamage = amount * multiplier;
+        
+        // Trừ đi Giáp từ trang bị
+        if (PlayerEquipmentManager.instance != null)
+        {
+            float armor = PlayerEquipmentManager.instance.GetTotalArmor();
+            finalDamage = Mathf.Max(0f, finalDamage - armor);
+        }
+
+        currentHealth = Mathf.Clamp(currentHealth - finalDamage, 0f, maxHealth);
         SaveStats();
         if (currentHealth <= 0f)
         {

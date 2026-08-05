@@ -62,7 +62,10 @@ public class DayManager : MonoBehaviour
 
     void UpdateDayCycle()
     {
-        currentTimeOfDay += (Time.deltaTime / dayDurationSeconds);
+        float speed = 1f;
+        if (GameDirector.instance != null) speed = GameDirector.instance.dayNightCycleSpeed;
+
+        currentTimeOfDay += ((Time.deltaTime * speed) / dayDurationSeconds);
         if (currentTimeOfDay >= 1f)
         {
             currentTimeOfDay = 0f;
