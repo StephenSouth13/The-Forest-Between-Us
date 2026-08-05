@@ -23,8 +23,10 @@ public static class ItemAndRecipeGeneratorTool
         ItemData energyDrink = CreateItem("Super_Energy_Drink", "Nước Tăng Lực", ItemType.Consumable, true, false, 0f, 20f, 10f, 100f);
         ItemData seashell = CreateItem("Item_Seashell", "Vỏ Sò Biển (Tiền Tệ)", ItemType.Resource, false, false, 0f, 0f, 0f, 0f);
         
-        ItemData ironSword = CreateItem("Iron_Sword", "Kiếm Sắt", ItemType.Weapon, false, false, 0f, 0f, 0f, 0f);
-        ItemData leatherArmor = CreateItem("Leather_Armor", "Giáp Da", ItemType.Tool, false, false, 0f, 0f, 0f, 0f);
+        ItemData ironSword = CreateEquipment("Iron_Sword", "Kiếm Sắt", EquipmentSlot.Weapon, 0f, 0f);
+        ItemData leatherArmor = CreateEquipment("Leather_Armor", "Giáp Da Thú", EquipmentSlot.Chest, 15f, 0f);
+        ItemData ironArmor = CreateEquipment("Iron_Armor", "Giáp Sắt Nặng", EquipmentSlot.Chest, 40f, -0.5f);
+        ItemData leatherBoots = CreateEquipment("Leather_Boots", "Giày Da Đi Rừng", EquipmentSlot.Boots, 2f, 1.5f); // Tăng tốc độ
 
         // 2. Tạo Recipes
         CreateRecipe("Recipe_Cooked_Meat", "Thịt Nướng", "Nướng thịt trên ngọn lửa hồng.", cookedMeat, 1, 3f, 
@@ -37,10 +39,27 @@ public static class ItemAndRecipeGeneratorTool
             new Ingredient { item = wildVegetable, amount = 1 },
             new Ingredient { item = waterBottle, amount = 1 });
 
+        CreateRecipe("Recipe_Leather_Armor", "Chế Tạo Giáp Da", "Mặc vào tăng 15 Giáp để đỡ đòn từ thú dữ.", leatherArmor, 1, 10f,
+            new Ingredient { item = rawMeat, amount = 2 }); // Dùng tạm thịt sống thay da thú
+
+        CreateRecipe("Recipe_Leather_Boots", "Chế Giày Da Đi Rừng", "Giày nhẹ giúp bạn chạy nhanh hơn (+1.5 Tốc độ).", leatherBoots, 1, 5f,
+            new Ingredient { item = rawMeat, amount = 1 },
+            new Ingredient { item = wildVegetable, amount = 2 });
+
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        Debug.Log("🎉 Đã tạo xong toàn bộ Vật phẩm & Công thức chế tạo tại Assets/_GAME/Data/");
+        Debug.Log("🎉 Đã tạo xong toàn bộ Vật phẩm, Trang Bị & Công thức chế tạo tại Assets/_GAME/Data/");
+    }
+
+    private static ItemData CreateEquipment(string fileName, string itemName, EquipmentSlot slot, float armor, float speed)
+    {
+        ItemData item = CreateItem(fileName, itemName, ItemType.Equipment, false, false, 0f, 0f, 0f, 0f);
+        item.equipSlot = slot;
+        item.armorValue = armor;
+        item.speedBoost = speed;
+        EditorUtility.SetDirty(item);
+        return item;
     }
 
     private static void EnsureDirectories()
