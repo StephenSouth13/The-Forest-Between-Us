@@ -6,71 +6,166 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// MainMenuController – AAA-quality main menu for "The Forest Between Us".
-/// Sons-of-the-Forest inspired: cinematic, dark, atmospheric.
-/// Self-contained: builds all UI in code, no prefabs needed.
-/// Attach to any GameObject in scene "Home".
+/// MainMenuController — AAA main menu for "The Forest Between Us".
+/// Sons-of-the-Forest cinematic style.
+/// Fully code-driven, no prefabs required.
+/// Scene flow: Home ──► Tutorial ──► GamePlay
 /// </summary>
 public class MainMenuController : MonoBehaviour
 {
     // ─────────────────────────────────────────────────────────────────
-    //  Inspector
+    //  Inspector – Scene Names
     // ─────────────────────────────────────────────────────────────────
-    [Header("Scene")]
-    public string gameplaySceneName = "GamePlay";
+    [Header("─── Scene Names ───────────────────")]
+    public string tutorialSceneName = "Tutorial";    // Home → Tutorial (first time)
+    public string gameplaySceneName = "GamePlay";    // Home → GamePlay (continue)
 
-    [Header("Optional: assign real AudioClips")]
-    public AudioClip menuMusicClip;     // forest ambient
-    public AudioClip sfxHoverClip;
-    public AudioClip sfxClickClip;
-    public AudioClip sfxOpenClip;
-    public AudioClip sfxCloseClip;
+    [Header("─── Music (để trống = dùng nhạc sinh bằng code) ───")]
+    [Tooltip("Kéo file .mp3/.ogg nhạc menu vào đây. Nếu trống, nhạc rừng procedural tự phát.")]
+    public AudioClip menuMusicClip;
+
+    [Header("─── SFX (để trống = dùng tone sinh bằng code) ───")]
+    public AudioClip sfxHover;
+    public AudioClip sfxClick;
+    public AudioClip sfxOpen;
+    public AudioClip sfxClose;
+
+    [Header("─── Story Panel Images (kéo Texture2D vào) ───")]
+    [Tooltip("Ảnh cho HỒI 1 – cảnh mù sương, đài radio")]
+    public Texture2D storyImg_Act1;
+    [Tooltip("Ảnh cho HỒI 2 – chiến đấu bóng đêm")]
+    public Texture2D storyImg_Act2;
+    [Tooltip("Ảnh cho HỒI 3 – phế tích cổ đại")]
+    public Texture2D storyImg_Act3;
+    [Tooltip("Ảnh cho HỒI 4 – đại chiến Void Leviathan")]
+    public Texture2D storyImg_Act4;
+    [Tooltip("Ảnh cho HỒI 5 – ngày phán quyết")]
+    public Texture2D storyImg_Act5;
 
     // ─────────────────────────────────────────────────────────────────
-    //  Private runtime
+    //  Private
     // ─────────────────────────────────────────────────────────────────
     Canvas      _cvs;
     AudioSource _music, _sfx;
 
-    // Panels
-    GameObject _panelMain, _panelSettings, _panelControls, _panelStory, _panelConfirmNew;
-    GameObject _overlay;   // loading screen
+    GameObject _panelMain, _panelSettings, _panelControls;
+    GameObject _panelStory, _panelCredits, _panelConfirmNew;
+    GameObject _overlay;
 
-    // Save data
     bool _hasSave;
     int  _saveDay, _saveKarma;
 
-    // Fireflies
     readonly List<FireflyData> _flies = new();
-    struct FireflyData { public RectTransform rt; public float speed, drift, phase; }
+    readonly List<FogData>     _fogStrips = new();
+    struct FireflyData { public RectTransform rt; public float speed, drift, phase; public Image img; }
+    struct FogData     { public RectTransform rt; public float speed; }
 
-    // Fog strips for scanline
-    readonly List<FogStrip> _fog = new();
-    struct FogStrip { public RectTransform rt; public float speed, alpha; }
+    int _storyPage; // 0-4
 
     // ─────────────────────────────────────────────────────────────────
-    //  AAA Colour System  (Sons of Forest dark-green palette)
+    //  AAA Palette (Sons-of-the-Forest dark-green)
     // ─────────────────────────────────────────────────────────────────
-    static Color C(float r, float g, float b, float a = 1f) => new(r, g, b, a);
+    static Color HC(float r,float g,float b,float a=1f)=>new(r,g,b,a);
+    static readonly Color C_ABYSS    = HC(0.016f,0.024f,0.038f);
+    static readonly Color C_PANEL    = HC(0.020f,0.032f,0.048f,0.97f);
+    static readonly Color C_BTN      = HC(0.040f,0.072f,0.088f,0.90f);
+    static readonly Color C_GREEN    = HC(0.16f, 0.82f, 0.44f);
+    static readonly Color C_AMBER    = HC(0.92f, 0.70f, 0.12f);
+    static readonly Color C_RED      = HC(0.78f, 0.14f, 0.14f);
+    static readonly Color C_PURPLE   = HC(0.58f, 0.22f, 0.88f);
+    static readonly Color C_BLUE     = HC(0.20f, 0.52f, 0.92f);
+    static readonly Color C_DIM      = HC(0.36f, 0.52f, 0.46f);
+    static readonly Color C_TXT      = HC(0.92f, 0.96f, 0.94f);
+    static readonly Color C_TXT2     = HC(0.60f, 0.72f, 0.66f);
+    static readonly Color C_SEP      = HC(0.16f, 0.82f, 0.44f, 0.18f);
 
-    // Backgrounds
-    static readonly Color BG_ABYSS   = C(0.020f, 0.030f, 0.045f);   // near-black teal
-    static readonly Color BG_PANEL   = C(0.025f, 0.038f, 0.055f, 0.96f);
+    // ─────────────────────────────────────────────────────────────────
+    //  Story Act Data
+    // ─────────────────────────────────────────────────────────────────
+    struct ActData
+    {
+        public string accentHex;
+        public string actTag;
+        public string title;
+        public string dayRange;
+        public string lore;
+        public string[] highlights;
+    }
 
-    // Accents
-    static readonly Color ACC_GREEN  = C(0.180f, 0.820f, 0.450f);    // bioluminescent forest green
-    static readonly Color ACC_AMBER  = C(0.920f, 0.680f, 0.100f);    // torch/fire amber
-    static readonly Color ACC_RED    = C(0.780f, 0.140f, 0.140f);    // danger
-    static readonly Color ACC_DIM    = C(0.380f, 0.520f, 0.480f);    // muted teal
-
-    // Text
-    static readonly Color TXT_HERO   = C(0.940f, 0.960f, 0.960f);    // near-white
-    static readonly Color TXT_BODY   = C(0.640f, 0.740f, 0.700f);    // dim seafoam
-    static readonly Color TXT_LABEL  = C(0.300f, 0.420f, 0.400f);    // very dim
-
-    // UI chrome
-    static readonly Color CHROME_LINE = C(0.180f, 0.820f, 0.450f, 0.20f); // separator
-    static readonly Color BTN_DARK   = C(0.060f, 0.100f, 0.130f, 0.90f); // button bg
+    static readonly ActData[] ACTS = {
+        new ActData {
+            accentHex="#2ED07A", actTag="HỒI I", title="KHỞI ĐẦU BÍ ẨN",
+            dayRange="Ngày 1 – 3",
+            lore=
+                "Bạn tỉnh dậy giữa khu rừng nguyên sinh phủ dày sương mù tím. " +
+                "Không có ký ức, không có vũ khí, chỉ có tiếng rè của một chiếc " +
+                "<b>đài Radio cũ</b> vọng ra từ xa.\n\n" +
+                "Qua làn sóng nhiễu loạn, giọng một người đàn ông cổ xưa vang lên: " +
+                "<i>\"Con ơi… đừng phá rừng… đừng phá rừng…\"</i>\n\n" +
+                "Đó là <color=#2ED07A><b>Mai An Tiêm</b></color> — người đã tồn tại " +
+                "hơn 300 năm, bảo vệ ranh giới giữa hai thế giới.",
+            highlights=new[]{"Tìm Đài Radio","Nhặt Dưa Hấu Hạt Đen","Đêm Sương Độc đầu tiên","Kích hoạt Trạm Tiếp Sóng 01"}
+        },
+        new ActData {
+            accentHex="#F5A623", actTag="HỒI II", title="CHIẾN ĐẤU & TRƯỜNG KỲ",
+            dayRange="Ngày 4 – 10",
+            lore=
+                "Bóng tối có sự sống. Những sinh thể được gọi là " +
+                "<color=#F5A623><b>Quái Vật Bóng Đêm</b></color> — tàn dư của " +
+                "Vùng Đứt Gãy Void Rift bắt đầu chủ động săn lùng bạn.\n\n" +
+                "Bạn chế tạo <b>Nỏ Tần Số</b>, xây dựng căn cứ, đặt bẫy. " +
+                "Nhưng mọi thứ leo thang đến đêm <b>Trăng Máu Hạt Đen</b> — " +
+                "đợt càn quét đầu tiên tàn bạo nhất.\n\n" +
+                "Trùm đầu: <color=#F5A623><b>Shadow Berserker</b></color> chặn đường " +
+                "đến tháp viễn thông.",
+            highlights=new[]{"Đêm Trăng Máu Hạt Đen (Wave 5)","Boss Shadow Berserker","Chế tạo Mặt Nạ Lọc Khí","Cơn Bão Rift đầu tiên (Wave 10)"}
+        },
+        new ActData {
+            accentHex="#AA55FF", actTag="HỒI III", title="BÍ ẨN CỔ ĐẠI",
+            dayRange="Ngày 11 – 20",
+            lore=
+                "Dưới nền rừng cổ đại, những <b>bia đá khắc chữ Nôm</b> lẫn " +
+                "mạch điện kỳ lạ hé lộ sự thật: khu rừng này từng là " +
+                "<color=#AA55FF><b>Phế Tích Mai An Tiêm</b></color>.\n\n" +
+                "Truyền thuyết và khoa học đan xen. Bạn giải đố mạch điện cổ đại, " +
+                "chiến đấu với <b>Shadow Drakes</b> bay lượn, và thu thập " +
+                "4 mảnh <b>Chìa Khóa Tần Số Trụ Vũ Trụ</b>.\n\n" +
+                "Void Rift đang lớn dần. Thời gian không còn nhiều.",
+            highlights=new[]{"Phế Tích Cổ (3 phần)","Boss Shadow Drakes","Thu Chìa Khóa Tần Số (4 mảnh)","Giải đố mạch điện cổ đại"}
+        },
+        new ActData {
+            accentHex="#CF3333", actTag="HỒI IV", title="ĐẠI CHIẾN RANH GIỚI",
+            dayRange="Ngày 21 – 29",
+            lore=
+                "Pháo đài cuối cùng của nhân loại: <b>Trạm Vô Tuyến Siêu Cấp</b>. " +
+                "Bạn gia cố tường thành, lắp đặt Pháo Sóng Âm tự động trong khi " +
+                "bầy quái ngày càng đông.\n\n" +
+                "Và rồi nó xuất hiện — <color=#CF3333><b>Void Leviathan</b></color>: " +
+                "Trùm Cổ Đại từ sâu thẳm Vùng Đứt Gãy, thực thể đã ngủ yên " +
+                "hàng nghìn năm.\n\n" +
+                "<b>Ngày 29:</b> Mai An Tiêm trò chuyện lần cuối qua vô tuyến. " +
+                "Ông hỏi bạn: <i>\"Con sẽ chọn vận mệnh nào cho nhân loại?\"</i>",
+            highlights=new[]{"Pháo Đài Vô Tuyến Siêu Cấp","Boss Void Leviathan","Cuộc chiến Wave 12","Đêm Trước Phán Quyết"}
+        },
+        new ActData {
+            accentHex="#4488FF", actTag="HỒI V", title="NGÀY PHÁN QUYẾT",
+            dayRange="Ngày 30  ·  5 Kết Thúc",
+            lore=
+                "Cổng <color=#4488FF><b>Void Rift</b></color> mở ra hoàn toàn. " +
+                "Không gian và thời gian rạn nứt. Đây là khoảnh khắc quyết định.\n\n" +
+                "Karma của bạn suốt 30 ngày — mỗi cây chặt, mỗi sinh linh giết, " +
+                "mỗi lựa chọn — tất cả hội tụ về đây.\n\n" +
+                "Bạn có <b>5 lựa chọn vận mệnh</b>. Mỗi lựa chọn mở ra một " +
+                "kết thúc khác nhau, không thể đảo ngược.",
+            highlights=new[]{
+                "① Sứ Giả Trở Về  (True Ending)",
+                "② Tiếng Vọng Không-Thời Gian",
+                "③ Tân Vương Bóng Đêm  (Dark Karma)",
+                "④ Sự Hy Sinh Thầm Lặng",
+                "⑤ Vòng Lặp Vĩnh Hằng  (Secret)"
+            }
+        }
+    };
 
     // ─────────────────────────────────────────────────────────────────
     //  Lifecycle
@@ -80,36 +175,35 @@ public class MainMenuController : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible   = true;
         Time.timeScale   = 1f;
-
-        _music = Mk<AudioSource>(); _music.loop = true; _music.spatialBlend = 0f;
+        _music = gameObject.AddComponent<AudioSource>();
+        _music.loop = true; _music.spatialBlend = 0f;
         _music.volume = PlayerPrefs.GetFloat("MV", 0.55f);
-        _sfx   = Mk<AudioSource>(); _sfx.playOnAwake = false; _sfx.spatialBlend = 0f;
+        _sfx = gameObject.AddComponent<AudioSource>();
+        _sfx.spatialBlend = 0f;
         _sfx.volume = PlayerPrefs.GetFloat("SV", 0.85f);
-
         _hasSave = SaveSystem.LoadProgress(out _saveDay, out _saveKarma, out _);
     }
-
-    T Mk<T>() where T : Component => gameObject.AddComponent<T>();
 
     void Start()
     {
         BuildCanvas();
-        BuildCinematicBackground();
-        BuildFireflyLayer();
+        BuildBackground();
+        BuildFirefliesLayer();
         BuildFogLayer();
         BuildPanelMain();
-        BuildPanelSettings();
-        BuildPanelControls();
         BuildPanelStory();
+        BuildPanelControls();
+        BuildPanelSettings();
+        BuildPanelCredits();
         BuildPanelConfirmNew();
         BuildLoadingOverlay();
         SwitchTo(null);
 
-        StartCoroutine(CoMusic());
-        StartCoroutine(CoFireflies());
-        StartCoroutine(CoFog());
+        StartCoroutine(CoStartMusic());
+        StartCoroutine(CoAnimateFireflies());
+        StartCoroutine(CoAnimateFog());
         StartCoroutine(CoTitleBreath());
-        StartCoroutine(CoChromaShift());
+        StartCoroutine(CoScanlineFloat());
     }
 
     // ─────────────────────────────────────────────────────────────────
@@ -119,95 +213,86 @@ public class MainMenuController : MonoBehaviour
     {
         var go = new GameObject("MainMenu_Canvas");
         _cvs = go.AddComponent<Canvas>();
-        _cvs.renderMode   = RenderMode.ScreenSpaceOverlay;
+        _cvs.renderMode = RenderMode.ScreenSpaceOverlay;
         _cvs.sortingOrder = 200;
         var cs = go.AddComponent<CanvasScaler>();
-        cs.uiScaleMode         = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        cs.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         cs.referenceResolution = new Vector2(1920, 1080);
-        cs.screenMatchMode     = CanvasScaler.ScreenMatchMode.Expand;
+        cs.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
         go.AddComponent<GraphicRaycaster>();
     }
 
     // ─────────────────────────────────────────────────────────────────
-    //  CINEMATIC BACKGROUND  (3-layer depth)
+    //  CINEMATIC BACKGROUND
     // ─────────────────────────────────────────────────────────────────
-    void BuildCinematicBackground()
+    void BuildBackground()
     {
-        // Layer 0: deep abyss gradient
-        var g0 = Img("BG_Deep", _cvs.transform, V2(0,0), V2(1,1), BG_ABYSS);
-        g0.GetComponent<Image>().sprite = SprGradient(
-            C(0.010f,0.015f,0.025f), C(0.035f,0.060f,0.080f));
+        MkImg("BG_Grad", _cvs.transform, V2(0,0), V2(1,1), C_ABYSS)
+            .GetComponent<Image>().sprite = MkGradient(HC(0.008f,0.012f,0.022f), HC(0.030f,0.055f,0.072f));
 
-        // Layer 1: mid-tone radial fog (light from center)
-        var g1 = Img("BG_Radial", _cvs.transform, V2(0,0), V2(1,1), Color.clear);
-        g1.GetComponent<Image>().sprite = SprRadialGlow(C(0.04f,0.10f,0.08f,0.35f));
+        MkImg("BG_Radial", _cvs.transform, V2(0,0), V2(1,1), Color.clear)
+            .GetComponent<Image>().sprite = MkRadialGlow(HC(0.04f,0.12f,0.09f,0.30f));
 
-        // Layer 2: vignette (heavy, cinematic black corners)
-        var g2 = Img("BG_Vignette", _cvs.transform, V2(0,0), V2(1,1), Color.clear);
-        g2.GetComponent<Image>().sprite = SprVignette(0.85f);
+        MkImg("BG_Vignette", _cvs.transform, V2(0,0), V2(1,1), Color.clear)
+            .GetComponent<Image>().sprite = MkVignette(0.88f);
 
-        // Layer 3: top dark bar (letterbox top)
-        var topBar = Img("Bar_Top", _cvs.transform, V2(0,0.92f), V2(1,1), C(0f,0f,0f,0.7f));
-        // Layer 4: bottom bar
-        var botBar = Img("Bar_Bot", _cvs.transform, V2(0,0), V2(1,0.04f), C(0f,0f,0f,0.7f));
+        // Cinematic letterbox bars
+        MkImg("Bar_Top",    _cvs.transform, V2(0,0.935f), V2(1,1.000f), HC(0,0,0,0.82f));
+        MkImg("Bar_Bottom", _cvs.transform, V2(0,0.000f), V2(1,0.040f), HC(0,0,0,0.82f));
 
-        // Glowing horizontal scanline
-        var scan = Img("Scanline", _cvs.transform, V2(0,0.435f), V2(1,0.440f),
-            C(ACC_GREEN.r, ACC_GREEN.g, ACC_GREEN.b, 0.06f));
-        scan.name = "Scanline_Animated";
+        // Animated scanline
+        var scan = MkImg("Scanline", _cvs.transform, V2(0,0.44f), V2(1,0.445f),
+            HC(C_GREEN.r,C_GREEN.g,C_GREEN.b,0.055f));
+        scan.name = "Scanline";
     }
 
     // ─────────────────────────────────────────────────────────────────
-    //  FIREFLY LAYER (40 bioluminescent specks)
+    //  FIREFLIES
     // ─────────────────────────────────────────────────────────────────
-    void BuildFireflyLayer()
+    void BuildFirefliesLayer()
     {
-        var layer = Rect("FireflyLayer", _cvs.transform, V2(0,0), V2(1,1));
-        var rng = new System.Random(77);
-        for (int i = 0; i < 45; i++)
+        var layer = MkRect("Flies", _cvs.transform, V2(0,0), V2(1,1));
+        var rng = new System.Random(404);
+        for (int i = 0; i < 48; i++)
         {
-            float sz  = (float)(rng.NextDouble() * 5 + 1.5f);
-            Color col = i % 4 == 0 ? ACC_AMBER
-                      : i % 4 == 1 ? ACC_GREEN
-                      : i % 4 == 2 ? C(0.4f,0.9f,0.7f)
-                      : C(0.6f,0.8f,1.0f);
-            col.a = (float)(rng.NextDouble() * 0.5f + 0.12f);
-
-            var dot = Img($"Fly{i}", layer.transform, V2(0,0), V2(0,0), col);
-            var rt  = dot.GetComponent<RectTransform>();
-            float ax = (float)rng.NextDouble();
-            float ay = (float)rng.NextDouble();
-            rt.anchorMin = V2(ax, ay);
-            rt.anchorMax = V2(ax + 0.004f, ay + 0.007f);
-            rt.offsetMin = rt.offsetMax = Vector2.zero;
-            dot.GetComponent<Image>().sprite = SprCircle(12);
-
-            _flies.Add(new FireflyData
-            {
-                rt    = rt,
-                speed = (float)(rng.NextDouble() * 0.00012f + 0.00004f),
-                drift = (float)((rng.NextDouble() - 0.5) * 0.00007f),
-                phase = (float)(rng.NextDouble() * Mathf.PI * 2f)
+            float sz = (float)(rng.NextDouble()*5.5f+1.5f);
+            Color col = i%5==0 ? C_AMBER
+                      : i%5==1 ? C_GREEN
+                      : i%5==2 ? HC(0.4f,0.9f,0.7f)
+                      : i%5==3 ? HC(0.6f,0.8f,1.0f)
+                      : HC(0.9f,0.6f,0.2f);
+            col.a = (float)(rng.NextDouble()*0.45f+0.1f);
+            float ax=(float)rng.NextDouble(), ay=(float)rng.NextDouble();
+            var dot = MkImg($"F{i}", layer.transform, V2(ax,ay), V2(ax+0.004f,ay+0.007f), col);
+            dot.GetComponent<Image>().sprite = MkCircle(14);
+            _flies.Add(new FireflyData{
+                rt    = dot.GetComponent<RectTransform>(),
+                img   = dot.GetComponent<Image>(),
+                speed = (float)(rng.NextDouble()*0.00013f+0.00004f),
+                drift = (float)((rng.NextDouble()-0.5)*0.00008f),
+                phase = (float)(rng.NextDouble()*Mathf.PI*2f)
             });
         }
     }
 
     // ─────────────────────────────────────────────────────────────────
-    //  FOG STRIPS (horizontal moving mist bands)
+    //  FOG
     // ─────────────────────────────────────────────────────────────────
     void BuildFogLayer()
     {
-        var layer = Rect("FogLayer", _cvs.transform, V2(0,0), V2(1,1));
-        var rng = new System.Random(33);
-        for (int i = 0; i < 6; i++)
+        var layer = MkRect("Fog", _cvs.transform, V2(0,0), V2(1,1));
+        var rng = new System.Random(7);
+        for (int i = 0; i < 7; i++)
         {
-            float y = (float)(rng.NextDouble() * 0.6f + 0.05f);
-            float h = (float)(rng.NextDouble() * 0.04f + 0.015f);
-            Color fogCol = C(0.10f, 0.22f, 0.18f, (float)(rng.NextDouble() * 0.06f + 0.02f));
-            var strip = Img($"Fog{i}", layer.transform, V2(-0.1f, y), V2(1.1f, y + h), fogCol);
-            strip.GetComponent<Image>().sprite = SprFogStrip();
-            float spd = (float)((rng.NextDouble() - 0.5) * 0.00006f);
-            _fog.Add(new FogStrip { rt = strip.GetComponent<RectTransform>(), speed = spd });
+            float y=(float)(rng.NextDouble()*0.65f+0.04f);
+            float h=(float)(rng.NextDouble()*0.045f+0.012f);
+            Color c=HC(0.08f,0.20f,0.16f,(float)(rng.NextDouble()*0.07f+0.02f));
+            var strip = MkImg($"Fog{i}", layer.transform, V2(-0.12f,y), V2(1.12f,y+h), c);
+            strip.GetComponent<Image>().sprite = MkFogStrip();
+            _fogStrips.Add(new FogData{
+                rt    = strip.GetComponent<RectTransform>(),
+                speed = (float)((rng.NextDouble()-0.5)*0.00007f)
+            });
         }
     }
 
@@ -216,246 +301,291 @@ public class MainMenuController : MonoBehaviour
     // ─────────────────────────────────────────────────────────────────
     void BuildPanelMain()
     {
-        _panelMain = Rect("Panel_Main", _cvs.transform, V2(0,0), V2(1,1)).gameObject;
-        var rt = _panelMain.GetComponent<RectTransform>();
+        _panelMain = MkRect("Panel_Main", _cvs.transform, V2(0,0), V2(1,1)).gameObject;
 
-        // ══ LEFT COLUMN — title + lore ══════════════════════════════════
-        var left = Rect("Left", _panelMain.transform, V2(0.03f,0.08f), V2(0.50f,0.92f));
+        // ══ LEFT – title + lore ═════════════════════════════════════
+        var L = MkRect("Left", _panelMain.transform, V2(0.03f,0.08f), V2(0.50f,0.92f));
 
-        // Glowing title badge
-        var titleBadge = Img("TitleBadge", left.transform, V2(0,0.68f), V2(1,1.0f),
-            C(0.03f,0.07f,0.06f,0.55f));
-        titleBadge.GetComponent<Image>().sprite = SprRR(16);
-        // Left accent strip
-        var accentStrip = Img("Accent", left.transform, V2(0,0.68f), V2(0.012f,1f),
-            C(ACC_GREEN.r, ACC_GREEN.g, ACC_GREEN.b, 0.9f));
+        // Badge background
+        var bg = MkImg("TitleBg", L.transform, V2(0f,0.68f), V2(1f,1.00f),
+            HC(0.02f,0.05f,0.04f,0.55f));
+        bg.GetComponent<Image>().sprite = MkRR(16);
+        // Accent strip (left edge)
+        MkImg("AccentStrip", L.transform, V2(0f,0.68f), V2(0.010f,1f), C_GREEN);
 
-        // Game title
-        var titleGO = Rect("Title_THE", left.transform, V2(0.04f,0.80f), V2(0.98f,0.98f));
-        var t1 = titleGO.AddComponent<TextMeshProUGUI>();
-        t1.text      = "THE FOREST";
-        t1.fontSize  = 72f;
-        t1.fontStyle = FontStyles.Bold;
+        // THE FOREST
+        var t1 = MkRect("T1", L.transform, V2(0.04f,0.82f), V2(0.98f,0.99f)).AddComponent<TextMeshProUGUI>();
+        t1.text = "THE FOREST"; t1.fontSize = 74f; t1.fontStyle = FontStyles.Bold;
         t1.alignment = TextAlignmentOptions.Left;
         t1.enableVertexGradient = true;
-        t1.colorGradient = new VertexGradient(TXT_HERO, TXT_HERO,
-            C(0.60f, 0.90f, 0.72f), C(0.30f, 0.60f, 0.45f));
-        titleGO.name = "TitleAnimated";
+        t1.colorGradient = new VertexGradient(C_TXT, C_TXT, HC(0.55f,0.88f,0.70f), HC(0.25f,0.55f,0.40f));
+        t1.gameObject.name = "TitleAnim";
 
-        var t2GO = Rect("Title_BETWEEN", left.transform, V2(0.04f,0.69f), V2(0.98f,0.82f));
-        var t2 = t2GO.AddComponent<TextMeshProUGUI>();
-        t2.text      = "BETWEEN US";
-        t2.fontSize  = 52f;
-        t2.fontStyle = FontStyles.Bold;
+        // BETWEEN US
+        var t2 = MkRect("T2", L.transform, V2(0.04f,0.70f), V2(0.98f,0.83f)).AddComponent<TextMeshProUGUI>();
+        t2.text = "BETWEEN US"; t2.fontSize = 54f; t2.fontStyle = FontStyles.Bold;
         t2.alignment = TextAlignmentOptions.Left;
-        t2.color     = ACC_GREEN;
-        t2.characterSpacing = 8f;
+        t2.color = C_GREEN; t2.characterSpacing = 9f;
 
-        // Subtitle / lore tagline
-        var sub = Rect("Sub", left.transform, V2(0.04f,0.61f), V2(0.95f,0.69f));
-        var subT = sub.AddComponent<TextMeshProUGUI>();
-        subT.text      = "Khu Rừng Giữa Chúng Ta  ·  30 Ngày Phán Quyết";
-        subT.fontSize  = 18f;
-        subT.color     = ACC_DIM;
-        subT.fontStyle = FontStyles.Italic;
+        // Tagline
+        var tag = MkRect("Tag", L.transform, V2(0.04f,0.625f), V2(0.95f,0.705f)).AddComponent<TextMeshProUGUI>();
+        tag.text = "Khu Rừng Giữa Chúng Ta  ·  30 Ngày  ·  5 Kết Thúc";
+        tag.fontSize = 17f; tag.fontStyle = FontStyles.Italic; tag.color = C_DIM;
 
-        // Separator line
-        Sep("Sep1", left.transform, V2(0.03f, 0.595f), V2(0.90f, 0.600f));
+        Sep("S1", L.transform, V2(0.03f,0.612f), V2(0.90f,0.618f));
 
-        // Lore blurb — 3 lines of atmosphere
-        var lore = Rect("Lore", left.transform, V2(0.02f,0.36f), V2(0.96f,0.59f));
-        var loreT = lore.AddComponent<TextMeshProUGUI>();
-        loreT.text =
-            "Bạn tỉnh dậy trong sương mù dày đặc.\n" +
-            "Chiếc đài Radio cũ phát ra tiếng rè của\n" +
-            "<color=#2ED07A>Mai An Tiêm</color> — người đã biến mất 300 năm trước.\n\n" +
-            "30 ngày. 5 kết thúc. Một Vùng Đứt Gãy.<b> Void Rift.</b>\n" +
-            "Lựa chọn của bạn sẽ định đoạt vận mệnh nhân loại.";
-        loreT.fontSize  = 17.5f;
-        loreT.color     = TXT_BODY;
-        loreT.richText  = true;
-        loreT.lineSpacing = 6f;
+        // Lore intro text
+        var lore = MkRect("Lore", L.transform, V2(0.02f,0.40f), V2(0.96f,0.610f)).AddComponent<TextMeshProUGUI>();
+        lore.richText = true;
+        lore.text =
+            "Bạn tỉnh dậy giữa sương mù dày đặc.\n" +
+            "Chiếc đài Radio cũ thì thầm tiếng của " +
+            "<color=#2ED07A><b>Mai An Tiêm</b></color> — người đã biến mất 300 năm.\n\n" +
+            "Một <b>Vùng Đứt Gãy Void Rift</b> bí ẩn đang mở ra, " +
+            "nuốt chửng mọi ranh giới giữa thế giới ánh sáng và bóng tối.\n\n" +
+            "<color=#F5A623>30 ngày.</color>  <color=#AA55FF>5 kết thúc.</color>  " +
+            "<color=#CF3333>Một phán quyết.</color>  Số phận nhân loại trong tay bạn.";
+        lore.fontSize = 17.5f; lore.color = C_TXT2; lore.lineSpacing = 5f;
 
-        // Chapter badge row
-        Sep("Sep2", left.transform, V2(0.03f, 0.345f), V2(0.90f, 0.350f));
-        BuildChapterBadges(left.transform);
+        Sep("S2", L.transform, V2(0.03f,0.385f), V2(0.90f,0.391f));
+
+        // Act badges row
+        BuildActBadgesRow(L.transform);
 
         // Save badge
         if (_hasSave)
         {
-            var sb = Img("SaveBadge", left.transform, V2(0.02f,0.09f), V2(0.70f,0.18f),
-                C(0.05f,0.20f,0.12f,0.88f));
-            sb.GetComponent<Image>().sprite = SprRR(8);
-            var sBorderL = Img("SBorderL", sb.transform, V2(0,0), V2(0.008f,1f),
-                C(ACC_GREEN.r,ACC_GREEN.g,ACC_GREEN.b,0.9f));
-            var sT = Rect("SaveTxt", sb.transform, V2(0.04f,0), V2(1,1)).AddComponent<TextMeshProUGUI>();
-            sT.text = $"💾  Ngày <b><color=#2ED07A>{_saveDay}</color></b>  /30     Karma  <b><color=#F5C332>{_saveKarma}</color></b> / 100";
-            sT.fontSize = 16f; sT.color = TXT_BODY; sT.alignment = TextAlignmentOptions.MidlineLeft;
+            var sb = MkImg("SaveBadge", L.transform, V2(0.02f,0.105f), V2(0.72f,0.185f),
+                HC(0.04f,0.18f,0.10f,0.90f));
+            sb.GetComponent<Image>().sprite = MkRR(8);
+            MkImg("SBL", sb.transform, V2(0,0), V2(0.007f,1), C_GREEN);
+            var st = MkRect("ST", sb.transform, V2(0.03f,0), V2(0.97f,1)).AddComponent<TextMeshProUGUI>();
+            st.richText = true;
+            st.text = $"💾  Ngày <b><color=#2ED07A>{_saveDay}</color></b> / 30    Karma <b><color=#F5A623>{_saveKarma}</color></b> / 100";
+            st.fontSize = 15.5f; st.color = C_TXT2; st.alignment = TextAlignmentOptions.MidlineLeft;
         }
 
-        // Version
-        var ver = Rect("Ver", left.transform, V2(0.02f,0.02f), V2(0.50f,0.08f)).AddComponent<TextMeshProUGUI>();
-        ver.text = "v1.0  ·  Unity 6  ·  VTC Academy 2025";
-        ver.fontSize = 13f; ver.color = TXT_LABEL;
+        // Version & credits mini
+        var ver = MkRect("Ver", L.transform, V2(0.02f,0.022f), V2(0.65f,0.085f)).AddComponent<TextMeshProUGUI>();
+        ver.text = "v1.0  ·  Unity 6 URP  ·  VTC Academy  ·  2025";
+        ver.fontSize = 13f; ver.color = HC(0.28f,0.38f,0.36f);
 
-        // ══ RIGHT COLUMN — button panel ═════════════════════════════════
-        var right = Rect("Right", _panelMain.transform, V2(0.52f,0.08f), V2(0.97f,0.92f));
-        var rightBg = Img("RightBg", right.transform, V2(0,0), V2(1,1), BG_PANEL);
-        rightBg.GetComponent<Image>().sprite = SprRR(20);
-        // Top accent line
-        var topAccent = Img("TopAccent", right.transform, V2(0.05f,0.965f), V2(0.95f,0.972f), ACC_GREEN);
+        // ══ RIGHT – button panel ════════════════════════════════════
+        var R = MkRect("Right", _panelMain.transform, V2(0.52f,0.08f), V2(0.97f,0.92f));
+        MkImg("RightBg", R.transform, V2(0,0), V2(1,1), C_PANEL)
+            .GetComponent<Image>().sprite = MkRR(22);
+        // Top color accent bar
+        MkImg("TopBar", R.transform, V2(0.04f,0.968f), V2(0.96f,0.975f), C_GREEN);
 
-        // Section header inside button panel
-        var hdrT = Rect("PanelHdr", right.transform, V2(0.06f,0.90f), V2(0.94f,0.97f)).AddComponent<TextMeshProUGUI>();
-        hdrT.text = "▶  ĐIỀU HƯỚNG";
-        hdrT.fontSize = 14f; hdrT.color = ACC_DIM; hdrT.characterSpacing = 5f;
-        hdrT.alignment = TextAlignmentOptions.MidlineLeft;
+        var hdr = MkRect("Hdr", R.transform, V2(0.06f,0.90f), V2(0.94f,0.97f)).AddComponent<TextMeshProUGUI>();
+        hdr.text = "ĐIỀU HƯỚNG"; hdr.fontSize = 13f; hdr.characterSpacing = 6f;
+        hdr.color = C_DIM; hdr.alignment = TextAlignmentOptions.MidlineLeft;
 
-        // Buttons — AAA styled
-        float btnH = 0.10f, gap = 0.018f, startY = 0.88f;
-        Btn("Btn_New",      right.transform, V2(0.05f, startY-0*(btnH+gap)), V2(0.95f, startY-0*(btnH+gap)+btnH),
-            "TRÒ CHƠI MỚI", "Bắt đầu hành trình 30 ngày", ACC_GREEN,
-            () => { Click(); SwitchTo(_panelConfirmNew); });
+        // ─── Buttons ─────────────────────────────────────────────
+        const float BH = 0.100f, GAP = 0.018f;
+        float sy = 0.875f;
 
-        Btn("Btn_Continue", right.transform, V2(0.05f, startY-1*(btnH+gap)), V2(0.95f, startY-1*(btnH+gap)+btnH),
-            _hasSave ? $"TIẾP TỤC" : "TIẾP TỤC",
-            _hasSave ? $"Ngày {_saveDay}  ·  Karma {_saveKarma}" : "Chưa có tiến trình",
-            _hasSave ? ACC_AMBER : C(0.3f,0.4f,0.38f),
-            () => { if (_hasSave) { Click(); StartCoroutine(CoLoad(gameplaySceneName)); } },
-            !_hasSave);
+        AaaBtn(R.transform, "Btn_New",
+            V2(0.05f, sy - 0*(BH+GAP)), V2(0.95f, sy - 0*(BH+GAP) + BH),
+            "TRÒ CHƠI MỚI", "Bắt đầu hành trình – 30 ngày sinh tồn", "🌲", C_GREEN,
+            () => { SFX_Click(); SwitchTo(_panelConfirmNew); });
 
-        Btn("Btn_Settings",  right.transform, V2(0.05f, startY-2*(btnH+gap)), V2(0.95f, startY-2*(btnH+gap)+btnH),
-            "CÀI ĐẶT", "Âm thanh  ·  Đồ hoạ  ·  Toàn màn hình", TXT_HERO,
-            () => { Click(); SwitchTo(_panelSettings); });
+        bool canContinue = _hasSave;
+        AaaBtn(R.transform, "Btn_Continue",
+            V2(0.05f, sy - 1*(BH+GAP)), V2(0.95f, sy - 1*(BH+GAP) + BH),
+            canContinue ? "TIẾP TỤC" : "TIẾP TỤC",
+            canContinue ? $"Ngày {_saveDay} / 30   ·   Karma {_saveKarma}" : "Chưa có tiến trình được lưu",
+            "▶", canContinue ? C_AMBER : C_DIM,
+            () => { if (canContinue) { SFX_Click(); GoToScene(gameplaySceneName); } },
+            !canContinue);
 
-        Btn("Btn_Controls", right.transform, V2(0.05f, startY-3*(btnH+gap)), V2(0.95f, startY-3*(btnH+gap)+btnH),
-            "ĐIỀU KHIỂN", "Xem hướng dẫn chơi & phím tắt", TXT_HERO,
-            () => { Click(); SwitchTo(_panelControls); });
+        AaaBtn(R.transform, "Btn_Story",
+            V2(0.05f, sy - 2*(BH+GAP)), V2(0.95f, sy - 2*(BH+GAP) + BH),
+            "CỐT TRUYỆN", "5 Hồi  ·  5 Kết Thúc  ·  Void Rift", "📖", C_AMBER,
+            () => { SFX_Open(); SwitchTo(_panelStory); });
 
-        Btn("Btn_Story",    right.transform, V2(0.05f, startY-4*(btnH+gap)), V2(0.95f, startY-4*(btnH+gap)+btnH),
-            "CỐT TRUYỆN", "5 Hồi  ·  30 Ngày  ·  5 Kết Thúc", ACC_AMBER,
-            () => { Click(); SwitchTo(_panelStory); });
+        AaaBtn(R.transform, "Btn_Controls",
+            V2(0.05f, sy - 3*(BH+GAP)), V2(0.95f, sy - 3*(BH+GAP) + BH),
+            "ĐIỀU KHIỂN", "Xem hướng dẫn chơi & phím tắt đầy đủ", "🎮", C_TXT,
+            () => { SFX_Open(); SwitchTo(_panelControls); });
 
-        // Quit — bottom right, smaller
-        var quitGO = Img("Btn_Quit", right.transform, V2(0.05f,0.03f), V2(0.48f,0.10f),
-            C(ACC_RED.r*0.5f,0.04f,0.04f,0.85f));
-        quitGO.GetComponent<Image>().sprite = SprRR(8);
-        var qBtn = quitGO.AddComponent<Button>();
-        AddHover(quitGO, C(ACC_RED.r*0.5f,0.04f,0.04f,0.85f), C(0.55f,0.10f,0.10f));
-        var qT = Rect("QT",quitGO.transform,V2(0,0),V2(1,1)).AddComponent<TextMeshProUGUI>();
-        qT.text="THOÁT"; qT.fontSize=18f; qT.fontStyle=FontStyles.Bold;
-        qT.alignment=TextAlignmentOptions.Center; qT.color=TXT_HERO;
-        qBtn.onClick.AddListener(()=>{Click();StartCoroutine(CoQuit());});
+        AaaBtn(R.transform, "Btn_Settings",
+            V2(0.05f, sy - 4*(BH+GAP)), V2(0.95f, sy - 4*(BH+GAP) + BH),
+            "CÀI ĐẶT", "Âm thanh  ·  Đồ hoạ  ·  Toàn màn hình", "⚙", C_TXT,
+            () => { SFX_Open(); SwitchTo(_panelSettings); });
 
-        // About — bottom right
-        var aboutGO = Img("Btn_About", right.transform, V2(0.52f,0.03f), V2(0.95f,0.10f),
-            BTN_DARK);
-        aboutGO.GetComponent<Image>().sprite = SprRR(8);
-        var aBtn = aboutGO.AddComponent<Button>();
-        AddHover(aboutGO, BTN_DARK, C(0.08f,0.18f,0.14f));
-        var aT = Rect("AT",aboutGO.transform,V2(0,0),V2(1,1)).AddComponent<TextMeshProUGUI>();
-        aT.text="VỀ GAME"; aT.fontSize=15f;
-        aT.alignment=TextAlignmentOptions.Center; aT.color=TXT_BODY;
-        aBtn.onClick.AddListener(()=>{Click();SwitchTo(_panelStory);});
+        // Credits & Quit side-by-side
+        SmallBtn(R.transform, "Btn_Credits", V2(0.05f,0.030f), V2(0.46f,0.108f),
+            "TÁC GIẢ", C_PURPLE, () => { SFX_Open(); SwitchTo(_panelCredits); });
+        SmallBtn(R.transform, "Btn_Quit", V2(0.54f,0.030f), V2(0.95f,0.108f),
+            "✖  THOÁT", C_RED, () => { SFX_Click(); StartCoroutine(CoQuit()); });
     }
 
-    // Chapter badges — 5 acts as small colored tags
-    void BuildChapterBadges(Transform parent)
+    void BuildActBadgesRow(Transform p)
     {
-        (string label, Color col)[] acts = {
-            ("HỒI 1: KHỞI ĐẦU", C(0.2f,0.7f,0.5f)),
-            ("HỒI 2: CHIẾN ĐẤU", C(0.8f,0.5f,0.1f)),
-            ("HỒI 3: BÍ ẨN", C(0.5f,0.2f,0.8f)),
-            ("HỒI 4: ĐẠI CHIẾN", C(0.8f,0.2f,0.2f)),
-            ("HỒI 5: PHÁN QUYẾT", C(0.2f,0.5f,0.9f)),
-        };
+        Color[] cols = { C_GREEN, C_AMBER, C_PURPLE, C_RED, C_BLUE };
+        string[] lbls = { "HỒI I", "HỒI II", "HỒI III", "HỒI IV", "HỒI V" };
+        string[] days = { "1-3", "4-10", "11-20", "21-29", "30" };
         float bw = 0.185f;
-        for (int i = 0; i < acts.Length; i++)
+        for (int i = 0; i < 5; i++)
         {
-            float x = 0.02f + i * (bw + 0.01f);
-            var b = Img($"Act{i}", parent, V2(x,0.27f), V2(x+bw,0.34f),
-                C(acts[i].col.r*0.25f, acts[i].col.g*0.25f, acts[i].col.b*0.25f, 0.9f));
-            b.GetComponent<Image>().sprite = SprRR(6);
-            var line = Img($"ActLine{i}", b.transform, V2(0,0.88f), V2(1,1), acts[i].col);
-            var t = Rect("T",b.transform,V2(0.05f,0),V2(0.95f,0.88f)).AddComponent<TextMeshProUGUI>();
-            t.text = acts[i].label; t.fontSize = 10f;
-            t.color = TXT_BODY; t.alignment = TextAlignmentOptions.Center;
+            float x = 0.02f + i * (bw + 0.008f);
+            var b = MkImg($"Act{i}", p, V2(x,0.28f), V2(x+bw,0.36f),
+                HC(cols[i].r*0.18f, cols[i].g*0.18f, cols[i].b*0.18f, 0.92f));
+            b.GetComponent<Image>().sprite = MkRR(5);
+            MkImg($"ActTop{i}", b.transform, V2(0f,0.82f), V2(1f,1f), cols[i]);
+            var t = MkRect($"AT{i}", b.transform, V2(0.04f,0f), V2(0.96f,0.82f)).AddComponent<TextMeshProUGUI>();
+            t.text = $"{lbls[i]}\n<size=9>Ngày {days[i]}</size>";
+            t.fontSize = 10.5f; t.color = C_TXT2; t.richText = true;
+            t.alignment = TextAlignmentOptions.Center;
         }
     }
 
     // ─────────────────────────────────────────────────────────────────
-    //  CONFIRM NEW GAME PANEL
+    //  STORY PANEL  (paginated — 1 act per page)
     // ─────────────────────────────────────────────────────────────────
-    void BuildPanelConfirmNew()
+    void BuildPanelStory()
     {
-        _panelConfirmNew = SidePanel("Panel_ConfirmNew", V2(0.20f,0.28f), V2(0.80f,0.72f));
-        PanelHeader(_panelConfirmNew.transform, "TRÒ CHƠI MỚI", ACC_GREEN);
+        _panelStory = SidePanel("Panel_Story", V2(0.02f,0.03f), V2(0.98f,0.97f));
+        // ── header ──
+        PanelHdr(_panelStory.transform, "CỐT TRUYỆN  ·  THE FOREST BETWEEN US", C_AMBER);
 
-        var bodyT = Rect("Body",_panelConfirmNew.transform,V2(0.06f,0.32f),V2(0.94f,0.84f))
-            .AddComponent<TextMeshProUGUI>();
-        bodyT.text = _hasSave
-            ? $"Tiến trình <b>Ngày {_saveDay}</b> (Karma {_saveKarma}) sẽ bị <color=#CF2222><b>XÓA VĨNH VIỄN</b></color>.\n\nBạn sẵn sàng bắt đầu lại từ <b>Ngày 1: Tín Hiệu Lạc Lối</b>?"
-            : "Bắt đầu cuộc hành trình sinh tồn trong <color=#2ED07A>Khu Rừng Huyền Bí</color>.\n\n30 ngày. 5 kết thúc. Số phận nhân loại trong tay bạn.";
-        bodyT.fontSize=19f; bodyT.color=TXT_BODY; bodyT.richText=true;
-        bodyT.alignment=TextAlignmentOptions.Center;
+        // ── placeholder image slot ──
+        var imgSlot = MkImg("StoryImg", _panelStory.transform, V2(0.55f,0.18f), V2(0.96f,0.87f),
+            HC(0.03f,0.06f,0.05f,0.92f));
+        imgSlot.GetComponent<Image>().sprite = MkRR(14);
+        imgSlot.name = "StoryImg";
+        // "Chèn ảnh vào đây" placeholder text
+        var ph = MkRect("ImgPH", imgSlot.transform, V2(0.05f,0.3f), V2(0.95f,0.7f)).AddComponent<TextMeshProUGUI>();
+        ph.name = "ImgPH";
+        ph.text = "[ Ảnh minh hoạ\nkéo Texture2D vào\nInspector → storyImg_Act1..5 ]";
+        ph.fontSize = 14f; ph.color = HC(0.3f,0.45f,0.4f); ph.alignment = TextAlignmentOptions.Center;
+        ph.richText = true;
 
-        SmallBtn("Btn_Confirm", _panelConfirmNew.transform, V2(0.06f,0.06f), V2(0.46f,0.22f),
-            "BẮT ĐẦU", ACC_GREEN, ()=>{ Click(); StartCoroutine(CoNewGame()); });
-        SmallBtn("Btn_CancelNew", _panelConfirmNew.transform, V2(0.54f,0.06f), V2(0.94f,0.22f),
-            "HỦY", ACC_RED, ()=>{ Click(); SwitchTo(null); });
+        // ── text area ──
+        // Act tag badge
+        var actBadge = MkImg("ActBadge", _panelStory.transform, V2(0.03f,0.84f), V2(0.22f,0.89f),
+            HC(C_GREEN.r*0.2f,C_GREEN.g*0.2f,C_GREEN.b*0.2f,0.9f));
+        actBadge.GetComponent<Image>().sprite = MkRR(6);
+        actBadge.name = "ActBadge";
+        var actTagT = MkRect("ActTag", actBadge.transform, V2(0,0), V2(1,1)).AddComponent<TextMeshProUGUI>();
+        actTagT.name = "ActTag";
+        actTagT.fontSize = 14f; actTagT.fontStyle = FontStyles.Bold;
+        actTagT.alignment = TextAlignmentOptions.Center; actTagT.color = C_TXT;
+
+        // Day range
+        var dayT = MkRect("DayRange", _panelStory.transform, V2(0.24f,0.84f), V2(0.50f,0.89f)).AddComponent<TextMeshProUGUI>();
+        dayT.name = "DayRange"; dayT.fontSize = 14f; dayT.color = C_DIM;
+        dayT.alignment = TextAlignmentOptions.MidlineLeft;
+
+        // Act title
+        var titleT = MkRect("ActTitle", _panelStory.transform, V2(0.03f,0.75f), V2(0.52f,0.845f)).AddComponent<TextMeshProUGUI>();
+        titleT.name = "ActTitle"; titleT.fontSize = 32f; titleT.fontStyle = FontStyles.Bold;
+        titleT.color = C_TXT; titleT.alignment = TextAlignmentOptions.Left;
+
+        Sep("StorySep", _panelStory.transform, V2(0.03f,0.742f), V2(0.53f,0.747f));
+
+        // Lore body
+        var loreT = MkRect("LoreTxt", _panelStory.transform, V2(0.03f,0.40f), V2(0.52f,0.740f)).AddComponent<TextMeshProUGUI>();
+        loreT.name = "LoreTxt"; loreT.fontSize = 17f; loreT.color = C_TXT2;
+        loreT.richText = true; loreT.lineSpacing = 6f; loreT.alignment = TextAlignmentOptions.TopLeft;
+
+        // Highlights header
+        var hlHdr = MkRect("HlHdr", _panelStory.transform, V2(0.03f,0.355f), V2(0.52f,0.400f)).AddComponent<TextMeshProUGUI>();
+        hlHdr.text = "ĐIỂM NỔI BẬT"; hlHdr.fontSize = 13f; hlHdr.fontStyle = FontStyles.Bold;
+        hlHdr.color = C_DIM; hlHdr.characterSpacing = 5f;
+
+        // Highlights bullets
+        var hlTxt = MkRect("HlTxt", _panelStory.transform, V2(0.03f,0.18f), V2(0.52f,0.355f)).AddComponent<TextMeshProUGUI>();
+        hlTxt.name = "HlTxt"; hlTxt.fontSize = 15.5f; hlTxt.richText = true;
+        hlTxt.color = C_TXT2; hlTxt.lineSpacing = 4f;
+
+        // Progress dots
+        var dotsGO = MkRect("Dots", _panelStory.transform, V2(0.03f,0.12f), V2(0.52f,0.175f));
+        dotsGO.name = "Dots";
+        for (int i = 0; i < 5; i++)
+        {
+            float dx = 0.06f + i * 0.07f;
+            var dot = MkImg($"Dot{i}", dotsGO.transform, V2(dx,0.2f), V2(dx+0.04f,0.8f),
+                HC(0.2f,0.3f,0.28f,0.8f));
+            dot.GetComponent<Image>().sprite = MkRR(4); dot.name = $"Dot{i}";
+        }
+
+        // ── navigation buttons ──
+        SmallBtn(_panelStory.transform, "Btn_Prev", V2(0.03f,0.035f), V2(0.22f,0.110f),
+            "◀  TRƯỚC", C_DIM, () => { SFX_Click(); StoryPage(_storyPage - 1); });
+        SmallBtn(_panelStory.transform, "Btn_Next", V2(0.33f,0.035f), V2(0.52f,0.110f),
+            "TIẾP  ▶", C_GREEN, () => { SFX_Click(); StoryPage(_storyPage + 1); });
+        SmallBtn(_panelStory.transform, "Btn_Back", V2(0.58f,0.035f), V2(0.97f,0.110f),
+            "← QUAY LẠI", HC(0.15f,0.25f,0.22f), () => { SFX_Close(); SwitchTo(null); });
+
+        _panelStory.SetActive(false);
+        StoryPage(0);
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  SETTINGS PANEL
-    // ─────────────────────────────────────────────────────────────────
-    void BuildPanelSettings()
+    void StoryPage(int page)
     {
-        _panelSettings = SidePanel("Panel_Settings", V2(0.12f,0.07f), V2(0.88f,0.93f));
-        PanelHeader(_panelSettings.transform, "CÀI ĐẶT", TXT_HERO);
+        _storyPage = Mathf.Clamp(page, 0, ACTS.Length - 1);
+        if (_panelStory == null) return;
+        var a = ACTS[_storyPage];
+        Color accentCol = HexColor(a.accentHex);
 
-        float y = 0.74f; float rh = 0.09f; float g = 0.015f;
-        Slider masterS = null, musicS = null, sfxS = null;
-        TextMeshProUGUI masterL = null, musicL = null, sfxL = null;
+        // Act badge
+        var badge = _panelStory.transform.Find("ActBadge");
+        if (badge)
+        {
+            badge.GetComponent<Image>().color = HC(accentCol.r*0.22f,accentCol.g*0.22f,accentCol.b*0.22f,0.92f);
+            badge.Find("ActTag")?.GetComponent<TextMeshProUGUI>()?.SetText(a.actTag);
+        }
 
-        SliderRow(_panelSettings.transform, "🔊  Âm lượng tổng",   ref y, rh, g, 0f, 1f,
-            PlayerPrefs.GetFloat("MasterVol",1f), v=>{AudioListener.volume=v;PlayerPrefs.SetFloat("MasterVol",v);}, ref masterS, ref masterL);
-        SliderRow(_panelSettings.transform, "🎵  Nhạc nền",          ref y, rh, g, 0f, 1f,
-            PlayerPrefs.GetFloat("MV",0.55f), v=>{_music.volume=v;PlayerPrefs.SetFloat("MV",v);}, ref musicS, ref musicL);
-        SliderRow(_panelSettings.transform, "🔔  Hiệu ứng âm thanh", ref y, rh, g, 0f, 1f,
-            PlayerPrefs.GetFloat("SV",0.85f), v=>{_sfx.volume=v;PlayerPrefs.SetFloat("SV",v);}, ref sfxS, ref sfxL);
+        // Day range
+        SetTMP(_panelStory.transform, "DayRange", $"<color=#{a.accentHex.TrimStart('#')}>{a.dayRange}</color>");
+        // Title
+        var titleT = _panelStory.transform.Find("ActTitle")?.GetComponent<TextMeshProUGUI>();
+        if (titleT) { titleT.text = a.title; titleT.color = accentCol; }
+        // Lore
+        SetTMP(_panelStory.transform, "LoreTxt", a.lore);
+        // Highlights
+        string hl = "";
+        foreach (var h in a.highlights) hl += $"<color=#{a.accentHex.TrimStart('#')}>▸</color>  {h}\n";
+        SetTMP(_panelStory.transform, "HlTxt", hl.TrimEnd('\n'));
 
-        Sep("SepS", _panelSettings.transform, V2(0.05f,y), V2(0.95f,y+0.006f)); y -= g*2f;
+        // Progress dots
+        var dots = _panelStory.transform.Find("Dots");
+        if (dots)
+            for (int i = 0; i < 5; i++)
+            {
+                var d = dots.Find($"Dot{i}")?.GetComponent<Image>();
+                if (d) d.color = i == _storyPage ? accentCol : HC(0.2f,0.3f,0.28f,0.8f);
+            }
 
-        // Fullscreen toggle
-        var fsLbl = Rect("FSL",_panelSettings.transform,V2(0.05f,y),V2(0.70f,y+rh)).AddComponent<TextMeshProUGUI>();
-        fsLbl.text="🖥️  Toàn màn hình"; fsLbl.fontSize=18f; fsLbl.color=TXT_HERO; fsLbl.alignment=TextAlignmentOptions.MidlineLeft;
-        var fsGO = Img("FSBtn",_panelSettings.transform,V2(0.74f,y+0.01f),V2(0.93f,y+rh-0.01f),BTN_DARK);
-        fsGO.GetComponent<Image>().sprite = SprRR(8);
-        var fsBtn = fsGO.AddComponent<Button>();
-        var fsTxt = Rect("FSTxt",fsGO.transform,V2(0,0),V2(1,1)).AddComponent<TextMeshProUGUI>();
-        fsTxt.alignment=TextAlignmentOptions.Center; fsTxt.fontSize=17f;
-        fsTxt.text=Screen.fullScreen?"BẬT":"TẮT"; fsTxt.color=Screen.fullScreen?ACC_GREEN:TXT_LABEL;
-        fsBtn.onClick.AddListener(()=>{bool n=!Screen.fullScreen; Screen.fullScreen=n;
-            fsTxt.text=n?"BẬT":"TẮT"; fsTxt.color=n?ACC_GREEN:TXT_LABEL; PlayerPrefs.SetInt("Fullscreen",n?1:0);});
-        y -= rh+g;
+        // Story image (placeholder or actual)
+        Texture2D[] imgs = { storyImg_Act1, storyImg_Act2, storyImg_Act3, storyImg_Act4, storyImg_Act5 };
+        var imgGO = _panelStory.transform.Find("StoryImg");
+        if (imgGO)
+        {
+            var imgComp = imgGO.GetComponent<Image>();
+            var phT = imgGO.Find("ImgPH")?.GetComponent<TextMeshProUGUI>();
+            if (imgs[_storyPage] != null)
+            {
+                var spr = Sprite.Create(imgs[_storyPage],
+                    new Rect(0,0,imgs[_storyPage].width,imgs[_storyPage].height),
+                    new Vector2(0.5f,0.5f));
+                imgComp.sprite = spr;
+                imgComp.color = Color.white;
+                if (phT) phT.enabled = false;
+            }
+            else
+            {
+                imgComp.sprite = MkRR(14);
+                imgComp.color = HC(0.03f,0.06f,0.05f,0.92f);
+                if (phT) { phT.enabled = true; phT.text = $"[ Ảnh HỒI {_storyPage+1}\n→ Inspector: storyImg_Act{_storyPage+1} ]"; }
+            }
+        }
 
-        // Quality cycle
-        string[] qNames={"Very Low","Low","Medium","High","Very High","Ultra"};
-        int cq=QualitySettings.GetQualityLevel();
-        var qLbl=Rect("QL",_panelSettings.transform,V2(0.05f,y),V2(0.65f,y+rh)).AddComponent<TextMeshProUGUI>();
-        qLbl.text="🎮  Chất lượng đồ hoạ"; qLbl.fontSize=18f; qLbl.color=TXT_HERO; qLbl.alignment=TextAlignmentOptions.MidlineLeft;
-        var qGO=Img("QBtn",_panelSettings.transform,V2(0.67f,y+0.01f),V2(0.93f,y+rh-0.01f),BTN_DARK);
-        qGO.GetComponent<Image>().sprite=SprRR(8); qGO.AddComponent<Button>();
-        AddHover(qGO,BTN_DARK,C(0.10f,0.22f,0.18f));
-        var qTxt=Rect("QT",qGO.transform,V2(0,0),V2(1,1)).AddComponent<TextMeshProUGUI>();
-        qTxt.text=qNames[Mathf.Clamp(cq,0,5)]; qTxt.fontSize=16f; qTxt.color=ACC_GREEN; qTxt.alignment=TextAlignmentOptions.Center;
-        qGO.GetComponent<Button>().onClick.AddListener(()=>{cq=(cq+1)%6;QualitySettings.SetQualityLevel(cq,true);
-            qTxt.text=qNames[cq];PlayerPrefs.SetInt("Quality",cq);});
-
-        SmallBtn("Btn_ClearSave",_panelSettings.transform,V2(0.05f,0.13f),V2(0.45f,0.21f),
-            "XÓA TIẾN TRÌNH",ACC_RED,()=>{SaveSystem.ClearSaveData();_hasSave=false;});
-        SmallBtn("Btn_BackS",_panelSettings.transform,V2(0.30f,0.03f),V2(0.70f,0.11f),
-            "← QUAY LẠI",ACC_GREEN,()=>{Click();SwitchTo(null);});
+        // Separator color
+        var sep = _panelStory.transform.Find("StorySep")?.GetComponent<Image>();
+        if (sep) sep.color = HC(accentCol.r,accentCol.g,accentCol.b,0.22f);
     }
 
     // ─────────────────────────────────────────────────────────────────
@@ -463,218 +593,338 @@ public class MainMenuController : MonoBehaviour
     // ─────────────────────────────────────────────────────────────────
     void BuildPanelControls()
     {
-        _panelControls = SidePanel("Panel_Controls", V2(0.04f,0.04f), V2(0.96f,0.96f));
-        PanelHeader(_panelControls.transform, "ĐIỀU KHIỂN & HƯỚNG DẪN", ACC_GREEN);
+        _panelControls = SidePanel("Panel_Controls", V2(0.03f,0.03f), V2(0.97f,0.97f));
+        PanelHdr(_panelControls.transform, "ĐIỀU KHIỂN & HƯỚNG DẪN CHƠI", C_GREEN);
 
-        // Two-column layout
-        var colL = Rect("ColL",_panelControls.transform,V2(0.03f,0.12f),V2(0.50f,0.88f));
-        var colR = Rect("ColR",_panelControls.transform,V2(0.53f,0.12f),V2(0.97f,0.88f));
+        var colL = MkRect("CL", _panelControls.transform, V2(0.03f,0.12f), V2(0.49f,0.88f));
+        var colR = MkRect("CR", _panelControls.transform, V2(0.52f,0.12f), V2(0.97f,0.88f));
 
-        ControlGroup(colL.transform, "DI CHUYỂN", new[]{
-            ("W A S D",     "Di chuyển cơ bản"),
-            ("Shift",       "Chạy (tiêu Stamina)"),
-            ("Space",       "Nhảy"),
-            ("Ctrl / C",    "Cúi người / Rón rén"),
-            ("X",           "Nằm xuống"),
-        });
-        ControlGroup(colL.transform, "TƯƠNG TÁC", new[]{
-            ("E",           "Nhặt vật phẩm / Tương tác"),
-            ("F",           "Thắp lửa / Kích hoạt thiết bị"),
-            ("Tab",         "Mở / Đóng Túi Đồ"),
-            ("K",           "Mở Sổ Công Thức (Crafting)"),
-            ("Chuột Trái",  "Tấn công / Khai thác / Chặt"),
-        });
+        string loreL =
+            "<color=#2ED07A><b>── DI CHUYỂN ──────────────</b></color>\n" +
+            "<color=#2ED07A>W A S D</color>    Di chuyển cơ bản\n" +
+            "<color=#2ED07A>Shift</color>    Chạy (tiêu Stamina)\n" +
+            "<color=#2ED07A>Space</color>    Nhảy\n" +
+            "<color=#2ED07A>Ctrl / C</color>    Cúi người / Rón rén\n" +
+            "<color=#2ED07A>X</color>    Nằm xuống né tránh\n\n" +
+            "<color=#F5A623><b>── TƯƠNG TÁC ──────────────</b></color>\n" +
+            "<color=#F5A623>E</color>    Nhặt vật phẩm / Tương tác\n" +
+            "<color=#F5A623>F</color>    Thắp lửa / Kích hoạt\n" +
+            "<color=#F5A623>Tab</color>    Mở / Đóng Túi Đồ (Inventory)\n" +
+            "<color=#F5A623>K</color>    Sổ Công Thức (Crafting)\n" +
+            "<color=#F5A623>Chuột Trái</color>    Tấn công / Chặt / Đào\n" +
+            "<color=#F5A623>Esc</color>    Menu Pause / Thoát";
 
-        ControlGroup(colR.transform, "SINH TỒN", new[]{
-            ("HP",          "Máu – bị tấn công / đói / khát"),
-            ("Stamina",     "Năng lượng – chạy & chiến đấu"),
-            ("Đói",         "Ăn thức ăn để phục hồi"),
-            ("Khát",        "Uống nước sạch"),
-            ("Ngủ",         "Nghỉ ngơi để phục hồi Stamina"),
-        });
-        ControlGroup(colR.transform, "CHIẾN ĐẤU & BẢO TỒN", new[]{
-            ("Nỏ Tần Số",   "Vũ khí tầm xa, tốn đạn"),
-            ("Cây ≤5/ngày", "Bảo vệ môi trường – tăng Karma"),
-            ("Bẫy Thú",     "Đặt bẫy bắt thú tự động"),
-            ("Karma",       "Ảnh hưởng kết thúc game"),
-            ("Esc",         "Mở menu Pause / Thoát"),
-        });
+        string loreR =
+            "<color=#AA55FF><b>── SINH TỒN ──────────────</b></color>\n" +
+            "<color=#AA55FF>HP</color>    Máu – bị tấn công / đói / khát\n" +
+            "<color=#AA55FF>Stamina</color>    Chạy & chiến đấu\n" +
+            "<color=#AA55FF>Đói / Khát</color>    Ăn & uống để phục hồi\n" +
+            "<color=#AA55FF>Ngủ</color>    Nghỉ để hồi Stamina\n\n" +
+            "<color=#CF3333><b>── CHIẾN ĐẤU ──────────────</b></color>\n" +
+            "<color=#CF3333>Nỏ Tần Số</color>    Vũ khí tầm xa chính\n" +
+            "<color=#CF3333>Bẫy Thú</color>    Đặt bẫy bắt thú tự động\n" +
+            "<color=#CF3333>Đuốc Tần Số</color>    Xua đuổi bóng đêm\n\n" +
+            "<color=#4488FF><b>── BẢO TỒN & KARMA ────────</b></color>\n" +
+            "<color=#4488FF>≤ 5 cây/ngày</color>    Giữ Karma tốt\n" +
+            "<color=#4488FF>Trồng cây</color>    +Karma, +môi trường\n" +
+            "<color=#4488FF>Karma cao</color>    Kết thúc Hòa Bình\n" +
+            "<color=#4488FF>Karma thấp</color>    Kết thúc Tân Vương";
 
-        SmallBtn("Btn_BackC",_panelControls.transform,V2(0.35f,0.02f),V2(0.65f,0.10f),
-            "← QUAY LẠI",ACC_GREEN,()=>{Click();SwitchTo(null);});
+        var lt = colL.AddComponent<TextMeshProUGUI>();
+        lt.text = loreL; lt.fontSize = 16f; lt.richText = true;
+        lt.color = C_TXT2; lt.lineSpacing = 5f;
+
+        var rt = colR.AddComponent<TextMeshProUGUI>();
+        rt.text = loreR; rt.fontSize = 16f; rt.richText = true;
+        rt.color = C_TXT2; rt.lineSpacing = 5f;
+
+        SmallBtn(_panelControls.transform, "Btn_Back", V2(0.35f,0.025f), V2(0.65f,0.100f),
+            "← QUAY LẠI", C_GREEN, () => { SFX_Close(); SwitchTo(null); });
+        _panelControls.SetActive(false);
     }
 
-    void ControlGroup(Transform parent, string title, (string key, string desc)[] rows)
+    // ─────────────────────────────────────────────────────────────────
+    //  SETTINGS PANEL
+    // ─────────────────────────────────────────────────────────────────
+    void BuildPanelSettings()
     {
-        // Find current bottom (first call starts at top)
-        var allChildren = parent.childCount;
+        _panelSettings = SidePanel("Panel_Settings", V2(0.12f,0.06f), V2(0.88f,0.94f));
+        PanelHdr(_panelSettings.transform, "CÀI ĐẶT", C_TXT);
+        float y = 0.75f; float rh = 0.09f; float g = 0.015f;
+        Slider ms=null,mus=null,ss=null; TextMeshProUGUI ml=null,muL=null,sl=null;
+        SliderRow(_panelSettings.transform,"🔊  Âm lượng tổng", ref y,rh,g,0,1,
+            PlayerPrefs.GetFloat("MasterVol",1f),v=>{AudioListener.volume=v;PlayerPrefs.SetFloat("MasterVol",v);},ref ms,ref ml);
+        SliderRow(_panelSettings.transform,"🎵  Nhạc nền",       ref y,rh,g,0,1,
+            PlayerPrefs.GetFloat("MV",0.55f),v=>{_music.volume=v;PlayerPrefs.SetFloat("MV",v);},ref mus,ref muL);
+        SliderRow(_panelSettings.transform,"🔔  Hiệu ứng âm",    ref y,rh,g,0,1,
+            PlayerPrefs.GetFloat("SV",0.85f),v=>{_sfx.volume=v;PlayerPrefs.SetFloat("SV",v);},ref ss,ref sl);
 
-        float startY = 1f - allChildren * 0.50f;  // rough stacking
-        var container = Rect($"CG_{title}", parent, V2(0,0), V2(1,1));
+        Sep("SetSep",_panelSettings.transform,V2(0.05f,y),V2(0.95f,y+0.006f)); y-=g*2f;
 
-        // Vertical layout via absolute positions
-        var titleT = Rect("T",container.transform,V2(0,0.90f),V2(1,1f)).AddComponent<TextMeshProUGUI>();
-        titleT.text = title; titleT.fontSize = 14f; titleT.fontStyle = FontStyles.Bold;
-        titleT.color = ACC_GREEN; titleT.alignment = TextAlignmentOptions.Left;
+        // Fullscreen
+        ToggleRow(_panelSettings.transform,"🖥️  Toàn màn hình",ref y,rh,g,Screen.fullScreen,
+            v=>{Screen.fullScreen=v;PlayerPrefs.SetInt("Fullscreen",v?1:0);});
 
-        // Use a VerticalLayoutGroup for automatic stacking
-        var vl = container.gameObject.AddComponent<VerticalLayoutGroup>();
-        vl.childControlHeight = false; vl.childControlWidth = true;
-        vl.spacing = 2f; vl.padding = new RectOffset(4,4,4,4);
+        // Quality
+        string[] qN={"Very Low","Low","Medium","High","Very High","Ultra"};
+        int cq=QualitySettings.GetQualityLevel();
+        var qlbl=MkRect("QL",_panelSettings.transform,V2(0.05f,y),V2(0.65f,y+rh)).AddComponent<TextMeshProUGUI>();
+        qlbl.text="🎮  Chất lượng đồ hoạ";qlbl.fontSize=18f;qlbl.color=C_TXT;qlbl.alignment=TextAlignmentOptions.MidlineLeft;
+        var qb=MkImg("QB",_panelSettings.transform,V2(0.67f,y+0.01f),V2(0.93f,y+rh-0.01f),C_BTN);
+        qb.GetComponent<Image>().sprite=MkRR(8);qb.AddComponent<Button>();
+        AddHover(qb,C_BTN,HC(0.10f,0.22f,0.18f));
+        var qt=MkRect("QT",qb.transform,V2(0,0),V2(1,1)).AddComponent<TextMeshProUGUI>();
+        qt.text=qN[Mathf.Clamp(cq,0,5)];qt.fontSize=16f;qt.color=C_GREEN;qt.alignment=TextAlignmentOptions.Center;
+        qb.GetComponent<Button>().onClick.AddListener(()=>{cq=(cq+1)%6;QualitySettings.SetQualityLevel(cq,true);qt.text=qN[cq];PlayerPrefs.SetInt("Quality",cq);});
 
-        // Title entry
-        var titleEntry = new GameObject("TGroup_"+title, typeof(RectTransform));
-        titleEntry.transform.SetParent(container.transform, false);
-        titleEntry.GetComponent<RectTransform>().sizeDelta = new Vector2(0,22);
-        var tt = titleEntry.AddComponent<TextMeshProUGUI>();
-        tt.text = $"── {title} ──"; tt.fontSize = 13f; tt.fontStyle = FontStyles.Bold;
-        tt.color = ACC_GREEN; tt.richText = true;
-
-        foreach (var (key, desc) in rows)
-        {
-            var row = new GameObject($"Row_{key}", typeof(RectTransform));
-            row.transform.SetParent(container.transform, false);
-            row.GetComponent<RectTransform>().sizeDelta = new Vector2(0,20);
-            var rt2 = row.AddComponent<TextMeshProUGUI>();
-            rt2.text = $"<color=#2ED07A><b>{key}</b></color>  {desc}";
-            rt2.fontSize = 14f; rt2.color = TXT_BODY; rt2.richText = true;
-        }
-
-        // Spacer
-        var spacer = new GameObject("Spacer", typeof(RectTransform));
-        spacer.transform.SetParent(container.transform, false);
-        spacer.GetComponent<RectTransform>().sizeDelta = new Vector2(0,12);
-
-        // Reset container to fill parent
-        Stretch(container.GetComponent<RectTransform>());
-        Destroy(titleGO: container.GetComponent<TextMeshProUGUI>());
+        SmallBtn(_panelSettings.transform,"Btn_Clear",V2(0.05f,0.13f),V2(0.44f,0.21f),
+            "🗑  XÓA TIẾN TRÌNH",C_RED,()=>{SaveSystem.ClearSaveData();_hasSave=false;});
+        SmallBtn(_panelSettings.transform,"Btn_Back",V2(0.30f,0.03f),V2(0.70f,0.11f),
+            "← QUAY LẠI",C_GREEN,()=>{SFX_Close();SwitchTo(null);});
+        _panelSettings.SetActive(false);
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  STORY / ABOUT PANEL
-    // ─────────────────────────────────────────────────────────────────
-    void BuildPanelStory()
+    void ToggleRow(Transform p, string label, ref float y, float rh, float g, bool init, System.Action<bool> onChange)
     {
-        _panelStory = SidePanel("Panel_Story", V2(0.04f,0.04f), V2(0.96f,0.96f));
-        PanelHeader(_panelStory.transform, "CỐT TRUYỆN & THẾ GIỚI", ACC_AMBER);
-
-        string storyText =
-            "<b><color=#F5C332>THẾ GIỚI</color></b>\n" +
-            "Năm 20XX. Một Vùng Đứt Gãy Không-Thời Gian bí ẩn (<b>Void Rift</b>) xuất hiện " +
-            "giữa khu rừng nguyên sinh hàng trăm năm tuổi. Sinh vật bóng đêm tràn ra, " +
-            "sương độc phủ kín mọi con đường. Bạn tỉnh dậy không một ký ức.\n\n" +
-
-            "<b><color=#2ED07A>MAI AN TIÊM</color></b>\n" +
-            "Qua sóng vô tuyến, giọng của một người đàn ông cổ xưa hướng dẫn bạn tìm " +
-            "những hạt giống huyền bí. Ông chính là <b>Mai An Tiêm</b> — người đã sống " +
-            "300 năm bảo vệ ranh giới giữa hai thế giới.\n\n" +
-
-            "<b><color=#F5C332>5 HỒI CHIẾN DịCH (30 NGÀY)</color></b>\n" +
-            "<color=#2ED07A>HỒI 1</color>  Ngày 1-3: Khởi Đầu Bí Ẩn  ·  Tìm đài Radio · Sinh tồn đêm sương độc\n" +
-            "<color=#F5C332>HỒI 2</color>  Ngày 4-10: Chiến Đấu & Trường Kỳ Kháng Cự  ·  Boss Shadow Berserker\n" +
-            "<color=#AA55FF>HỒI 3</color>  Ngày 11-20: Bí Ẩn Cổ Đại  ·  Giải đố mạch điện · Phế Tích Mai An Tiêm\n" +
-            "<color=#CF3333>HỒI 4</color>  Ngày 21-29: Đại Chiến  ·  Void Leviathan · Pháo Đài Vô Tuyến\n" +
-            "<color=#5588FF>HỒI 5</color>  Ngày 30: NGÀY PHÁN QUYẾT  ·  Chọn 1 trong 5 kết thúc\n\n" +
-
-            "<b><color=#F5C332>5 KẾT THÚC</color></b>\n" +
-            "① <color=#2ED07A>True Ending</color>  Sứ Giả Trở Về — Cứu thế giới & trở về làm anh hùng\n" +
-            "② <color=#AA55FF>Tiếng Vọng</color>  Gặp Mai An Tiêm — Ở lại bảo vệ ranh giới 2 thế giới\n" +
-            "③ <color=#CF3333>Tân Vương Bóng Đêm</color>  Dark Karma — Trị vì Void Rift vĩnh viễn\n" +
-            "④ <color=#AAAAAA>Hy Sinh Thầm Lặng</color>  Tự hủy Trạm Vô Tuyến — Không ai biết bạn đã hy sinh\n" +
-            "⑤ <color=#5588FF>Vòng Lặp Bí Ẩn</color>  Secret Ending — Bạn chính là người tạo ra vòng lặp";
-
-        var contentGO = Rect("Content",_panelStory.transform,V2(0.03f,0.12f),V2(0.97f,0.87f));
-        var mask = contentGO.AddComponent<RectMask2D>();
-        var txt = contentGO.AddComponent<TextMeshProUGUI>();
-        txt.text = storyText; txt.fontSize = 16f; txt.richText = true;
-        txt.color = TXT_BODY; txt.alignment = TextAlignmentOptions.TopLeft;
-        txt.lineSpacing = 5f;
-
-        SmallBtn("Btn_BackSt",_panelStory.transform,V2(0.35f,0.02f),V2(0.65f,0.10f),
-            "← QUAY LẠI",ACC_GREEN,()=>{Click();SwitchTo(null);});
+        var lbl=MkRect(label+"L",p,V2(0.05f,y),V2(0.70f,y+rh)).AddComponent<TextMeshProUGUI>();
+        lbl.text=label;lbl.fontSize=18f;lbl.color=C_TXT;lbl.alignment=TextAlignmentOptions.MidlineLeft;
+        var bg=MkImg(label+"B",p,V2(0.74f,y+0.01f),V2(0.93f,y+rh-0.01f),C_BTN);
+        bg.GetComponent<Image>().sprite=MkRR(8); bg.AddComponent<Button>();
+        AddHover(bg,C_BTN,HC(0.08f,0.20f,0.15f));
+        bool cur=init;
+        var t=MkRect(label+"T",bg.transform,V2(0,0),V2(1,1)).AddComponent<TextMeshProUGUI>();
+        t.text=cur?"BẬT":"TẮT";t.color=cur?C_GREEN:C_DIM;t.fontSize=17f;t.alignment=TextAlignmentOptions.Center;
+        bg.GetComponent<Button>().onClick.AddListener(()=>{cur=!cur;onChange(cur);t.text=cur?"BẬT":"TẮT";t.color=cur?C_GREEN:C_DIM;});
+        y-=rh+g;
     }
 
     // ─────────────────────────────────────────────────────────────────
-    //  LOADING OVERLAY
+    //  CREDITS / TÁC GIẢ PANEL
+    // ─────────────────────────────────────────────────────────────────
+    void BuildPanelCredits()
+    {
+        _panelCredits = SidePanel("Panel_Credits", V2(0.08f,0.05f), V2(0.92f,0.95f));
+        PanelHdr(_panelCredits.transform, "TÁC GIẢ  &  LỜI CẢM ƠN", C_PURPLE);
+
+        // ── Game info box ──
+        var infoBox = MkImg("InfoBox", _panelCredits.transform, V2(0.04f,0.72f), V2(0.96f,0.88f),
+            HC(C_PURPLE.r*0.15f, C_PURPLE.g*0.15f, C_PURPLE.b*0.15f, 0.85f));
+        infoBox.GetComponent<Image>().sprite = MkRR(10);
+        MkImg("InfoAccent", infoBox.transform, V2(0,0), V2(0.007f,1), C_PURPLE);
+        var infoT = MkRect("InfoT", infoBox.transform, V2(0.03f,0.05f), V2(0.97f,0.95f)).AddComponent<TextMeshProUGUI>();
+        infoT.richText = true;
+        infoT.text =
+            "<b><color=#AA55FF>THE FOREST BETWEEN US</color></b>    " +
+            "Game sinh tồn 3D thế giới mở  ·  Unity 6 URP  ·  2025\n" +
+            "<size=13><color=#60727E>Thể loại: Sinh tồn · RPG · Khám phá · Kinh dị nhẹ  " +
+            "·  Nền tảng: PC / WebGL</color></size>";
+        infoT.fontSize = 16.5f; infoT.color = C_TXT; infoT.lineSpacing = 5f;
+
+        // ── Credits text ──
+        string creditsText =
+            "<color=#AA55FF><b>──  NHÓM PHÁT TRIỂN  ──────────────────────────────</b></color>\n\n" +
+            "  Trưởng Nhóm  /  Game Designer\n" +
+            "  <color=#F5A623><b>[ Tên trưởng nhóm ]</b></color>  ·  VTC Academy\n\n" +
+            "  Lập Trình (Unity C#)\n" +
+            "  <color=#2ED07A><b>[ Tên lập trình viên 1 ]</b></color>\n" +
+            "  <color=#2ED07A><b>[ Tên lập trình viên 2 ]</b></color>\n\n" +
+            "  Đồ Hoạ  /  3D Art  /  UI Design\n" +
+            "  <color=#4488FF><b>[ Tên artist ]</b></color>\n\n" +
+            "  Âm Nhạc  /  Sound Design\n" +
+            "  <color=#4488FF><b>[ Tên composer ]</b></color>\n\n" +
+            "  Game Tester  /  QA\n" +
+            "  <color=#60727E>[ Danh sách tester ]</color>\n\n" +
+            "<color=#AA55FF><b>──  GIẢNG VIÊN HƯỚNG DẪN  ────────────────────────</b></color>\n\n" +
+            "  <color=#F5A623><b>[ Tên Giảng Viên ]</b></color>  ·  VTC Academy  ·  Bộ Môn Game Development\n\n" +
+            "<color=#AA55FF><b>──  TÀI NGUYÊN SỬ DỤNG  ──────────────────────────</b></color>\n\n" +
+            "  <color=#60727E>Unity 6 LTS  ·  TextMeshPro  ·  Universal Render Pipeline (URP)\n" +
+            "  Devion Games Inventory & Stat System  ·  Toby Foliage Engine\n" +
+            "  Terrain Evo 3  ·  Joystick Pack  ·  StarterAssets (ThirdPerson)\n\n" +
+            "  Nhạc: [ Tên bài / nguồn ]  ·  Hiệu ứng âm thanh: [ Nguồn ]</color>\n\n" +
+            "<color=#AA55FF><b>──  LỜI CẢM ƠN  ──────────────────────────────────</b></color>\n\n" +
+            "  <color=#60727E>Cảm ơn gia đình, bạn bè và tất cả người chơi đã ủng hộ.\n" +
+            "  Game được tạo ra với tình yêu dành cho văn hoá Việt Nam\n" +
+            "  và truyền thuyết Mai An Tiêm cổ đại.\n\n" +
+            "  \"Khu rừng không chỉ là khung cảnh — đó là nhân vật.\"</color>\n\n" +
+            "<color=#AA55FF><b>──  BẢN QUYỀN  ────────────────────────────────────</b></color>\n\n" +
+            "  <color=#60727E>© 2025 VTC Academy. Bảo lưu mọi quyền.\n" +
+            "  Dự án học thuật — không vì mục đích thương mại.</color>";
+
+        var creditsTxt = MkRect("CredTxt", _panelCredits.transform, V2(0.04f,0.12f), V2(0.96f,0.715f)).AddComponent<TextMeshProUGUI>();
+        creditsTxt.text = creditsText; creditsTxt.fontSize = 15f; creditsTxt.richText = true;
+        creditsTxt.color = C_TXT2; creditsTxt.lineSpacing = 3f;
+
+        SmallBtn(_panelCredits.transform, "Btn_Back", V2(0.32f,0.025f), V2(0.68f,0.100f),
+            "← QUAY LẠI", C_PURPLE, () => { SFX_Close(); SwitchTo(null); });
+        _panelCredits.SetActive(false);
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  CONFIRM NEW GAME PANEL
+    // ─────────────────────────────────────────────────────────────────
+    void BuildPanelConfirmNew()
+    {
+        _panelConfirmNew = SidePanel("Panel_ConfirmNew", V2(0.20f,0.26f), V2(0.80f,0.74f));
+        PanelHdr(_panelConfirmNew.transform, "TRÒ CHƠI MỚI", C_GREEN);
+
+        var body = MkRect("Body", _panelConfirmNew.transform, V2(0.06f,0.30f), V2(0.94f,0.85f)).AddComponent<TextMeshProUGUI>();
+        body.richText = true;
+        body.text = _hasSave
+            ? $"Tiến trình <b>Ngày {_saveDay}</b> (Karma {_saveKarma}) sẽ bị\n" +
+              "<color=#CF3333><b>XÓA VĨNH VIỄN</b></color>.\n\n" +
+              "Bạn sẵn sàng bắt đầu lại từ\n<b>Ngày 1: Tín Hiệu Lạc Lối</b>?"
+            : "Bắt đầu hành trình sinh tồn trong\n<color=#2ED07A>Khu Rừng Bí Ẩn</color>.\n\n" +
+              "Bạn sẽ được hướng dẫn qua Tutorial\ntrước khi vào thế giới chính.";
+        body.fontSize = 19f; body.color = C_TXT2; body.alignment = TextAlignmentOptions.Center;
+
+        SmallBtn(_panelConfirmNew.transform, "Btn_Yes", V2(0.06f,0.07f), V2(0.46f,0.22f),
+            "▶  BẮT ĐẦU", C_GREEN, () => { SFX_Click(); StartCoroutine(CoNewGame()); });
+        SmallBtn(_panelConfirmNew.transform, "Btn_No",  V2(0.54f,0.07f), V2(0.94f,0.22f),
+            "✖  HỦY",     C_RED,   () => { SFX_Click(); SwitchTo(null); });
+
+        _panelConfirmNew.SetActive(false);
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  LOADING OVERLAY  (cinematic)
     // ─────────────────────────────────────────────────────────────────
     void BuildLoadingOverlay()
     {
-        _overlay = Img("LoadOverlay",_cvs.transform,V2(0,0),V2(1,1),C(0,0,0,0.97f)).gameObject;
+        _overlay = MkImg("LoadOverlay", _cvs.transform, V2(0,0), V2(1,1), HC(0,0,0,0.97f)).gameObject;
+
+        // Top/Bottom cinematic bars
+        MkImg("LBar_Top",    _overlay.transform, V2(0,0.90f), V2(1,1.00f), HC(0,0,0,1));
+        MkImg("LBar_Bottom", _overlay.transform, V2(0,0.00f), V2(1,0.06f), HC(0,0,0,1));
 
         // Logo
-        var logo = Rect("LoadLogo",_overlay.transform,V2(0.30f,0.55f),V2(0.70f,0.90f)).AddComponent<TextMeshProUGUI>();
-        logo.text = "THE FOREST\nBETWEEN US"; logo.fontSize=48f; logo.fontStyle=FontStyles.Bold;
-        logo.alignment=TextAlignmentOptions.Center; logo.enableVertexGradient=true;
-        logo.colorGradient=new VertexGradient(ACC_AMBER,ACC_AMBER,ACC_GREEN,ACC_GREEN);
+        var logo = MkRect("Logo", _overlay.transform, V2(0.28f,0.55f), V2(0.72f,0.88f)).AddComponent<TextMeshProUGUI>();
+        logo.text = "THE FOREST\nBETWEEN US";
+        logo.fontSize = 52f; logo.fontStyle = FontStyles.Bold;
+        logo.alignment = TextAlignmentOptions.Center;
+        logo.enableVertexGradient = true;
+        logo.colorGradient = new VertexGradient(C_AMBER, C_AMBER, C_GREEN, HC(0.1f,0.5f,0.3f));
+
+        // Destination label
+        var dest = MkRect("Dest", _overlay.transform, V2(0.30f,0.505f), V2(0.70f,0.555f)).AddComponent<TextMeshProUGUI>();
+        dest.name = "LoadDest";
+        dest.fontSize = 16f; dest.color = C_DIM; dest.alignment = TextAlignmentOptions.Center;
 
         // Tip
-        var tip = Rect("LoadTip",_overlay.transform,V2(0.10f,0.37f),V2(0.90f,0.50f)).AddComponent<TextMeshProUGUI>();
-        tip.name="LoadTip"; tip.text="Đang tải..."; tip.fontSize=20f;
-        tip.color=ACC_GREEN; tip.alignment=TextAlignmentOptions.Center;
+        var tip = MkRect("Tip", _overlay.transform, V2(0.10f,0.38f), V2(0.90f,0.50f)).AddComponent<TextMeshProUGUI>();
+        tip.name = "LoadTip"; tip.fontSize = 19f; tip.richText = true;
+        tip.color = C_GREEN; tip.alignment = TextAlignmentOptions.Center;
 
-        // Progress bar bg
-        var barBg = Img("BarBg",_overlay.transform,V2(0.10f,0.26f),V2(0.90f,0.33f),C(0.06f,0.10f,0.12f));
-        Img("BarFill",barBg.transform,V2(0,0),V2(0,1),ACC_GREEN).name="LoadFill";
+        // Bar track
+        var barBg = MkImg("BarBg", _overlay.transform, V2(0.10f,0.27f), V2(0.90f,0.33f),
+            HC(0.05f,0.09f,0.10f));
+        // Glow fill
+        var fill = MkImg("Fill", barBg.transform, V2(0,0), V2(0,1), C_GREEN);
+        fill.name = "LoadFill";
+        fill.GetComponent<Image>().sprite = null;
 
         // Pct
-        var pct = Rect("Pct",_overlay.transform,V2(0.44f,0.16f),V2(0.56f,0.25f)).AddComponent<TextMeshProUGUI>();
-        pct.name="LoadPct"; pct.text="0%"; pct.fontSize=20f;
-        pct.alignment=TextAlignmentOptions.Center; pct.color=TXT_BODY;
+        var pct = MkRect("Pct", _overlay.transform, V2(0.44f,0.17f), V2(0.56f,0.26f)).AddComponent<TextMeshProUGUI>();
+        pct.name = "LoadPct"; pct.text = "0%"; pct.fontSize = 22f;
+        pct.alignment = TextAlignmentOptions.Center; pct.color = C_TXT2;
 
         _overlay.SetActive(false);
     }
 
     // ─────────────────────────────────────────────────────────────────
-    //  Panel switch
+    //  PANEL SWITCH
     // ─────────────────────────────────────────────────────────────────
     void SwitchTo(GameObject panel)
     {
-        SafeSet(_panelMain,        panel == null);
-        SafeSet(_panelSettings,    panel == _panelSettings);
-        SafeSet(_panelControls,    panel == _panelControls);
-        SafeSet(_panelStory,       panel == _panelStory);
-        SafeSet(_panelConfirmNew,  panel == _panelConfirmNew);
-        if (panel != null && panel != _panelConfirmNew) Open();
+        void S(GameObject g, bool v) { if (g) g.SetActive(v); }
+        S(_panelMain,        panel == null);
+        S(_panelStory,       panel == _panelStory);
+        S(_panelControls,    panel == _panelControls);
+        S(_panelSettings,    panel == _panelSettings);
+        S(_panelCredits,     panel == _panelCredits);
+        S(_panelConfirmNew,  panel == _panelConfirmNew);
+        if (panel != null && panel != _panelConfirmNew) SFX_Open();
+        if (panel == _panelStory) StoryPage(_storyPage);
     }
-    static void SafeSet(GameObject g, bool v){ if(g!=null) g.SetActive(v); }
 
     // ─────────────────────────────────────────────────────────────────
-    //  Game actions
+    //  GAME ACTIONS
     // ─────────────────────────────────────────────────────────────────
     IEnumerator CoNewGame()
     {
         SaveSystem.ClearSaveData();
-        yield return StartCoroutine(CoLoad(gameplaySceneName));
+        // New Game always goes to Tutorial first
+        yield return StartCoroutine(CoCinematicLoad(tutorialSceneName, "TUTORIAL  ·  Ngày 1: Tín Hiệu Lạc Lối"));
     }
 
-    IEnumerator CoLoad(string scene)
+    void GoToScene(string scene)
     {
+        string label = scene == gameplaySceneName
+            ? $"GAMEPLAY  ·  Ngày {_saveDay} / 30"
+            : scene;
+        StartCoroutine(CoCinematicLoad(scene, label));
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  CINEMATIC SCENE LOAD  (fade + cinematic bars + tip rotation)
+    // ─────────────────────────────────────────────────────────────────
+    IEnumerator CoCinematicLoad(string sceneName, string destLabel)
+    {
+        // 1. Show overlay
         _overlay.SetActive(true);
-        var fill = _overlay.transform.Find("BarBg/LoadFill")?.GetComponent<RectTransform>();
-        var tip  = _overlay.transform.Find("LoadTip")?.GetComponent<TextMeshProUGUI>();
-        var pct  = _overlay.transform.Find("LoadPct")?.GetComponent<TextMeshProUGUI>();
+        var fill = _overlay.transform.Find("BarBg/Fill")?.GetComponent<RectTransform>();
+        var tip  = _overlay.transform.Find("Tip")?.GetComponent<TextMeshProUGUI>();
+        var pct  = _overlay.transform.Find("Pct")?.GetComponent<TextMeshProUGUI>();
+        var dest = _overlay.transform.Find("Dest")?.GetComponent<TextMeshProUGUI>();
+        if (dest) dest.text = destLabel;
 
         string[] tips = {
-            "Bảo vệ rừng: chặt ≤ 5 cây mỗi ngày để giữ Karma tốt.",
-            "Ban đêm nguy hiểm – Thổ dân K'Nu bị Hắc Hóa lúc nửa đêm!",
-            "Cho Thỏ Rừng ăn 3 lần sẽ thuần hóa thành pet bảo vệ bạn.",
-            "Karma cao = Ending Hòa Bình. Karma thấp = Tân Vương Bóng Đêm.",
-            "Giải đố mạch điện cổ tại Phế Tích để mở bí mật Mai An Tiêm.",
-            "Void Rift ngày càng lớn – hãy hành động trước ngày 30!",
+            "Bảo vệ rừng: <b>chặt ≤ 5 cây/ngày</b> để giữ Karma tốt.",
+            "Ban đêm: <b>Thổ dân K'Nu bị Hắc Hóa</b> — rất nguy hiểm!",
+            "Cho <b>Thỏ Rừng</b> ăn 3 lần → thuần hóa thành pet đồng hành.",
+            "<b>Karma cao</b> = kết thúc Hòa Bình. <b>Karma thấp</b> = Tân Vương Bóng Đêm.",
+            "Giải đố <b>mạch điện cổ đại</b> tại Phế Tích để mở bí mật Mai An Tiêm.",
+            "<b>Void Rift</b> đang lớn dần — hành động trước ngày 30 hoặc mọi thứ kết thúc.",
+            "Đặt <b>bẫy Tần Số</b> quanh căn cứ để tự động bảo vệ ban đêm.",
+            "<b>Nỏ Tần Số</b> hiệu quả nhất lúc bóng đêm — tích lũy đạn mỗi ngày.",
         };
-        float vol0=_music.volume; float fd=1.8f; float el=0; int ti=0;
-        var op = SceneManager.LoadSceneAsync(scene);
+
+        if (tip != null) tip.text = tips[0];
+        if (fill != null) fill.anchorMax = V2(0f, 1f);
+        if (pct != null) pct.text = "0%";
+
+        // 2. Fade overlay IN (alpha 0 → 1)
+        var cg = _overlay.GetComponent<CanvasGroup>();
+        if (cg == null) cg = _overlay.AddComponent<CanvasGroup>();
+        cg.alpha = 0f;
+        float t = 0f;
+        while (t < 1.2f)
+        {
+            t += Time.unscaledDeltaTime;
+            cg.alpha = Mathf.Clamp01(t / 1.2f);
+            // Fade music out simultaneously
+            _music.volume = Mathf.Lerp(PlayerPrefs.GetFloat("MV",0.55f), 0f, t/1.2f);
+            yield return null;
+        }
+
+        // 3. Async load
+        float elapsed = 0f; int tipIdx = 0;
+        var op = SceneManager.LoadSceneAsync(sceneName);
         op.allowSceneActivation = false;
+
         while (!op.isDone)
         {
-            el += Time.unscaledDeltaTime;
-            float p = Mathf.Clamp01(op.progress/0.9f);
-            if (fill!=null) fill.anchorMax=V2(p,1);
-            if (pct!=null)  pct.text=Mathf.RoundToInt(p*100f)+"%";
-            int ni=Mathf.FloorToInt(el/2.5f)%tips.Length;
-            if (ni!=ti && tip!=null){ti=ni;tip.text=tips[ti];}
-            _music.volume=Mathf.Lerp(vol0,0f,Mathf.Clamp01(el/fd));
-            if (op.progress>=0.9f && el>=1.5f) op.allowSceneActivation=true;
+            elapsed += Time.unscaledDeltaTime;
+            float p = Mathf.Clamp01(op.progress / 0.9f);
+            if (fill != null) fill.anchorMax = V2(p, 1f);
+            if (pct  != null) pct.text = Mathf.RoundToInt(p * 100f) + "%";
+
+            // Tip rotation every 2.5s
+            int ni = Mathf.FloorToInt(elapsed / 2.5f) % tips.Length;
+            if (ni != tipIdx && tip != null) { tipIdx = ni; tip.text = tips[tipIdx]; }
+
+            if (op.progress >= 0.9f && elapsed >= 1.8f)
+                op.allowSceneActivation = true;
+
             yield return null;
         }
     }
@@ -690,110 +940,115 @@ public class MainMenuController : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────────────────────────
-    //  PROCEDURAL FOREST AMBIENT MUSIC  (layers: drone+wind+pentatonic)
+    //  PROCEDURAL FOREST AMBIENT  (drone + wind + pentatonic + cricket)
     // ─────────────────────────────────────────────────────────────────
-    IEnumerator CoMusic()
+    IEnumerator CoStartMusic()
     {
         yield return new WaitForEndOfFrame();
-        _music.clip   = menuMusicClip ?? GenerateForestAmbient();
+        _music.clip   = menuMusicClip != null ? menuMusicClip : GenerateForestAmbient();
         _music.volume = 0f;
         _music.Play();
-        float tgt = PlayerPrefs.GetFloat("MV",0.55f);
-        float t=0f;
-        while(t<3.5f){t+=Time.deltaTime;_music.volume=Mathf.Lerp(0,tgt,t/3.5f);yield return null;}
-        _music.volume=tgt;
+        float tgt = PlayerPrefs.GetFloat("MV", 0.55f);
+        float t = 0f;
+        while (t < 3.5f)
+        {
+            t += Time.deltaTime;
+            _music.volume = Mathf.Lerp(0f, tgt, t / 3.5f);
+            yield return null;
+        }
+        _music.volume = tgt;
     }
 
     AudioClip GenerateForestAmbient()
     {
-        int sr=44100; int dur=40; int total=sr*dur;
-        float[] buf=new float[total];
-        var rng=new System.Random(9001);
-        float[] penta={261.63f,293.66f,329.63f,392f,440f,523.25f};
-        for(int i=0;i<total;i++)
+        int sr = 44100; int dur = 40;
+        float[] buf = new float[sr * dur];
+        var rng = new System.Random(9001);
+        float[] penta = { 261.63f, 293.66f, 329.63f, 392f, 440f, 523.25f };
+        for (int i = 0; i < buf.Length; i++)
         {
-            float t=(float)i/sr;
-            // Deep drone (3 harmonics)
-            float drone=Mathf.Sin(Mathf.PI*2*44f*t)*0.05f
-                       +Mathf.Sin(Mathf.PI*2*66f*t)*0.03f
-                       +Mathf.Sin(Mathf.PI*2*88f*t)*0.02f;
-            float breath=(Mathf.Sin(Mathf.PI*2*0.18f*t)+1f)*0.5f;
-            drone*=0.4f+breath*0.6f;
-            // Filtered wind (low-frequency noise)
+            float t = (float)i / sr;
+            // Deep drone – 3 harmonics with breath
+            float drone = Mathf.Sin(Mathf.PI*2*44*t)*0.05f
+                         +Mathf.Sin(Mathf.PI*2*66*t)*0.03f
+                         +Mathf.Sin(Mathf.PI*2*88*t)*0.02f;
+            float breath = (Mathf.Sin(Mathf.PI*2*0.18f*t)+1)*0.5f;
+            drone *= 0.4f + breath*0.6f;
+            // Wind
             float wind=(float)(rng.NextDouble()*2-1)*0.022f;
-            float we=(Mathf.Sin(Mathf.PI*2*0.06f*t+0.8f)+1f)*0.5f; wind*=we;
-            // Pentatonic ping (every 5 seconds, random note)
+            wind*=(Mathf.Sin(Mathf.PI*2*0.07f*t+0.9f)+1)*0.5f;
+            // Pentatonic ping every 5s
             float ping=0; float pt=t%5f;
-            if(pt<0.8f){int ni=((int)(t/5f))%penta.Length;
-                float env=Mathf.Exp(-pt*6f);
-                ping=Mathf.Sin(Mathf.PI*2*penta[ni]*t)*env*0.05f;
-                ping+=Mathf.Sin(Mathf.PI*2*penta[ni]*2f*t)*env*0.018f;}
-            // Cricket chirp (subtle high-freq texture)
-            float cricket=(float)(rng.NextDouble()*2-1)*0.008f;
-            float ce=(Mathf.Sin(Mathf.PI*2*2.3f*t)+1f)*0.5f; cricket*=ce;
+            if(pt<0.9f){int ni=((int)(t/5f))%penta.Length;
+                float env=Mathf.Exp(-pt*5.5f);
+                ping=Mathf.Sin(Mathf.PI*2*penta[ni]*t)*env*0.05f
+                    +Mathf.Sin(Mathf.PI*2*penta[ni]*2*t)*env*0.018f;}
+            // Cricket texture
+            float cricket=(float)(rng.NextDouble()*2-1)*0.009f;
+            cricket*=(Mathf.Sin(Mathf.PI*2*2.2f*t)+1)*0.5f;
             buf[i]=Mathf.Clamp(drone+wind+ping+cricket,-1f,1f);
         }
-        var clip=AudioClip.Create("ForestAmbient",total,1,sr,false);
+        var clip=AudioClip.Create("ForestAmbient",buf.Length,1,sr,false);
         clip.SetData(buf,0); return clip;
     }
 
     // ─────────────────────────────────────────────────────────────────
-    //  SFX helpers
+    //  SFX
     // ─────────────────────────────────────────────────────────────────
-    void Click() => PlaySFX(sfxClickClip, 680f, 0.06f);
-    void Open()  => PlaySFX(sfxOpenClip,  820f, 0.05f);
+    void SFX_Click() => PlaySFX(sfxClick,  680f, 0.065f);
+    void SFX_Open()  => PlaySFX(sfxOpen,   820f, 0.055f);
+    void SFX_Close() => PlaySFX(sfxClose,  440f, 0.055f);
     void PlaySFX(AudioClip c, float freq, float dur)
     {
-        if (_sfx==null) return;
-        _sfx.PlayOneShot(c ?? Tone(freq,dur,0.25f));
+        if (_sfx == null) return;
+        _sfx.PlayOneShot(c ?? MkTone(freq, dur, 0.22f));
     }
-    AudioClip Tone(float f, float dur, float vol)
+    static AudioClip MkTone(float f, float d, float v)
     {
-        int sr=44100; int n=(int)(sr*dur); float[] d=new float[n];
-        for(int i=0;i<n;i++){float t=(float)i/sr;
-            d[i]=Mathf.Sin(Mathf.PI*2*f*t)*Mathf.Clamp01(1f-t/dur)*vol;}
-        var c=AudioClip.Create("SFX",n,1,sr,false);c.SetData(d,0);return c;
+        int sr=44100;int n=(int)(sr*d);float[] buf=new float[n];
+        for(int i=0;i<n;i++){float t=(float)i/sr;buf[i]=Mathf.Sin(Mathf.PI*2*f*t)*Mathf.Clamp01(1f-t/d)*v;}
+        var c=AudioClip.Create("T",n,1,sr,false);c.SetData(buf,0);return c;
     }
 
     // ─────────────────────────────────────────────────────────────────
-    //  COROUTINE ANIMATIONS
+    //  ANIMATIONS
     // ─────────────────────────────────────────────────────────────────
-    IEnumerator CoFireflies()
+    IEnumerator CoAnimateFireflies()
     {
         var rng=new System.Random(55);
         while(true)
         {
-            float dt=Time.deltaTime;
             foreach(var f in _flies)
             {
-                if(f.rt==null) continue;
-                float glow=0.5f+0.5f*Mathf.Sin(Time.time*1.2f+f.phase);
-                var col=f.rt.GetComponent<Image>()?.color ?? Color.white;
-                col.a=Mathf.Lerp(0.05f,0.55f,glow);
-                if(f.rt.TryGetComponent<Image>(out var img)) img.color=col;
-
-                var mn=f.rt.anchorMin+new Vector2(f.drift,f.speed);
-                var mx=f.rt.anchorMax+new Vector2(f.drift,f.speed);
-                if(mn.y>1.06f){mn.y=-0.06f;mx.y=mn.y+0.007f;}
-                if(mn.x<-0.06f||mn.x>1.06f){float nx=(float)rng.NextDouble();mn.x=nx;mx.x=nx+0.004f;}
-                f.rt.anchorMin=mn; f.rt.anchorMax=mx;
+                if(f.rt==null)continue;
+                if(f.img)
+                {
+                    var c=f.img.color;
+                    c.a=Mathf.Lerp(0.06f,0.55f,(Mathf.Sin(Time.time*1.3f+f.phase)+1)*0.5f);
+                    f.img.color=c;
+                }
+                var mn=f.rt.anchorMin+V2(f.drift,f.speed);
+                var mx=f.rt.anchorMax+V2(f.drift,f.speed);
+                if(mn.y>1.08f){mn.y=-0.08f;mx.y=mn.y+0.007f;}
+                if(mn.x<-0.08f||mn.x>1.08f){float nx=(float)rng.NextDouble();mn.x=nx;mx.x=nx+0.004f;}
+                f.rt.anchorMin=mn;f.rt.anchorMax=mx;
             }
             yield return null;
         }
     }
 
-    IEnumerator CoFog()
+    IEnumerator CoAnimateFog()
     {
         while(true)
         {
-            foreach(var f in _fog)
+            foreach(var f in _fogStrips)
             {
-                if(f.rt==null) continue;
-                var mn=f.rt.anchorMin; var mx=f.rt.anchorMax;
-                mn.x+=f.speed; mx.x+=f.speed;
-                if(mn.x>1.1f){mn.x=-0.2f;mx.x=mn.x+(mx.x-mn.x);}
-                if(mx.x<-0.1f){mn.x=0.9f;mx.x=mn.x+(mx.x-mn.x);}
-                f.rt.anchorMin=mn; f.rt.anchorMax=mx;
+                if(f.rt==null)continue;
+                var mn=f.rt.anchorMin;var mx=f.rt.anchorMax;
+                mn.x+=f.speed;mx.x+=f.speed;
+                if(mn.x>1.12f)mn.x=mx.x=-0.15f;
+                if(mx.x<-0.12f){mn.x=0.88f;mx.x=mn.x+(mx.x-mn.x);}
+                f.rt.anchorMin=mn;f.rt.anchorMax=mx;
             }
             yield return null;
         }
@@ -801,84 +1056,74 @@ public class MainMenuController : MonoBehaviour
 
     IEnumerator CoTitleBreath()
     {
-        yield return new WaitForSeconds(1f);
-        var go=_cvs?.transform.Find("Panel_Main/Left/TitleAnimated");
-        if(go==null) yield break;
-        var tmp=go.GetComponent<TextMeshProUGUI>();
-        if(tmp==null) yield break;
-        while(true)
-        {
-            float t=0;
-            while(t<4f){t+=Time.deltaTime;tmp.fontSize=72f+Mathf.Sin(t*Mathf.PI*0.4f)*1.8f;yield return null;}
-            t=0;
-            while(t<4f){t+=Time.deltaTime;tmp.fontSize=73.8f-Mathf.Sin(t*Mathf.PI*0.4f)*1.8f;yield return null;}
+        yield return new WaitForSeconds(0.8f);
+        var go=_cvs?.transform.Find("Panel_Main/Left/TitleAnim");
+        if(go==null)yield break;
+        var t=go.GetComponent<TextMeshProUGUI>();
+        if(t==null)yield break;
+        while(true){
+            float s=0;while(s<5f){s+=Time.deltaTime;t.fontSize=74f+Mathf.Sin(s*Mathf.PI*0.35f)*2f;yield return null;}
+            s=0;while(s<5f){s+=Time.deltaTime;t.fontSize=76f-Mathf.Sin(s*Mathf.PI*0.35f)*2f;yield return null;}
         }
     }
 
-    IEnumerator CoChromaShift()
+    IEnumerator CoScanlineFloat()
     {
-        // Animate the scanline position slowly up and down
-        var scan=_cvs?.transform.Find("Scanline_Animated");
-        if(scan==null) yield break;
-        var rt=scan.GetComponent<RectTransform>();
-        while(true)
-        {
-            float t=Time.time;
-            float y=0.40f+Mathf.Sin(t*0.15f)*0.12f;
-            rt.anchorMin=V2(0,y); rt.anchorMax=V2(1,y+0.004f);
+        var go=_cvs?.transform.Find("Scanline");
+        if(go==null)yield break;
+        var rt=go.GetComponent<RectTransform>();
+        while(true){
+            float y=0.38f+Mathf.Sin(Time.time*0.12f)*0.14f;
+            rt.anchorMin=V2(0,y);rt.anchorMax=V2(1,y+0.004f);
             yield return null;
         }
     }
 
     // ─────────────────────────────────────────────────────────────────
-    //  UI COMPONENT BUILDERS
+    //  UI BUILDERS
     // ─────────────────────────────────────────────────────────────────
-    // Full AAA-style button with icon accent + sub-label
-    void Btn(string name, Transform p, Vector2 amin, Vector2 amax,
-        string label, string sublabel, Color accentCol, System.Action onClick, bool disabled=false)
+    // Full AAA button with left accent bar + subtitle
+    void AaaBtn(Transform p, string name, Vector2 amin, Vector2 amax,
+        string label, string sub, string icon, Color accent, System.Action onClick, bool disabled=false)
     {
-        var go = Img(name, p, amin, amax, disabled
-            ? C(0.04f,0.06f,0.08f,0.6f) : BTN_DARK);
-        go.GetComponent<Image>().sprite = SprRR(10);
-
+        Color bg = disabled ? HC(0.03f,0.05f,0.07f,0.6f) : C_BTN;
+        var go = MkImg(name, p, amin, amax, bg);
+        go.GetComponent<Image>().sprite = MkRR(10);
         // Left accent bar
-        var bar = Img("Bar",go.transform,V2(0,0),V2(0.007f,1),
-            C(accentCol.r,accentCol.g,accentCol.b, disabled?0.25f:1f));
-
-        // Main label
-        var lbl = Rect("Lbl",go.transform,V2(0.03f,0.42f),V2(0.85f,0.92f)).AddComponent<TextMeshProUGUI>();
-        lbl.text=label; lbl.fontSize=22f; lbl.fontStyle=FontStyles.Bold;
-        lbl.color=disabled?TXT_LABEL:TXT_HERO; lbl.alignment=TextAlignmentOptions.MidlineLeft;
-
-        // Sub label
-        var sub = Rect("Sub",go.transform,V2(0.03f,0.08f),V2(0.85f,0.44f)).AddComponent<TextMeshProUGUI>();
-        sub.text=sublabel; sub.fontSize=13f; sub.color=disabled?TXT_LABEL:ACC_DIM;
-        sub.alignment=TextAlignmentOptions.MidlineLeft;
-
-        // Arrow indicator
-        var arr = Rect("Arr",go.transform,V2(0.88f,0.25f),V2(0.97f,0.75f)).AddComponent<TextMeshProUGUI>();
-        arr.text="›"; arr.fontSize=28f; arr.color=disabled?TXT_LABEL:accentCol;
+        MkImg("Bar",go.transform,V2(0,0),V2(0.007f,1), HC(accent.r,accent.g,accent.b,disabled?0.25f:1f));
+        // Icon
+        var iconT=MkRect("Icon",go.transform,V2(0.012f,0.15f),V2(0.075f,0.85f)).AddComponent<TextMeshProUGUI>();
+        iconT.text=icon; iconT.fontSize=22f; iconT.color=disabled?C_DIM:accent; iconT.alignment=TextAlignmentOptions.Center;
+        // Label
+        var lblT=MkRect("Lbl",go.transform,V2(0.08f,0.46f),V2(0.85f,0.92f)).AddComponent<TextMeshProUGUI>();
+        lblT.text=label; lblT.fontSize=22f; lblT.fontStyle=FontStyles.Bold;
+        lblT.color=disabled?C_DIM:C_TXT; lblT.alignment=TextAlignmentOptions.MidlineLeft;
+        // Sub
+        var subT=MkRect("Sub",go.transform,V2(0.08f,0.06f),V2(0.85f,0.48f)).AddComponent<TextMeshProUGUI>();
+        subT.text=sub; subT.fontSize=13f;
+        subT.color=disabled?HC(0.25f,0.3f,0.28f):C_DIM; subT.alignment=TextAlignmentOptions.MidlineLeft;
+        // Arrow
+        var arr=MkRect("Arr",go.transform,V2(0.87f,0.2f),V2(0.97f,0.8f)).AddComponent<TextMeshProUGUI>();
+        arr.text="›"; arr.fontSize=30f; arr.color=disabled?HC(0.2f,0.25f,0.23f):accent;
         arr.alignment=TextAlignmentOptions.Center;
-
-        // Hover / unhover
-        Color normalBg = disabled?C(0.04f,0.06f,0.08f,0.6f):BTN_DARK;
-        Color hoverBg  = C(0.08f,0.16f,0.12f,0.95f);
-        AddHover(go, normalBg, hoverBg);
-
-        var btn = go.AddComponent<Button>();
-        if(!disabled && onClick!=null) btn.onClick.AddListener(()=>onClick());
+        // Hover
+        AddHover(go, bg, HC(0.07f,0.14f,0.11f,0.95f));
+        var btn=go.AddComponent<Button>();
+        if(!disabled&&onClick!=null)btn.onClick.AddListener(()=>onClick());
         else btn.interactable=!disabled;
     }
 
-    void SmallBtn(string name, Transform p, Vector2 amin, Vector2 amax,
+    void SmallBtn(Transform p, string name, Vector2 amin, Vector2 amax,
         string label, Color col, System.Action onClick)
     {
-        var go = Img(name,p,amin,amax, C(col.r*0.25f,col.g*0.25f,col.b*0.25f,0.9f));
-        go.GetComponent<Image>().sprite=SprRR(8);
-        AddHover(go, C(col.r*0.25f,col.g*0.25f,col.b*0.25f,0.9f), C(col.r*0.45f,col.g*0.45f,col.b*0.45f));
-        var t=Rect("T",go.transform,V2(0,0),V2(1,1)).AddComponent<TextMeshProUGUI>();
-        t.text=label; t.fontSize=18f; t.fontStyle=FontStyles.Bold;
-        t.alignment=TextAlignmentOptions.Center; t.color=TXT_HERO;
+        var bg = HC(col.r*0.22f,col.g*0.22f,col.b*0.22f,0.90f);
+        var hv = HC(col.r*0.40f,col.g*0.40f,col.b*0.40f,0.95f);
+        var go = MkImg(name, p, amin, amax, bg);
+        go.GetComponent<Image>().sprite = MkRR(8);
+        AddHover(go, bg, hv);
+        var t = MkRect("T",go.transform,V2(0,0),V2(1,1)).AddComponent<TextMeshProUGUI>();
+        t.text=label; t.fontSize=17f; t.fontStyle=FontStyles.Bold;
+        t.alignment=TextAlignmentOptions.Center; t.color=C_TXT;
         var b=go.AddComponent<Button>(); if(onClick!=null)b.onClick.AddListener(()=>onClick());
     }
 
@@ -886,60 +1131,59 @@ public class MainMenuController : MonoBehaviour
     {
         var img=go.GetComponent<Image>();
         var et=go.AddComponent<UnityEngine.EventSystems.EventTrigger>();
-        void Add(UnityEngine.EventSystems.EventTriggerType type, System.Action<UnityEngine.EventSystems.BaseEventData> cb)
+        void Add(UnityEngine.EventSystems.EventTriggerType type,
+                 System.Action<UnityEngine.EventSystems.BaseEventData> cb)
         {
             var e=new UnityEngine.EventSystems.EventTrigger.Entry{eventID=type};
             e.callback.AddListener(d=>cb(d)); et.triggers.Add(e);
         }
-        Add(UnityEngine.EventSystems.EventTriggerType.PointerEnter,_=>{if(img)img.color=hover;PlaySFX(sfxHoverClip,920f,0.04f);});
-        Add(UnityEngine.EventSystems.EventTriggerType.PointerExit, _=>{if(img)img.color=normal;});
+        Add(UnityEngine.EventSystems.EventTriggerType.PointerEnter,
+            _=>{if(img)img.color=hover;PlaySFX(sfxHover,920f,0.035f);});
+        Add(UnityEngine.EventSystems.EventTriggerType.PointerExit,
+            _=>{if(img)img.color=normal;});
     }
 
     // ─────────────────────────────────────────────────────────────────
-    //  Panel template
+    //  Panel helpers
     // ─────────────────────────────────────────────────────────────────
     GameObject SidePanel(string name, Vector2 amin, Vector2 amax)
     {
-        var p=Img(name,_cvs.transform,amin,amax,BG_PANEL);
-        p.GetComponent<Image>().sprite=SprRR(20);
-        // Glow border
-        var b=Img(name+"_B",p.transform,V2(-0.003f,-0.003f),V2(1.003f,1.003f),
-            C(ACC_GREEN.r,ACC_GREEN.g,ACC_GREEN.b,0.12f));
-        b.GetComponent<Image>().sprite=SprRR(20);
-        b.transform.SetAsFirstSibling();
+        var p = MkImg(name, _cvs.transform, amin, amax, C_PANEL);
+        p.GetComponent<Image>().sprite = MkRR(20);
+        var border = MkImg(name+"_B", p.transform, V2(-0.003f,-0.003f), V2(1.003f,1.003f),
+            HC(C_GREEN.r,C_GREEN.g,C_GREEN.b,0.10f));
+        border.GetComponent<Image>().sprite = MkRR(20);
+        border.transform.SetAsFirstSibling();
         return p.gameObject;
     }
 
-    void PanelHeader(Transform p, string title, Color col)
+    void PanelHdr(Transform p, string title, Color col)
     {
-        var h=Rect("Hdr",p,V2(0,0.90f),V2(1,1));
-        h.AddComponent<Image>().color=C(col.r,col.g,col.b,0.09f);
-        var t=Rect("HdrT",h.transform,V2(0.04f,0),V2(0.96f,1)).AddComponent<TextMeshProUGUI>();
-        t.text=title; t.fontSize=24f; t.fontStyle=FontStyles.Bold;
+        var h = MkRect("Hdr",p,V2(0,0.910f),V2(1,1.00f));
+        h.AddComponent<Image>().color=HC(col.r,col.g,col.b,0.10f);
+        var t = MkRect("HdrT",h.transform,V2(0.04f,0),V2(0.96f,1)).AddComponent<TextMeshProUGUI>();
+        t.text=title; t.fontSize=22f; t.fontStyle=FontStyles.Bold;
         t.alignment=TextAlignmentOptions.MidlineLeft; t.color=col;
-        Sep("HdrSep",p,V2(0.02f,0.893f),V2(0.98f,0.899f));
+        Sep("HdrSep",p,V2(0.02f,0.902f),V2(0.98f,0.907f));
     }
 
-    void SliderRow(Transform p, string label, ref float y, float rh, float gap,
+    void SliderRow(Transform p, string label, ref float y, float rh, float g,
         float min, float max, float init, System.Action<float> onChange,
         ref Slider slider, ref TextMeshProUGUI valLbl)
     {
-        Rect(label+"_L",p,V2(0.04f,y),V2(0.52f,y+rh)).AddComponent<TextMeshProUGUI>()
-            .text=label; var lt=p.Find(label+"_L").GetComponent<TextMeshProUGUI>();
-        lt.fontSize=17f; lt.color=TXT_HERO; lt.alignment=TextAlignmentOptions.MidlineLeft;
-
-        valLbl=Rect(label+"_V",p,V2(0.87f,y),V2(0.97f,y+rh)).AddComponent<TextMeshProUGUI>();
-        valLbl.fontSize=14f; valLbl.color=ACC_GREEN; valLbl.alignment=TextAlignmentOptions.Center;
+        var lt=MkRect(label+"_L",p,V2(0.04f,y),V2(0.52f,y+rh)).AddComponent<TextMeshProUGUI>();
+        lt.text=label; lt.fontSize=17f; lt.color=C_TXT; lt.alignment=TextAlignmentOptions.MidlineLeft;
+        valLbl=MkRect(label+"_V",p,V2(0.87f,y),V2(0.97f,y+rh)).AddComponent<TextMeshProUGUI>();
+        valLbl.fontSize=14f; valLbl.color=C_GREEN; valLbl.alignment=TextAlignmentOptions.Center;
         valLbl.text=Mathf.RoundToInt(init*100)+"%";
-
-        var sGO=Rect(label+"_S",p,V2(0.52f,y+rh*0.22f),V2(0.85f,y+rh*0.78f));
+        var sGO=MkRect(label+"_S",p,V2(0.52f,y+rh*0.22f),V2(0.85f,y+rh*0.78f));
         slider=sGO.AddComponent<Slider>();
-        Img("SBg",sGO.transform,V2(0,0),V2(1,1),C(0.06f,0.10f,0.12f));
-        var fa=Rect("FA",sGO.transform,V2(0,0.2f),V2(1,0.8f));
-        var fill=Img("Fill",fa.transform,V2(0,0),V2(1,1),ACC_GREEN);
-        var hsa=Rect("HA",sGO.transform,V2(0,0),V2(1,1));
-        var hand=Img("Hand",hsa.transform,V2(0,0),V2(0,1),C(0.9f,0.7f,0.2f));
-        hand.GetComponent<RectTransform>().sizeDelta=new Vector2(12,0);
+        MkImg("SBg",sGO.transform,V2(0,0),V2(1,1),HC(0.05f,0.09f,0.10f));
+        var fa=MkRect("FA",sGO.transform,V2(0,0.2f),V2(1,0.8f));
+        var fill=MkImg("Fill",fa.transform,V2(0,0),V2(1,1),C_GREEN);
+        var hsa=MkRect("HA",sGO.transform,V2(0,0),V2(1,1));
+        var hand=MkImg("Hand",hsa.transform,V2(0,0),V2(0,1),C_AMBER);
+        hand.GetComponent<RectTransform>().sizeDelta=new Vector2(13,0);
         slider.fillRect=fill.GetComponent<RectTransform>();
         slider.handleRect=hand.GetComponent<RectTransform>();
         slider.targetGraphic=hand.GetComponent<Image>();
@@ -947,78 +1191,92 @@ public class MainMenuController : MonoBehaviour
         slider.minValue=min; slider.maxValue=max; slider.value=init;
         var vl=valLbl;
         slider.onValueChanged.AddListener(v=>{onChange(v);vl.text=Mathf.RoundToInt(v*100)+"%";});
-        y-=rh+gap;
+        y-=rh+g;
     }
 
     // ─────────────────────────────────────────────────────────────────
     //  LOW-LEVEL HELPERS
     // ─────────────────────────────────────────────────────────────────
-    static GameObject Rect(string name, Transform p, Vector2 amin, Vector2 amax)
+    static GameObject MkRect(string n, Transform p, Vector2 amin, Vector2 amax)
     {
-        var go=new GameObject(name,typeof(RectTransform));
+        var go=new GameObject(n,typeof(RectTransform));
         go.transform.SetParent(p,false);
         var rt=go.GetComponent<RectTransform>();
         rt.anchorMin=amin; rt.anchorMax=amax; rt.offsetMin=rt.offsetMax=Vector2.zero;
         return go;
     }
-    static GameObject Img(string name, Transform p, Vector2 amin, Vector2 amax, Color col)
+    static GameObject MkImg(string n, Transform p, Vector2 amin, Vector2 amax, Color c)
     {
-        var go=Rect(name,p,amin,amax); go.AddComponent<Image>().color=col; return go;
+        var go=MkRect(n,p,amin,amax); go.AddComponent<Image>().color=c; return go;
     }
-    static void Sep(string name, Transform p, Vector2 amin, Vector2 amax)
-        => Img(name,p,amin,amax,CHROME_LINE);
-    static void Stretch(RectTransform rt){rt.anchorMin=Vector2.zero;rt.anchorMax=Vector2.one;rt.offsetMin=rt.offsetMax=Vector2.zero;}
-    static Vector2 V2(float x, float y)=>new(x,y);
-    static void Destroy(TextMeshProUGUI titleGO){if(titleGO)Object.Destroy(titleGO);}
+    static void Sep(string n, Transform p, Vector2 amin, Vector2 amax)
+        => MkImg(n,p,amin,amax,C_SEP);
+    static Vector2 V2(float x, float y) => new(x,y);
+    static void SetTMP(Transform root, string path, string text)
+    {
+        var t=root.Find(path)?.GetComponent<TextMeshProUGUI>();
+        if(t) t.text=text;
+    }
+    static Color HexColor(string hex)
+    {
+        if(ColorUtility.TryParseHtmlString(hex,out var c)) return c;
+        return Color.white;
+    }
 
     // ─────────────────────────────────────────────────────────────────
-    //  PROCEDURAL SPRITES
+    //  SPRITE GENERATORS
     // ─────────────────────────────────────────────────────────────────
-    static Sprite SprGradient(Color top, Color bot, int w=4, int h=512)
+    static Sprite MkGradient(Color bot, Color top, int w=4, int h=512)
     {
-        var tex=new Texture2D(w,h,TextureFormat.RGBA32,false);
-        tex.wrapMode=TextureWrapMode.Clamp;
+        var tex=new Texture2D(w,h,TextureFormat.RGBA32,false); tex.wrapMode=TextureWrapMode.Clamp;
         for(int y=0;y<h;y++){Color c=Color.Lerp(bot,top,(float)y/h);for(int x=0;x<w;x++)tex.SetPixel(x,y,c);}
         tex.Apply(); return Sprite.Create(tex,new Rect(0,0,w,h),V2(0.5f,0.5f));
     }
-    static Sprite SprRadialGlow(Color center, int s=512)
+    static Sprite MkRadialGlow(Color center, int s=512)
     {
         var tex=new Texture2D(s,s,TextureFormat.RGBA32,false); tex.wrapMode=TextureWrapMode.Clamp;
         Vector2 c=V2(s/2f,s/2f); float r=s/2f;
-        for(int y=0;y<s;y++) for(int x=0;x<s;x++)
-        {float d=Vector2.Distance(V2(x,y),c)/r;float a=Mathf.SmoothStep(1,0,d);tex.SetPixel(x,y,new Color(center.r,center.g,center.b,center.a*a));}
+        for(int y=0;y<s;y++) for(int x=0;x<s;x++){
+            float a=Mathf.SmoothStep(1,0,Vector2.Distance(V2(x,y),c)/r);
+            tex.SetPixel(x,y,new Color(center.r,center.g,center.b,center.a*a));}
         tex.Apply(); return Sprite.Create(tex,new Rect(0,0,s,s),V2(0.5f,0.5f));
     }
-    static Sprite SprVignette(float strength=0.85f, int s=512)
+    static Sprite MkVignette(float strength=0.88f, int s=512)
     {
         var tex=new Texture2D(s,s,TextureFormat.RGBA32,false); tex.wrapMode=TextureWrapMode.Clamp;
         Vector2 c=V2(s/2f,s/2f); float r=Vector2.Distance(Vector2.zero,c);
-        for(int y=0;y<s;y++) for(int x=0;x<s;x++)
-        {float a=Mathf.SmoothStep(0,strength,Vector2.Distance(V2(x,y),c)/r);tex.SetPixel(x,y,new Color(0,0,0,a));}
+        for(int y=0;y<s;y++) for(int x=0;x<s;x++){
+            float a=Mathf.SmoothStep(0,strength,Vector2.Distance(V2(x,y),c)/r);
+            tex.SetPixel(x,y,new Color(0,0,0,a));}
         tex.Apply(); return Sprite.Create(tex,new Rect(0,0,s,s),V2(0.5f,0.5f));
     }
-    static Sprite SprFogStrip(int w=256, int h=32)
+    static Sprite MkFogStrip(int w=256, int h=32)
     {
         var tex=new Texture2D(w,h,TextureFormat.RGBA32,false); tex.wrapMode=TextureWrapMode.Clamp;
-        for(int y=0;y<h;y++) for(int x=0;x<w;x++)
-        {float ex=1f-Mathf.Abs(x/(float)w*2f-1f);float ey=1f-Mathf.Abs(y/(float)h*2f-1f);tex.SetPixel(x,y,new Color(1,1,1,ex*ey));}
+        for(int y=0;y<h;y++) for(int x=0;x<w;x++){
+            float ex=1f-Mathf.Abs(x/(float)w*2f-1f);
+            float ey=1f-Mathf.Abs(y/(float)h*2f-1f);
+            tex.SetPixel(x,y,new Color(1,1,1,ex*ey));}
         tex.Apply(); return Sprite.Create(tex,new Rect(0,0,w,h),V2(0.5f,0.5f));
     }
-    static Sprite SprRR(int radius=10, int w=128, int h=64)
+    static Sprite MkRR(int r=10, int w=128, int h=64)
     {
         var tex=new Texture2D(w,h,TextureFormat.RGBA32,false); tex.wrapMode=TextureWrapMode.Clamp;
-        for(int y=0;y<h;y++) for(int x=0;x<w;x++)
-        {int cx=Mathf.Clamp(x,radius,w-radius-1);int cy=Mathf.Clamp(y,radius,h-radius-1);
-            float d=Mathf.Sqrt((x-cx)*(x-cx)+(y-cy)*(y-cy));tex.SetPixel(x,y,d<=radius?Color.white:Color.clear);}
+        for(int y=0;y<h;y++) for(int x=0;x<w;x++){
+            int cx=Mathf.Clamp(x,r,w-r-1),cy=Mathf.Clamp(y,r,h-r-1);
+            float d=Mathf.Sqrt((x-cx)*(x-cx)+(y-cy)*(y-cy));
+            tex.SetPixel(x,y,d<=r?Color.white:Color.clear);}
         tex.Apply();
-        return Sprite.Create(tex,new Rect(0,0,w,h),V2(0.5f,0.5f),100f,0,SpriteMeshType.FullRect,new Vector4(radius,radius,radius,radius));
+        return Sprite.Create(tex,new Rect(0,0,w,h),V2(0.5f,0.5f),100f,0,
+            SpriteMeshType.FullRect,new Vector4(r,r,r,r));
     }
-    static Sprite SprCircle(int s=24)
+    static Sprite MkCircle(int s=24)
     {
         var tex=new Texture2D(s,s,TextureFormat.RGBA32,false); tex.wrapMode=TextureWrapMode.Clamp;
         Vector2 c=V2(s/2f,s/2f); float r=s/2f-1f;
-        for(int y=0;y<s;y++) for(int x=0;x<s;x++)
-        {float a=Mathf.Clamp01(r-Mathf.Max(0,Vector2.Distance(V2(x,y),c)-r+1));tex.SetPixel(x,y,new Color(1,1,1,a));}
+        for(int y=0;y<s;y++) for(int x=0;x<s;x++){
+            float a=Mathf.Clamp01(r-Mathf.Max(0,Vector2.Distance(V2(x,y),c)-r+1));
+            tex.SetPixel(x,y,new Color(1,1,1,a));}
         tex.Apply(); return Sprite.Create(tex,new Rect(0,0,s,s),V2(0.5f,0.5f));
     }
 }
