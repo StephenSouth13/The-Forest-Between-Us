@@ -4,6 +4,11 @@ public class PlayerStatsManager : MonoBehaviour
 {
     public static PlayerStatsManager instance;
 
+    [Header("Level System")]
+    public int level = 1;
+    public float currentXP = 0f;
+    public float xpToNextLevel = 100f;
+
     [Header("Real Player Vitals (0 - 100)")]
     public float maxHealth = 100f;
     public float currentHealth = 100f;
@@ -90,6 +95,46 @@ public class PlayerStatsManager : MonoBehaviour
         }
     }
 
+    public void AddXP(float amount)
+    {
+        currentXP += amount;
+        Debug.Log($"Nhận {amount} XP! ({currentXP}/{xpToNextLevel})");
+        
+        if (currentXP >= xpToNextLevel)
+        {
+            LevelUp();
+        }
+        SaveStats();
+    }
+
+    void LevelUp()
+    {
+        level++;
+        currentXP -= xpToNextLevel;
+        xpToNextLevel = Mathf.Round(xpToNextLevel * 1.5f); // Tăng lượng XP cần thiết cho cấp tiếp theo
+
+        // Tăng giới hạn chỉ số tối đa
+        maxHealth += 10f;
+        maxStamina += 10f;
+        maxHunger += 10f;
+        maxThirst += 10f;
+        maxSleep += 5f;
+
+        // Hồi phục toàn bộ khi lên cấp
+        currentHealth = maxHealth;
+        currentStamina = maxStamina;
+        currentHunger = maxHunger;
+        currentThirst = maxThirst;
+        currentSleep = maxSleep;
+
+        Debug.Log($"🎉 CHÚC MỪNG LÊN CẤP {level}! Chỉ số tối đa đã được tăng cường.");
+        
+        if (PlayerStatusUI.instance != null)
+        {
+            PlayerStatusUI.instance.Refresh();
+        }
+    }
+
     public void TakeDamage(float amount)
     {
         currentHealth = Mathf.Clamp(currentHealth - amount, 0f, maxHealth);
@@ -132,6 +177,16 @@ public class PlayerStatsManager : MonoBehaviour
 
     public void SaveStats()
     {
+        PlayerPrefs.SetInt("Player_Level", level);
+        PlayerPrefs.SetFloat("Player_CurrentXP", currentXP);
+        PlayerPrefs.SetFloat("Player_XPToNextLevel", xpToNextLevel);
+
+        PlayerPrefs.SetFloat("Player_MaxHealth", maxHealth);
+        PlayerPrefs.SetFloat("Player_MaxStamina", maxStamina);
+        PlayerPrefs.SetFloat("Player_MaxHunger", maxHunger);
+        PlayerPrefs.SetFloat("Player_MaxThirst", maxThirst);
+        PlayerPrefs.SetFloat("Player_MaxSleep", maxSleep);
+
         PlayerPrefs.SetFloat("Player_Health", currentHealth);
         PlayerPrefs.SetFloat("Player_Stamina", currentStamina);
         PlayerPrefs.SetFloat("Player_Thirst", currentThirst);
@@ -143,6 +198,16 @@ public class PlayerStatsManager : MonoBehaviour
 
     public void LoadStats()
     {
+        level = PlayerPrefs.GetInt("Player_Level", 1);
+        currentXP = PlayerPrefs.GetFloat("Player_CurrentXP", 0f);
+        xpToNextLevel = PlayerPrefs.GetFloat("Player_XPToNextLevel", 100f);
+
+        maxHealth = PlayerPrefs.GetFloat("Player_MaxHealth", 100f);
+        maxStamina = PlayerPrefs.GetFloat("Player_MaxStamina", 100f);
+        maxHunger = PlayerPrefs.GetFloat("Player_MaxHunger", 100f);
+        maxThirst = PlayerPrefs.GetFloat("Player_MaxThirst", 100f);
+        maxSleep = PlayerPrefs.GetFloat("Player_MaxSleep", 100f);
+
         currentHealth = PlayerPrefs.GetFloat("Player_Health", maxHealth);
         currentStamina = PlayerPrefs.GetFloat("Player_Stamina", maxStamina);
         currentThirst = PlayerPrefs.GetFloat("Player_Thirst", maxThirst);

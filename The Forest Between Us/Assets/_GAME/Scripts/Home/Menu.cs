@@ -42,6 +42,10 @@ public class MainMenuController : MonoBehaviour
     [Tooltip("Ảnh cho HỒI 5 – ngày phán quyết")]
     public Texture2D storyImg_Act5;
 
+    [Header("─── Controls Panel Images (kéo Texture2D vào) ───")]
+    public Texture2D controlsImg_Left;   // Ảnh minh họa trái (di chuyển/tương tác)
+    public Texture2D controlsImg_Right;  // Ảnh minh họa phải (sinh tồn/chiến đấu)
+
     // ─────────────────────────────────────────────────────────────────
     //  Private
     // ─────────────────────────────────────────────────────────────────
@@ -612,47 +616,71 @@ public class MainMenuController : MonoBehaviour
         _panelControls = SidePanel("Panel_Controls", V2(0.03f,0.03f), V2(0.97f,0.97f));
         PanelHdr(_panelControls.transform, "ĐIỀU KHIỂN & HƯỚNG DẪN CHƠI", C_GREEN);
 
-        var colL = MkRect("CL", _panelControls.transform, V2(0.03f,0.12f), V2(0.49f,0.88f));
-        var colR = MkRect("CR", _panelControls.transform, V2(0.52f,0.12f), V2(0.97f,0.88f));
+        // Layout mới: Left (20%), Mid (20%), Right (Image Slot)
+        var colL = MkRect("CL", _panelControls.transform, V2(0.03f,0.12f), V2(0.33f,0.88f));
+        var colM = MkRect("CM", _panelControls.transform, V2(0.35f,0.12f), V2(0.65f,0.88f));
 
         string loreL =
-            "<color=#2ED07A><b>── DI CHUYỂN ──────────────</b></color>\n" +
-            "<color=#2ED07A>W A S D</color>    Di chuyển cơ bản\n" +
-            "<color=#2ED07A>Shift</color>    Chạy (tiêu Stamina)\n" +
-            "<color=#2ED07A>Space</color>    Nhảy\n" +
-            "<color=#2ED07A>Ctrl / C</color>    Cúi người / Rón rén\n" +
-            "<color=#2ED07A>X</color>    Nằm xuống né tránh\n\n" +
-            "<color=#F5A623><b>── TƯƠNG TÁC ──────────────</b></color>\n" +
-            "<color=#F5A623>E</color>    Nhặt vật phẩm / Tương tác\n" +
-            "<color=#F5A623>F</color>    Thắp lửa / Kích hoạt\n" +
-            "<color=#F5A623>Tab</color>    Mở / Đóng Túi Đồ (Inventory)\n" +
-            "<color=#F5A623>K</color>    Sổ Công Thức (Crafting)\n" +
-            "<color=#F5A623>Chuột Trái</color>    Tấn công / Chặt / Đào\n" +
-            "<color=#F5A623>Esc</color>    Menu Pause / Thoát";
+            "<color=#2ED07A><b>── DI CHUYỂN ────────</b></color>\n" +
+            "<color=#2ED07A>W A S D</color>   Di chuyển\n" +
+            "<color=#2ED07A>Shift</color>     Chạy nhanh\n" +
+            "<color=#2ED07A>Space</color>     Nhảy\n" +
+            "<color=#2ED07A>C</color>         Cúi / Rón rén\n" +
+            "<color=#2ED07A>X</color>         Né tránh\n\n" +
+            "<color=#F5A623><b>── TƯƠNG TÁC ────────</b></color>\n" +
+            "<color=#F5A623>E</color>         Nhặt / Tương tác\n" +
+            "<color=#F5A623>F</color>         Thắp lửa / Bật\n" +
+            "<color=#F5A623>Tab</color>       Nhân vật & Túi Đồ\n" +
+            "<color=#F5A623>K / L</color>     Sổ Công Thức\n" +
+            "<color=#F5A623>Chuột Trái</color> Tấn công\n" +
+            "<color=#F5A623>Esc</color>       Menu Pause";
 
-        string loreR =
-            "<color=#AA55FF><b>── SINH TỒN ──────────────</b></color>\n" +
-            "<color=#AA55FF>HP</color>    Máu – bị tấn công / đói / khát\n" +
-            "<color=#AA55FF>Stamina</color>    Chạy & chiến đấu\n" +
-            "<color=#AA55FF>Đói / Khát</color>    Ăn & uống để phục hồi\n" +
-            "<color=#AA55FF>Ngủ</color>    Nghỉ để hồi Stamina\n\n" +
-            "<color=#CF3333><b>── CHIẾN ĐẤU ──────────────</b></color>\n" +
-            "<color=#CF3333>Nỏ Tần Số</color>    Vũ khí tầm xa chính\n" +
-            "<color=#CF3333>Bẫy Thú</color>    Đặt bẫy bắt thú tự động\n" +
-            "<color=#CF3333>Đuốc Tần Số</color>    Xua đuổi bóng đêm\n\n" +
-            "<color=#4488FF><b>── BẢO TỒN & KARMA ────────</b></color>\n" +
-            "<color=#4488FF>≤ 5 cây/ngày</color>    Giữ Karma tốt\n" +
-            "<color=#4488FF>Trồng cây</color>    +Karma, +môi trường\n" +
-            "<color=#4488FF>Karma cao</color>    Kết thúc Hòa Bình\n" +
-            "<color=#4488FF>Karma thấp</color>    Kết thúc Tân Vương";
+        string loreM =
+            "<color=#AA55FF><b>── SINH TỒN ────────</b></color>\n" +
+            "<color=#AA55FF>HP</color>        Bị đánh/đói/khát\n" +
+            "<color=#AA55FF>Stamina</color>   Chạy & đánh\n" +
+            "<color=#AA55FF>Đói/Khát</color>  Ăn/Uống phục hồi\n" +
+            "<color=#AA55FF>Ngủ</color>       Hồi thể lực\n\n" +
+            "<color=#CF3333><b>── CHIẾN ĐẤU ────────</b></color>\n" +
+            "<color=#CF3333>Nỏ Tần Số</color> Vũ khí chính\n" +
+            "<color=#CF3333>Bẫy Thú</color>   Bắt thú/Phòng ngự\n" +
+            "<color=#CF3333>Đuốc</color>      Đuổi bóng đêm\n\n" +
+            "<color=#4488FF><b>── KARMA ────────────</b></color>\n" +
+            "<color=#4488FF>≤ 5 cây/ngày</color> Giữ Karma tốt\n" +
+            "<color=#4488FF>Trồng cây</color> +Karma\n" +
+            "<color=#4488FF>Cao/Thấp</color>  Quyết định kết thúc";
 
         var lt = colL.AddComponent<TextMeshProUGUI>();
-        lt.text = loreL; lt.fontSize = 16f; lt.richText = true;
+        lt.text = loreL; lt.fontSize = 15f; lt.richText = true;
         lt.color = C_TXT2; lt.lineSpacing = 5f;
 
-        var rt = colR.AddComponent<TextMeshProUGUI>();
-        rt.text = loreR; rt.fontSize = 16f; rt.richText = true;
-        rt.color = C_TXT2; rt.lineSpacing = 5f;
+        var mt = colM.AddComponent<TextMeshProUGUI>();
+        mt.text = loreM; mt.fontSize = 15f; mt.richText = true;
+        mt.color = C_TXT2; mt.lineSpacing = 5f;
+
+        // Vùng bên phải hiển thị ảnh minh họa (có thể chia làm 2 mảnh trên dưới nếu cần, hoặc trái/phải).
+        // Ta tạo 2 slot ảnh (trên/dưới)
+        var imgL = MkImg("ImgSlotLeft", _panelControls.transform, V2(0.68f, 0.50f), V2(0.97f, 0.88f), HC(0.03f, 0.06f, 0.05f, 0.92f));
+        imgL.GetComponent<Image>().sprite = MkRR(10);
+        var phL = MkRect("PH_L", imgL.transform, V2(0.05f, 0.2f), V2(0.95f, 0.8f)).AddComponent<TextMeshProUGUI>();
+        phL.text = "[ Kéo ảnh hướng dẫn vào\nInspector → controlsImg_Left ]";
+        phL.fontSize = 13f; phL.color = HC(0.3f, 0.45f, 0.4f); phL.alignment = TextAlignmentOptions.Center;
+        if (controlsImg_Left != null) {
+            imgL.GetComponent<Image>().sprite = Sprite.Create(controlsImg_Left, new Rect(0,0,controlsImg_Left.width,controlsImg_Left.height), V2(0.5f,0.5f));
+            imgL.GetComponent<Image>().color = Color.white;
+            phL.enabled = false;
+        }
+
+        var imgR = MkImg("ImgSlotRight", _panelControls.transform, V2(0.68f, 0.12f), V2(0.97f, 0.48f), HC(0.03f, 0.06f, 0.05f, 0.92f));
+        imgR.GetComponent<Image>().sprite = MkRR(10);
+        var phR = MkRect("PH_R", imgR.transform, V2(0.05f, 0.2f), V2(0.95f, 0.8f)).AddComponent<TextMeshProUGUI>();
+        phR.text = "[ Kéo ảnh hướng dẫn vào\nInspector → controlsImg_Right ]";
+        phR.fontSize = 13f; phR.color = HC(0.3f, 0.45f, 0.4f); phR.alignment = TextAlignmentOptions.Center;
+        if (controlsImg_Right != null) {
+            imgR.GetComponent<Image>().sprite = Sprite.Create(controlsImg_Right, new Rect(0,0,controlsImg_Right.width,controlsImg_Right.height), V2(0.5f,0.5f));
+            imgR.GetComponent<Image>().color = Color.white;
+            phR.enabled = false;
+        }
 
         SmallBtn(_panelControls.transform, "Btn_Back", V2(0.35f,0.025f), V2(0.65f,0.100f),
             "← QUAY LẠI", C_GREEN, () => { SFX_Close(); SwitchTo(null); });

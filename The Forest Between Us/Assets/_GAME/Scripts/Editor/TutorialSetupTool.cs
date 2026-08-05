@@ -31,6 +31,8 @@ public static class TutorialSetupTool
         PlayerStatusUI statusUI = GetOrCreateUIComponent<PlayerStatusUI>("PlayerStatusUI", canvas.transform);
         statusUI.toggleKey = KeyCode.Tab;
         statusUI.controlCursor = true;
+        statusUI.characterName = "Người Sinh Tồn";
+        statusUI.characterLevel = 1;
 
         // 4. Setup BackpackUIController (B Key)
         BackpackUIController backpackUI = GetOrCreateUIComponent<BackpackUIController>("BackpackUIController", canvas.transform);

@@ -94,4 +94,87 @@ public class AutoAssignTreesTool
         Debug.Log($"<b>[Forest Between Us] SUCCESS!</b> Auto-detected and converted {count} trees in Scene!");
         EditorUtility.DisplayDialog("Tự Động Quét Thành Công!", $"Hệ thống đã tự động tìm thấy và gắn Script Chặt Cây cho {count} cây 3D trong Scene hiện tại!", "OK");
     }
+
+    [MenuItem("Tools/Forest Between Us/Convert Selected Objects to Rocks")]
+    public static void ConvertSelectedToRocks()
+    {
+        GameObject[] selectedObjects = Selection.gameObjects;
+        if (selectedObjects == null || selectedObjects.Length == 0)
+        {
+            EditorUtility.DisplayDialog("Thông Báo", "Vui lòng chọn 1 hoặc nhiều GameObject Cục Đá trong Hierarchy!", "OK");
+            return;
+        }
+
+        ItemData rockItem = AssetDatabase.LoadAssetAtPath<ItemData>("Assets/_GAME/Data/Items/Item_Stone.asset");
+        int count = 0;
+
+        foreach (GameObject go in selectedObjects)
+        {
+            Undo.RegisterCompleteObjectUndo(go, "Convert to Rock");
+
+            if (go.GetComponent<Collider>() == null) go.AddComponent<BoxCollider>();
+
+            ResourceNode resNode = go.GetComponent<ResourceNode>();
+            if (resNode == null) resNode = go.AddComponent<ResourceNode>();
+
+            resNode.resourceType = ResourceType.Rock;
+            resNode.resourceName = "Đá Tảng";
+            resNode.maxHits = 4;
+            resNode.currentHits = 4;
+            resNode.dropItemData = rockItem;
+            resNode.dropAmountMin = 1;
+            resNode.dropAmountMax = 3;
+            resNode.autoRespawn = false; // Đá thường không mọc lại
+            resNode.directToInventory = true;
+
+            EditorUtility.SetDirty(resNode);
+            count++;
+        }
+
+        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+        Debug.Log($"<b>[Forest Between Us] SUCCESS!</b> Converted {count} objects into Rocks.");
+        EditorUtility.DisplayDialog("Thành Công!", $"Đã chuyển {count} đối tượng thành Đá (Khai thác).", "OK");
+    }
+
+    [MenuItem("Tools/Forest Between Us/Convert Selected Objects to Berry Bushes")]
+    public static void ConvertSelectedToBushes()
+    {
+        GameObject[] selectedObjects = Selection.gameObjects;
+        if (selectedObjects == null || selectedObjects.Length == 0)
+        {
+            EditorUtility.DisplayDialog("Thông Báo", "Vui lòng chọn 1 hoặc nhiều Bụi cỏ trong Hierarchy!", "OK");
+            return;
+        }
+
+        ItemData berryItem = AssetDatabase.LoadAssetAtPath<ItemData>("Assets/_GAME/Data/Items/Wild_Vegetable.asset"); // Dùng Rau Rừng đã tạo
+        int count = 0;
+
+        foreach (GameObject go in selectedObjects)
+        {
+            Undo.RegisterCompleteObjectUndo(go, "Convert to Berry Bush");
+
+            if (go.GetComponent<Collider>() == null) go.AddComponent<SphereCollider>();
+
+            ResourceNode resNode = go.GetComponent<ResourceNode>();
+            if (resNode == null) resNode = go.AddComponent<ResourceNode>();
+
+            resNode.resourceType = ResourceType.BerryBush;
+            resNode.resourceName = "Bụi Rau Rừng";
+            resNode.maxHits = 1;
+            resNode.currentHits = 1;
+            resNode.dropItemData = berryItem;
+            resNode.dropAmountMin = 1;
+            resNode.dropAmountMax = 2;
+            resNode.autoRespawn = true;
+            resNode.respawnTimeSeconds = 60f;
+            resNode.directToInventory = true;
+
+            EditorUtility.SetDirty(resNode);
+            count++;
+        }
+
+        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+        Debug.Log($"<b>[Forest Between Us] SUCCESS!</b> Converted {count} objects into Berry Bushes.");
+        EditorUtility.DisplayDialog("Thành Công!", $"Đã chuyển {count} đối tượng thành Bụi Rau Rừng (Hái lượm).", "OK");
+    }
 }
