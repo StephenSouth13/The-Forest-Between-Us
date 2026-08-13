@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -26,7 +26,7 @@ public class MultiSceneControllerEd : Editor {
     static void DoLoadForestScenes(int sceneSet) {
 		LoadMasterScene(true);
 
-        var instance = Object.FindObjectOfType<MultiSceneController>();
+        var instance = Object.FindFirstObjectByType<MultiSceneController>();
 
 		if(sceneSet == 0)
 			LoadEditorScenes(instance.mainScenePath);

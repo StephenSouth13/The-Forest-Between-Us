@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 using UnityEngine.Rendering;
@@ -106,8 +106,8 @@ public class LayerCulling : MonoBehaviour {
 	}
 
 	static void AssignCulling(Camera cameraCullTarget, LayerCulling culling) {
-		// Spherical distance is shared between camera and shadow culling (since the distances are combined internally)
-		if(cameraCullTarget)
+		// Spherical distance is supported on built-in pipeline only
+		if(cameraCullTarget && GraphicsSettings.currentRenderPipeline == null)
 			cameraCullTarget.layerCullSpherical = culling.sphericalCulling;
 
 		if(cameraCullTarget) {
@@ -126,7 +126,7 @@ public class LayerCulling : MonoBehaviour {
 	}
 
 	static void ClearLayerCulling(Camera cullTarget, Light shadowCullTarget) {
-		if(cullTarget)
+		if(cullTarget && GraphicsSettings.currentRenderPipeline == null)
 			cullTarget.layerCullSpherical = false;
 
 		if(cullTarget)

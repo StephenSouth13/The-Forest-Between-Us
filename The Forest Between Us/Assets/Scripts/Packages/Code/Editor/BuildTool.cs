@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -65,7 +65,7 @@ static public class BuildTool {
 		if(!masterScene.IsValid())
 			masterScene = EditorSceneManager.OpenScene(kMasterPath);
 
-		var msc = Object.FindObjectOfType<MultiSceneController>();
+		var msc = Object.FindFirstObjectByType<MultiSceneController>();
 		BuildPipeline.BuildPlayer(msc.mainScenePath.scenePaths, string.Format("Builds/{0}", name), target, flags);
 	}
 

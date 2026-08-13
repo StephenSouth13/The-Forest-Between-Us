@@ -23,12 +23,12 @@ public static class GameViewTracker
     {
         if (enabled && !s_Enabled)
         {
-            SceneView.onSceneGUIDelegate += sceneGUICallback;
+            SceneView.duringSceneGui += sceneGUICallback;
             s_Enabled = true;
         }
         else if (!enabled && s_Enabled)
         {
-            SceneView.onSceneGUIDelegate -= sceneGUICallback;
+            SceneView.duringSceneGui -= sceneGUICallback;
             s_Enabled = false;
 
             Camera.main.transform.localPosition = Vector3.zero;

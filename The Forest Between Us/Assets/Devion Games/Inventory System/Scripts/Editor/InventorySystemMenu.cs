@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System.Collections;
 
@@ -37,7 +37,7 @@ namespace DevionGames.InventorySystem
 		[MenuItem ("Tools/Devion Dames/Inventory System/Create Inventory Manager", true)]
 		static bool ValidateCreateInventoryManager()
 		{
-			return GameObject.FindObjectOfType<InventoryManager> () == null;
+			return GameObject.FindFirstObjectByType<InventoryManager> () == null;
 		}
 	}
 }
