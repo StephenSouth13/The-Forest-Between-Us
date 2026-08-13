@@ -564,7 +564,7 @@ Material:
     - _SPECPOWER: 1
     - _SSSFalloff: 0
     - _ScaleA: 0.4
-    - _SeasonChangeGlobal: -0.2
+    - _SeasonChangeGlobal: -2
     - _SeasonVertexColorR: 0
     - _SecondaryFactor: 0.64
     - _SelfShading: 0

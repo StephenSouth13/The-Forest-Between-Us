@@ -205,7 +205,7 @@ Transform:
   m_GameObject: {fileID: 176385217}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -509,6 +509,200 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
+--- !u!1 &2135663201
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2135663208}
+  - component: {fileID: 2135663207}
+  - component: {fileID: 2135663206}
+  - component: {fileID: 2135663205}
+  - component: {fileID: 2135663204}
+  - component: {fileID: 2135663203}
+  - component: {fileID: 2135663202}
+  m_Layer: 0
+  m_Name: GameManagers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2135663202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135663201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccd2a2dfc36620f43b7c249428a1fcfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuestManager
+  activeQuest: {fileID: 0}
+  titleText: {fileID: 0}
+  objectiveText: {fileID: 0}
+  storyOverlay: {fileID: 0}
+--- !u!114 &2135663203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135663201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bdcbd28b158ac84a920f71156678c20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MissionManager
+  currentDay: 1
+  allQuests: []
+  radioObject: {fileID: 0}
+--- !u!114 &2135663204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135663201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 912d282df3370c448b0df6759d7897d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndingManager
+  playerKarma: 50
+  totalDaysSurvived: 1
+  totalTreesChopped: 0
+  totalRocksMined: 0
+  totalMonstersKilled: 0
+  totalItemsCrafted: 0
+  endingChoicePanel: {fileID: 0}
+  optionAButton: {fileID: 0}
+  optionBButton: {fileID: 0}
+  optionCButton: {fileID: 0}
+  optionDButton: {fileID: 0}
+  optionEButton: {fileID: 0}
+  endingScreenPanel: {fileID: 0}
+  endingTitleText: {fileID: 0}
+  endingDescText: {fileID: 0}
+  statsSummaryText: {fileID: 0}
+  returnHomeButton: {fileID: 0}
+--- !u!114 &2135663205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135663201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a978f4a25c9bf164ca87432c48238b1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatManager
+  equippedWeapon: 0
+  attackDamage: 25
+  attackRange: 2.5
+  attackRate: 1
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  boltPrefab: {fileID: 0}
+  firePoint: {fileID: 0}
+  boltSpeed: 25
+  enemyPrefabs: []
+  spawnPoints: []
+--- !u!114 &2135663206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135663201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce2e8dc31fd932d4fa87879112ae4b6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DayManager
+  currentDay: 1
+  maxDays: 30
+  dayDurationSeconds: 300
+  directionalLight: {fileID: 0}
+  lightColorGradient:
+    serializedVersion: 2
+    key0: {r: 1, g: 1, b: 1, a: 1}
+    key1: {r: 1, g: 1, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  lightIntensityCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  currentTimeOfDay: 0.25
+  dayFogColor: {r: 0.5, g: 0.6, b: 0.7, a: 1}
+  nightFogColor: {r: 0.05, g: 0.05, b: 0.1, a: 1}
+  dayFogDensity: 0.01
+  nightFogDensity: 0.04
+  maxTreesAllowedPerDay: 5
+  treesChoppedToday: 0
+--- !u!114 &2135663207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135663201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90cba6df21c05f841bed7c833a21e091, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Campaign30DaysManager
+  currentDay: 1
+  campaignQuests: []
+--- !u!4 &2135663208
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135663201}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -516,3 +710,4 @@ SceneRoots:
   - {fileID: 176385220}
   - {fileID: 1706388749}
   - {fileID: 854399786}
+  - {fileID: 2135663208}

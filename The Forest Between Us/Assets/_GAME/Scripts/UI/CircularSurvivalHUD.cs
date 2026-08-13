@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[ExecuteAlways]
 public class CircularSurvivalHUD : MonoBehaviour
 {
     public static CircularSurvivalHUD instance;
@@ -62,7 +63,7 @@ public class CircularSurvivalHUD : MonoBehaviour
             }
         }
 
-        if (isPersistentAcrossScenes)
+        if (isPersistentAcrossScenes && Application.isPlaying)
         {
             if (canvas != null && canvas.transform.parent == null)
             {

@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdba0860e964f3040ac44529b870b95b, type: 3}
+  m_Name: Item_FullWaterBottle
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemName: "N\u01B0\u1EDBc Su\u1ED1i Trong"
+  category: 4
+  icon: {fileID: 0}
+  isStackable: 1
+  maxStackSize: 5
+  equipSlot: 0
+  armorValue: 0
+  speedBoost: 0
+  isConsumable: 1
+  isRawFood: 0
+  hungerRestore: 0
+  thirstRestore: 60
+  healthRestore: 5
+  staminaRestore: 10
+  itemWeight: 1.3
+  canSpoil: 0
+  spoilTimeSeconds: 300
+  spoiledItemResult: {fileID: 0}
+  isWaterContainer: 1
+  isFullWaterBottle: 1
+  emptyBottleVariant: {fileID: 11400000, guid: e8d5c2227a563814b9df5930a83575d9, type: 2}
+  fullBottleVariant: {fileID: 0}
+  isSeed: 0
+  cropHarvestResult: {fileID: 0}
+  cropGrowthTimeSeconds: 45
+  hasDurability: 0
+  maxDurability: 100
+  repairIngredient: {fileID: 0}
+  repairIngredientAmount: 1
+  brokenItemVariant: {fileID: 0}
+  itemLevel: 1
+  upgradedItemVariant: {fileID: 0}
+  upgradeMaterial: {fileID: 0}
+  upgradeMaterialAmount: 2
+  canDismantle: 1
+  salvageReturnItem: {fileID: 0}
+  salvageReturnAmount: 1
+  worldModelPrefab: {fileID: 0}
+  equippedHandPrefab: {fileID: 0}
+  useAudioSFX: {fileID: 0}
+  useEffectVFX: {fileID: 0}

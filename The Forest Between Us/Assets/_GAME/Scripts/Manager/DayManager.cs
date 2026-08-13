@@ -74,14 +74,15 @@ public class DayManager : MonoBehaviour
         }
 
         // Lighting & Fog updates
+        float intensityFactor = GetLightIntensity(currentTimeOfDay);
         if (directionalLight != null)
         {
             directionalLight.transform.localRotation = Quaternion.Euler((currentTimeOfDay * 360f) - 90f, 170f, 0f);
-            if (lightColorGradient != null)
+            if (lightColorGradient != null && lightColorGradient.colorKeys.Length > 0)
             {
                 directionalLight.color = lightColorGradient.Evaluate(currentTimeOfDay);
             }
-            directionalLight.intensity = lightIntensityCurve.Evaluate(currentTimeOfDay);
+            directionalLight.intensity = intensityFactor;
         }
 
         bool currentlyNight = (currentTimeOfDay < 0.2f || currentTimeOfDay > 0.75f);
@@ -93,8 +94,25 @@ public class DayManager : MonoBehaviour
         }
 
         // Update Fog
-        RenderSettings.fogColor = Color.Lerp(nightFogColor, dayFogColor, lightIntensityCurve.Evaluate(currentTimeOfDay));
-        RenderSettings.fogDensity = Mathf.Lerp(nightFogDensity, dayFogDensity, lightIntensityCurve.Evaluate(currentTimeOfDay));
+        RenderSettings.fogColor = Color.Lerp(nightFogColor, dayFogColor, Mathf.Clamp01(intensityFactor / 1.5f));
+        RenderSettings.fogDensity = Mathf.Lerp(nightFogDensity, dayFogDensity, Mathf.Clamp01(intensityFactor / 1.5f));
+    }
+
+    public float GetLightIntensity(float timeOfDay)
+    {
+        if (lightIntensityCurve != null && lightIntensityCurve.length > 0)
+        {
+            float val = lightIntensityCurve.Evaluate(timeOfDay);
+            if (val > 0.05f) return val;
+        }
+
+        // Default curve calculation if curve is missing or 0: daytime (0.2-0.8) -> bright, night -> dim
+        if (timeOfDay >= 0.2f && timeOfDay <= 0.8f)
+        {
+            float sin = Mathf.Sin((timeOfDay - 0.2f) / 0.6f * Mathf.PI);
+            return Mathf.Lerp(0.3f, 1.4f, sin);
+        }
+        return 0.25f; // Night time ambient
     }
 
     public void NextDay()

@@ -236,5 +236,27 @@ public class PlayerStatsManager : MonoBehaviour
         currentHunger = PlayerPrefs.GetFloat("Player_Hunger", maxHunger);
         currentSleep = PlayerPrefs.GetFloat("Player_Sleep", maxSleep);
         karma = PlayerPrefs.GetInt("Player_Karma", 50);
+
+        if (currentHealth <= 0f)
+        {
+            currentHealth = maxHealth;
+            currentStamina = maxStamina;
+            currentThirst = maxThirst;
+            currentHunger = maxHunger;
+            currentSleep = maxSleep;
+            SaveStats();
+        }
+    }
+
+    public void ResetVitalsToFull()
+    {
+        currentHealth = maxHealth;
+        currentStamina = maxStamina;
+        currentThirst = maxThirst;
+        currentHunger = maxHunger;
+        currentSleep = maxSleep;
+        isStarving = false;
+        isDehydrated = false;
+        SaveStats();
     }
 }

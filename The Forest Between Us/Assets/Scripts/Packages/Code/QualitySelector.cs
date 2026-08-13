@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering.HighDefinition;
@@ -48,8 +48,11 @@ public class QualitySelector : MonoBehaviour {
 		if(Application.isPlaying && verbose)
 			Debug.LogFormat("Applying quality: {0}", quality.platform);
 
-		if(quality.renderPipeline && quality.renderPipeline != GraphicsSettings.defaultRenderPipeline)
+		if(quality.renderPipeline != null && quality.renderPipeline != GraphicsSettings.defaultRenderPipeline)
+		{
+			// Only apply if it matches current project rendering pipeline type
 			GraphicsSettings.defaultRenderPipeline = quality.renderPipeline;
+		}
 
 		if(quality.layerCulling && quality.layerCulling != LayerCulling.Instance) {
 			if(LayerCulling.Instance)

@@ -183,6 +183,8 @@ public class PlayerRespawnManager : MonoBehaviour
         {
             deathPanel = existing.gameObject;
             deathCanvasGroup = deathPanel.GetComponent<CanvasGroup>();
+            if (deathCanvasGroup != null) deathCanvasGroup.alpha = 0f;
+            deathPanel.SetActive(false);
             return;
         }
 

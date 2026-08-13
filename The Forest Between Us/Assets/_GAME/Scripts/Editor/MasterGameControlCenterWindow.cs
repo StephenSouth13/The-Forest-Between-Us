@@ -30,6 +30,27 @@ public class MasterGameControlCenterWindow : EditorWindow
 
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
+        // Content sections...
+        // -------------------------------------------------------------
+        // SECTION 0: QUÉT & SỬA LỖI SCENE FOREST_ENVIRONMENT (HOTFIX)
+        // -------------------------------------------------------------
+        EditorGUILayout.BeginVertical("box");
+        GUI.color = new Color(1f, 0.4f, 0.4f);
+        EditorGUILayout.LabelField("🚨 QUÉT & SỬA LỖI SCENE FOREST_ENVIRONMENTSAMPLE", EditorStyles.boldLabel);
+        GUI.color = Color.white;
+        EditorGUILayout.HelpBox("Khôi phục ánh sáng Mặt trời sáng đẹp, xả đè màn hình đen UI, sửa vật liệu tím (Magenta Shaders) & nạp đủ bộ khung Managers.", MessageType.Info);
+
+        if (GUILayout.Button("🔍 Quét & Sửa Lỗi Scene Forest_EnvironmentSample", GUILayout.Height(36)))
+        {
+            if (CheckAndConfirmPlayMode())
+            {
+                ForestEnvironmentFixerTool.ScanAndRepairForestSampleScene();
+            }
+        }
+        EditorGUILayout.EndVertical();
+
+        GUILayout.Space(10);
+
         // -------------------------------------------------------------
         // SECTION 1: HỆ THỐNG CHUYỂN CẢNH & LOADING SCENE AAA
         // -------------------------------------------------------------
@@ -140,6 +161,64 @@ public class MasterGameControlCenterWindow : EditorWindow
                 AutoSaveActiveScene();
             }
         }
+        EditorGUILayout.EndVertical();
+
+        GUILayout.Space(10);
+
+        // -------------------------------------------------------------
+        // SECTION 0: DEVELOPER BRAIN & DYNAMIC SCENE SWITCHER
+        // -------------------------------------------------------------
+        EditorGUILayout.BeginVertical("box");
+        GUI.color = new Color(0.9f, 0.5f, 1f);
+        EditorGUILayout.LabelField("0. ĐẦU NÃO CẤU HÌNH & CHUYỂN SCENE TỰ ĐỘNG (DYNAMIC)", EditorStyles.boldLabel);
+        GUI.color = Color.white;
+        
+        string activeSceneName = EditorSceneManager.GetActiveScene().name;
+        EditorGUILayout.HelpBox($"📌 SCENE ĐANG MỞ HIỆN TẠI: '{activeSceneName}'\n" +
+                                "Tất cả các nút Setup bên dưới sẽ TỰ ĐỘNG THIẾT LẬP VÀO SCENE NÀY bất kể bạn đổi tên Scene thành gì!", MessageType.Info);
+        
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("🧠 Tạo Developer Brain Scene", GUILayout.Height(26)))
+        {
+            if (CheckAndConfirmPlayMode()) DevSceneSetupTool.CreateDevScene();
+        }
+        if (GUILayout.Button("⚡ Setup Tích Hợp Vào Scene Hiện Tại", GUILayout.Height(26)))
+        {
+            if (CheckAndConfirmPlayMode())
+            {
+                Campaign30DaysSetupTool.SetupCampaign();
+                HarvestSystemSetupTool.SetupHarvestSystem();
+                TutorialSetupTool.SetupFullTutorialAndUI();
+                AutoSaveActiveScene();
+                EditorUtility.DisplayDialog("Thành Công", $"Đã tự động tích hợp toàn bộ hệ thống vào Scene hiện tại: '{activeSceneName}'!", "OK");
+            }
+        }
+        EditorGUILayout.EndHorizontal();
+
+        // 🔍 TỰ ĐỘNG QUÉT TOÀN BỘ FILE SCENE TRONG PROJECT (DYNAMIC SCENE SCANNER)
+        EditorGUILayout.LabelField("📂 Danh Sách Tất Cả Scene Trong Dự Án (Tự động cập nhật khi đổi tên):", EditorStyles.miniBoldLabel);
+        string[] sceneGuids = AssetDatabase.FindAssets("t:Scene");
+        if (sceneGuids != null && sceneGuids.Length > 0)
+        {
+            EditorGUILayout.BeginVertical("helpBox");
+            foreach (string guid in sceneGuids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                if (path.StartsWith("Assets/"))
+                {
+                    string sceneName = System.IO.Path.GetFileNameWithoutExtension(path);
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField($"• {sceneName}", GUILayout.Width(220));
+                    if (GUILayout.Button("🚪 Mở Scene Này", GUILayout.Width(110)))
+                    {
+                        if (CheckAndConfirmPlayMode()) EditorSceneManager.OpenScene(path);
+                    }
+                    EditorGUILayout.EndHorizontal();
+                }
+            }
+            EditorGUILayout.EndVertical();
+        }
+
         EditorGUILayout.EndVertical();
 
         GUILayout.Space(10);

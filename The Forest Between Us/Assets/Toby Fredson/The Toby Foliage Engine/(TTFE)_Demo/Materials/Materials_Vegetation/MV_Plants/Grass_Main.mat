@@ -869,7 +869,7 @@ Material:
     - _SSSSteps: 64
     - _SSSStrength: 0.5
     - _ScaleA: 0.4
-    - _SeasonChangeGlobal: -0.2
+    - _SeasonChangeGlobal: -2
     - _SeasonChangeGlobal1: 0.24
     - _SeasonVertexColorR: 0
     - _SeasonVertexColorR1: 0

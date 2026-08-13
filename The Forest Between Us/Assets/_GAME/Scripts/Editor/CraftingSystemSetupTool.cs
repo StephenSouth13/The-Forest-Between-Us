@@ -132,8 +132,15 @@ public class CraftingSystemSetupTool
         Renderer rend = go.GetComponent<Renderer>();
         if (rend != null)
         {
-            rend.sharedMaterial = new Material(Shader.Find("Standard"));
-            rend.sharedMaterial.color = color;
+            Shader defaultShader = Shader.Find("HDRP/Lit");
+            if (defaultShader == null) defaultShader = Shader.Find("Universal Render Pipeline/Lit");
+            if (defaultShader == null) defaultShader = Shader.Find("Standard");
+
+            Material mat = new Material(defaultShader);
+            if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", color);
+            else if (mat.HasProperty("_Color")) mat.SetColor("_Color", color);
+
+            rend.sharedMaterial = mat;
         }
 
         T station = go.GetComponent<T>();

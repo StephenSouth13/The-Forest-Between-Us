@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 758db83d6df1be448a8cdf2baa05998b, type: 3}
+  m_Name: StoryLoreDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::StoryLoreDatabase
+  prologueLore: "<b>[CH\u01AF\u01A0NG I: NH\u1EACT K\xDD R\u1EEANG THI\xCANG]</b>\nNg\xE0y
+    01: B\u1EA1n th\u1EE9c d\u1EADy sau m\u1ED9t c\u01A1n b\xE3o t\u1EEB k\u1EF3
+    l\u1EA1. Chi\u1EBFc m\xE1y thu ph\xE1t v\xF4 tuy\u1EBFn ph\xE1t ra nh\u1EEFng
+    t\u1EA7n s\u1ED1 \u0111\u1EE9t \u0111o\u1EA1n c\xF9ng gi\u1ECDng n\xF3i xa x\u01B0a
+    c\u1EE7a Mai An Ti\xEAm v\u1EC1 H\u1EA1t Gi\u1ED1ng C\u1ED5 \u0110\u1EA1i."
+  day1Lore: "<b>[CH\u01AF\u01A0NG II: S\u01AF\u01A0NG M\xD9 V\xD9NG \u0110\u1EE8T
+    G\xC3Y]</b>\nNg\xE0y 07: S\u01B0\u01A1ng \u0111\u1ED9c bao ph\u1EE7 khu r\u1EEBng.
+    Nh\u1EEFng sinh th\u1EC3 bi\u1EBFn d\u1EA1ng b\u1EAFt \u0111\u1EA7u \u0111i t\xECm
+    ki\u1EBFm ngu\u1ED3n n\u0103ng l\u01B0\u1EE3ng t\u1EEB tr\u1EA1i c\u1EE7a b\u1EA1n."
+  day2Lore: "<b>[CH\u01AF\u01A0NG III: B\xCD M\u1EACT TR\u1EA0M PH\xC1T S\u1ED0NG]</b>\nNg\xE0y
+    15: B\u1EA1n t\xECm th\u1EA5y t\xE0n t\xEDch Tr\u1EA1m V\xF4 Tuy\u1EBFn Si\xEAu
+    C\u1EA5p. Th\u01B0\u01A1ng nh\xE2n b\xED \u1EA9n xu\u1EA5t hi\u1EC7n \u0111\u1EC1
+    ngh\u1ECB \u0111\u1ED5i C\u1ED5 V\u1EADt l\u1EA5y linh ki\u1EC7n gi\u1EA3i m\xE3."
+  day3Lore: "<b>[CH\u01AF\u01A0NG IV: QUY\u1EBET \u0110\u1ECANH V\u1EACN M\u1EC6NH
+    (5 ENDINGS)]</b>\nNg\xE0y 30: N\u0103ng l\u01B0\u1EE3ng Rift \u0111\u1EA1t \u0111\u1EC9nh
+    \u0111i\u1EC3m. 5 C\xE1nh C\u1ED5ng Th\u1EDDi Kh\xF4ng m\u1EDF ra \u2014 L\u1EF1a
+    ch\u1ECDn c\u1EE7a b\u1EA1n s\u1EBD quy\u1EBFt \u0111\u1ECBnh s\u1ED1 ph\u1EADn
+    c\u1EE7a hai th\u1EBF gi\u1EDBi!"
+  mainQuests: []

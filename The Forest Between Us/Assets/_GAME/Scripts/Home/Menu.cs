@@ -21,6 +21,10 @@ public class MainMenuController : MonoBehaviour
     public string tutorialSceneName = "Tutorial";    // Home → Tutorial (first time)
     public string gameplaySceneName = "GamePlay";    // Home → GamePlay (continue)
 
+    [Header("─── Video Background (Kéo file video .mp4/.webm vào đây) ───")]
+    [Tooltip("Kéo file video cảnh rừng quay sẵn (.mp4) vào đây để làm nền động cho Main Menu.")]
+    public UnityEngine.Video.VideoClip backgroundVideoClip;
+
     [Header("─── Music (để trống = dùng nhạc sinh bằng code) ───")]
     [Tooltip("Kéo file .mp3/.ogg nhạc menu vào đây. Nếu trống, nhạc rừng procedural tự phát.")]
     public AudioClip menuMusicClip;
@@ -200,6 +204,15 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
+    void OnDisable()
+    {
+        if (!Application.isPlaying && _cvs != null)
+        {
+            DestroyImmediate(_cvs.gameObject);
+            _cvs = null;
+        }
+    }
+
     void Start()
     {
         GenerateMenuUI();
@@ -265,12 +278,53 @@ public class MainMenuController : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────────────────────────
-    //  CINEMATIC BACKGROUND
+    //  CINEMATIC BACKGROUND (ẢNH & VIDEO)
     // ─────────────────────────────────────────────────────────────────
     void BuildBackground()
     {
         MkImg("BG_Grad", _cvs.transform, V2(0,0), V2(1,1), C_ABYSS)
             .GetComponent<Image>().sprite = MkGradient(HC(0.008f,0.012f,0.022f), HC(0.030f,0.055f,0.072f));
+
+        // Nếu có Video Clip background, dựng RawImage & VideoPlayer để phát Video loop
+        UnityEngine.Video.VideoPlayer videoPlayer = FindFirstObjectByType<UnityEngine.Video.VideoPlayer>();
+        if (backgroundVideoClip != null || videoPlayer != null)
+        {
+            var rawImgGO = new GameObject("BG_VideoRawImage", typeof(RectTransform), typeof(RawImage));
+            rawImgGO.transform.SetParent(_cvs.transform, false);
+            var rect = rawImgGO.GetComponent<RectTransform>();
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
+
+            RawImage rawImage = rawImgGO.GetComponent<RawImage>();
+            rawImage.color = new Color(0.85f, 0.85f, 0.85f, 0.95f);
+
+            if (videoPlayer == null)
+            {
+                videoPlayer = rawImgGO.AddComponent<UnityEngine.Video.VideoPlayer>();
+            }
+
+            if (backgroundVideoClip != null)
+            {
+                videoPlayer.clip = backgroundVideoClip;
+            }
+
+            videoPlayer.renderMode = UnityEngine.Video.VideoRenderMode.APIOnly;
+            videoPlayer.isLooping = true;
+            videoPlayer.playOnAwake = true;
+            videoPlayer.audioOutputMode = UnityEngine.Video.VideoAudioOutputMode.None;
+
+            RenderTexture rt = new RenderTexture(1920, 1080, 16, RenderTextureFormat.ARGB32);
+            rt.Create();
+            videoPlayer.targetTexture = rt;
+            rawImage.texture = rt;
+
+            if (Application.isPlaying)
+            {
+                videoPlayer.Play();
+            }
+        }
 
         MkImg("BG_Radial", _cvs.transform, V2(0,0), V2(1,1), Color.clear)
             .GetComponent<Image>().sprite = MkRadialGlow(HC(0.04f,0.12f,0.09f,0.30f));
@@ -908,7 +962,7 @@ public class MainMenuController : MonoBehaviour
         S(_panelSettings,    panel == _panelSettings);
         S(_panelCredits,     panel == _panelCredits);
         S(_panelConfirmNew,  panel == _panelConfirmNew);
-        if (panel != null && panel != _panelConfirmNew) SFX_Open();
+        if (Application.isPlaying && panel != null && panel != _panelConfirmNew) SFX_Open();
         if (panel == _panelStory) StoryPage(_storyPage);
     }
 

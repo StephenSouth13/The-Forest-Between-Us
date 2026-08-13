@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdba0860e964f3040ac44529b870b95b, type: 3}
+  m_Name: Item_SpoiledFood
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemName: "Tr\xE1i C\xE2y / \u0110\u1ED3 \u0102n Th\u1ED1i"
+  category: 2
+  icon: {fileID: 0}
+  isStackable: 1
+  maxStackSize: 20
+  equipSlot: 0
+  armorValue: 0
+  speedBoost: 0
+  isConsumable: 1
+  isRawFood: 0
+  hungerRestore: -15
+  thirstRestore: 0
+  healthRestore: -20
+  staminaRestore: 10
+  itemWeight: 0.2
+  canSpoil: 0
+  spoilTimeSeconds: 300
+  spoiledItemResult: {fileID: 0}
+  isWaterContainer: 0
+  isFullWaterBottle: 0
+  emptyBottleVariant: {fileID: 0}
+  fullBottleVariant: {fileID: 0}
+  isSeed: 0
+  cropHarvestResult: {fileID: 0}
+  cropGrowthTimeSeconds: 45
+  hasDurability: 0
+  maxDurability: 100
+  repairIngredient: {fileID: 0}
+  repairIngredientAmount: 1
+  brokenItemVariant: {fileID: 0}
+  itemLevel: 1
+  upgradedItemVariant: {fileID: 0}
+  upgradeMaterial: {fileID: 0}
+  upgradeMaterialAmount: 2
+  canDismantle: 1
+  salvageReturnItem: {fileID: 0}
+  salvageReturnAmount: 1
+  worldModelPrefab: {fileID: 0}
+  equippedHandPrefab: {fileID: 0}
+  useAudioSFX: {fileID: 0}
+  useEffectVFX: {fileID: 0}

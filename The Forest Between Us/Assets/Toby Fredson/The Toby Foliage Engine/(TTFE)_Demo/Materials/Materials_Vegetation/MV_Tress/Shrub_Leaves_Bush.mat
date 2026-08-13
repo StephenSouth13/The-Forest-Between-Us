@@ -435,7 +435,7 @@ Material:
     - _SSSMapScale: 1
     - _Scale: 5
     - _Sclevg: 1
-    - _SeasonChangeGlobal: -0.2
+    - _SeasonChangeGlobal: -2
     - _SeasonChnageA: 5
     - _SeasonChnageA1: 5
     - _SeasonChnageA2: 5
