@@ -133,6 +133,13 @@ public class ResourceNode : MonoBehaviour, Interactable
             DayManager.instance.RegisterTreeChopped();
         }
 
+        // Ghi nhận chỉ số sinh tồn cho bảng thống kê Kết game
+        if (EndingManager.instance != null)
+        {
+            if (resourceType == ResourceType.Tree) EndingManager.instance.RecordTreeChopped();
+            else if (resourceType == ResourceType.Rock) EndingManager.instance.RecordRockMined();
+        }
+
         int amountToDrop = Random.Range(dropAmountMin, dropAmountMax + 1);
 
         if (dropItemData != null && InventoryManager.instance != null)

@@ -394,43 +394,41 @@ Menu: **`Tools > Forest Between Us > Setup Crafting System`**
 | `UpgradeStation.cs` | Nâng cấp trang bị |
 | `MosquitoZone.cs` | Vùng muỗi (gây bệnh) |
 
-### 🛠 Editor Tools (Chỉ hoạt động trong Unity Editor)
-| File | Menu Path |
-|------|-----------|
-| `DevSceneSetupTool.cs` | Tools > Create Developer Dashboard Scene |
-| `AutoAssignTreesTool.cs` | Tools > Auto-Assign Trees/Rocks/Bushes |
-| `ItemAndRecipeGeneratorTool.cs` | Tools > Generate Items & Recipes |
-| `CraftingSystemSetupTool.cs` | Tools > Setup Crafting System |
-| `InventorySetupTool.cs` | Tools > Setup Inventory |
-| `HarvestSystemSetupTool.cs` | Tools > Setup Harvest System |
-| `AISystemSetupTool.cs` | Tools > Setup AI System |
-| `MainMenuSetupTool.cs` | Tools > Setup Main Menu UI |
-| `TutorialSetupTool.cs` | Tools > Setup Tutorial |
-| `SceneTransitionSetupTool.cs` | Tools > Setup Scene Transition |
-| `Campaign30DaysSetupTool.cs` | Tools > Setup 30-Day Campaign |
-| `GameDirectorEditor.cs` | Custom Inspector cho GameDirector |
+### 🛠 Editor Tools & Master Control Center (Bảng Quản Lý Dự Án)
+
+Để giúp bạn không phải tự thao tác từng bước bằng tay, toàn bộ công cụ tự động hóa đã được tích hợp vào **`Master Control Center`**:
+
+👉 **Vị trí mở trong Unity Editor:** Menu **`Tools` ➔ `Forest Between Us` ➔ `🎮 MASTER CONTROL CENTER (BẢNG QUẢN LÝ DỰ ÁN)`**
+
+#### 🛠 Chi Tiết Chức Năng Của Từng Tool Tự Động:
+
+| Tên Tool & Menu Path | Chức Năng Chi Tiết | Cách Sử Dụng / Lưu Ý |
+|----------------------|-------------------|----------------------|
+| **1. Master Game Control Center**<br>`Tools > Forest Between Us > 🎮 MASTER CONTROL CENTER` | Bảng điều khiển trung tâm tập trung tất cả 10+ Tools của dự án. Có tích hợp **Cảnh báo Play Mode** và **Tự Động Lưu Scene (`Auto-Save`)** vĩnh viễn sau mỗi lần bấm. | Mở bảng này ra là có đầy đủ các nút bấm setup cho toàn bộ game. |
+| **2. Setup Scene Transition (AAA)**<br>`SceneTransitionSetupTool.cs` | Tự động tạo Prefab `SceneTransitionManager` trong thư mục `Resources`. Dựng Canvas Loading Screen điện ảnh với 2 thanh trượt đen (Cinematic Bars), thanh tiến trình chạy mượt (Progress Bar), Vignette tối góc và xoay các mẹo sinh tồn. | Nhấn 1 click ➔ Tự tạo Prefab chuẩn. Mọi lệnh chuyển scene sẽ tự động gọi màn hình này. |
+| **3. Setup 30-Day Campaign & Story Data**<br>`Campaign30DaysSetupTool.cs` | Tự động sinh ra file `StoryLoreDatabase.asset` chứa dữ liệu Cốt truyện 4 Chương + Nhật ký rừng thiêng, tự động kết nối `DayManager`, `EndingManager` (5 Kết thúc), `MissionManager`, `QuestManager` vào GameObject `GameManagers`. | Chạy 1 click trong Scene `GamePlay` để sẵn sàng cho chuỗi sinh tồn 30 ngày. |
+| **4. Setup Harvest & Resource System**<br>`HarvestSystemSetupTool.cs` | Tự động khởi tạo toàn bộ ScriptableObject `ItemData` cho các nguyên liệu (Gỗ, Đá, Thực phẩm, Hạt giống, Bình nước, Thịt nướng...), tạo Prefab rớt đồ và cấu hình hệ thống Khai thác. | Tự tạo file `.asset` trong `Assets/_GAME/Data/Items/`. Bạn chỉ cần kéo Model 3D vào ô `WorldModelPrefab`. |
+| **5. Setup Crafting System & Recipes**<br>`CraftingSystemSetupTool.cs` | Tự động tạo công thức chế tạo (Crafting Recipes), liên kết các Bàn Sửa Chữa (Repair), Nâng Cấp (Upgrade), Tháo Dỡ (Salvage) và Rìu/Vũ khí. | Tự tạo công thức trong `Assets/_GAME/Data/Crafting/`. |
+| **6. Setup Inventory UI & Drag-Drop**<br>`InventorySetupTool.cs` | Tự động dựng Canvas Balo (Inventory Grid), Hotbar 1-9, ô chứa trang bị và logic Kéo-Thả (Drag & Drop) vật phẩm. | Chạy 1 click để có ngay giao diện Balo hoàn chỉnh. |
+| **7. Setup Full AI & Monster Spawner**<br>`AISystemSetupTool.cs` | Tự động tìm/tạo quái vật `EnemyAI`, điểm xuất hiện quái (Monster Spawner), Waypoint đi tuần và khu vực an toàn `SafeZone`. | Yêu cầu Scene đã Bake NavMesh (`Window > AI > Navigation`). |
+| **8. Convert Selected Objects to Choppable Trees**<br>`AutoAssignTreesTool.cs` | Quét các GameObject Cây 3D hoặc Đá 3D mà bạn đang chọn trong Scene Hierarchy ➔ Tự động gắn `Collider` và `ResourceNode.cs` để chặt/đập được ngay. | Chọn các cây 3D trong Scene ➔ Bấm nút này ➔ Cây 3D biến thành Cây chặt lấy gỗ được ngay! |
+| **9. Setup Main Menu Scene**<br>`MainMenuSetupTool.cs` | Tự động kết nối `MainMenuController` với giao diện Main Menu trên Scene `Home`, không làm mất hay ghi đè lên các nút bấm UI thủ công mà bạn đã xếp. | Chạy khi đang ở Scene `Home`. |
+| **10. Setup Full Tutorial & UI**<br>`TutorialSetupTool.cs` | Tự động gắn hệ thống hướng dẫn tân thủ (Tutorial Steps), bảng thông số nhân vật (Tab Key UI), hệ thống phụ đề Radio và kiểm tra EventSystem. | Chạy 1 click để hoàn thiện hệ thống UI hướng dẫn. |
 
 ---
 
 ## ✅ CHECKLIST TRƯỚC KHI BUILD
 
 ```
-[ ] 1. Đã chạy Tools > Generate Items & Recipes (tạo vật phẩm)
-[ ] 2. Đã chạy Tools > Auto-Assign Trees (gắn tài nguyên vào cây/đá)
-[ ] 3. Đã gắn GameDirector vào Scene GamePlay
-[ ] 4. Đã gắn PlayerStatsManager + PlayerEquipmentManager vào Player
-[ ] 5. Đã gắn PlayerInteraction vào Player
-[ ] 6. Đã gắn InventoryManager + CraftingManager vào _MANAGERS
-[ ] 7. Đã gắn DayManager + Directional Light vào DayManager
-[ ] 8. Đã gắn PlayerRespawnManager vào _MANAGERS
-[ ] 9. Đã đặt ít nhất 1 Campfire + SavePointCheckpoint
-[ ] 10. Đã kéo icon vào các file .asset (vật phẩm) 
-[ ] 11. Đã Bake NavMesh cho Scene GamePlay
-[ ] 12. Đã thêm Home + GamePlay vào Build Settings
-[ ] 13. Đã test: Nhặt đồ, Chế tạo, Chiến đấu, Chết/Hồi sinh
-[ ] 14. Đã test: Mở Balo (I), Sổ tay (K), Bản đồ (M)
+[ ] 1. Đã mở Tools > Master Control Center
+[ ] 2. Đã chạy 🎬 Setup / Upgrade Loading Screen System (AAA)
+[ ] 3. Đã chạy 📖 Setup 30-Day Campaign & Story Data trên Scene GamePlay
+[ ] 4. Đã chọn các Cây 3D trên Terrain và chạy 🌳 Convert Selected Objects to Choppable Trees
+[ ] 5. Đã Bake NavMesh cho Scene GamePlay (Window > AI > Navigation)
+[ ] 6. Đã kiểm tra File > Build Settings có đủ 2 scene: Home và GamePlay
+[ ] 7. Nhấn PLAY và tận hưởng thành quả!
 ```
 
 ---
 
-> **💡 MẸO:** Mọi thay đổi về chỉ số cân bằng (độ khó, tốc độ, giáp...) đều có thể điều chỉnh từ **GameDirector** mà không cần sửa code. Chỉ cần mở Scene `Developer_Control_Center`, chỉnh số, rồi chuyển sang Scene GamePlay để test!
+> **💡 MẸO VÀNG:** Bạn không cần nhớ phím tắt hay vị trí từng file script. Chỉ cần mở cửa sổ **`Tools > Forest Between Us > 🎮 MASTER CONTROL CENTER`**, tất cả mọi công cụ đã được gom gọn và phân loại theo từng nhóm chức năng rõ ràng kèm nút nhấn Tự Động Lưu (`Auto-Save`)!

@@ -18,6 +18,13 @@ public class EndingManager : MonoBehaviour
     [Header("Moral Karma System")]
     public int playerKarma = 50; // 0 to 100
 
+    [Header("Player Survival Lifetime Stats")]
+    public int totalDaysSurvived = 1;
+    public int totalTreesChopped = 0;
+    public int totalRocksMined = 0;
+    public int totalMonstersKilled = 0;
+    public int totalItemsCrafted = 0;
+
     [Header("UI Panels")]
     public GameObject endingChoicePanel;
     public Button optionAButton;
@@ -30,6 +37,7 @@ public class EndingManager : MonoBehaviour
     public GameObject endingScreenPanel;
     public TextMeshProUGUI endingTitleText;
     public TextMeshProUGUI endingDescText;
+    public TextMeshProUGUI statsSummaryText; // Bảng tổng kết thống kê chỉ số
     public Button returnHomeButton;
 
     void Awake()
@@ -58,6 +66,11 @@ public class EndingManager : MonoBehaviour
         Debug.Log($"Karma updated: {playerKarma}");
     }
 
+    public void RecordTreeChopped() { totalTreesChopped++; }
+    public void RecordRockMined() { totalRocksMined++; }
+    public void RecordMonsterKilled() { totalMonstersKilled++; }
+    public void RecordItemCrafted() { totalItemsCrafted++; }
+
     public void ShowEndingChoiceUI()
     {
         if (endingChoicePanel != null)
@@ -72,6 +85,12 @@ public class EndingManager : MonoBehaviour
     {
         if (endingChoicePanel != null) endingChoicePanel.SetActive(false);
         if (endingScreenPanel != null) endingScreenPanel.SetActive(true);
+
+        // Cập nhật số ngày sống sót từ DayManager nếu có
+        if (DayManager.Instance != null)
+        {
+            totalDaysSurvived = DayManager.Instance.currentDay;
+        }
 
         switch (choice)
         {
@@ -116,6 +135,20 @@ public class EndingManager : MonoBehaviour
     {
         if (endingTitleText != null) endingTitleText.text = title;
         if (endingDescText != null) endingDescText.text = description;
+
+        if (statsSummaryText != null)
+        {
+            string karmaRating = playerKarma >= 75 ? "<color=#00FF88>Anh Hùng Rừng Xanh (Thiện)</color>" :
+                                (playerKarma <= 25 ? "<color=#FF4444>Bị Tha Hóa Bóng Đêm (Ác)</color>" : "<color=#FFCC00>Kẻ Sống Sót Trung Lập</color>");
+
+            statsSummaryText.text = $"<b>📊 TỔNG KẾT TỔNG THỂ HÀNH TRÌNH:</b>\n" +
+                                    $"• Số Ngày Sống Sót: <b>{totalDaysSurvived} Ngày</b>\n" +
+                                    $"• Số Cây Đã Chặt: <b>{totalTreesChopped} Cây</b>\n" +
+                                    $"• Số Đá Khai Thác: <b>{totalRocksMined} Khối</b>\n" +
+                                    $"• Quái Vật Tiêu Diệt: <b>{totalMonstersKilled} Con</b>\n" +
+                                    $"• Đồ Đạc Đã Chế Tạo: <b>{totalItemsCrafted} Món</b>\n" +
+                                    $"• Điểm Nhân Quả (Karma): <b>{playerKarma}/100</b> ({karmaRating})";
+        }
     }
 
     void ReturnToMainMenu()

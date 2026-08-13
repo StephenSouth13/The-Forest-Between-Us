@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 // Singleton persistent qua các scene. Gọi SceneTransitionManager.Instance.LoadScene("TenScene")
 // để chuyển cảnh có fade + màn hình loading (ảnh nền, thanh tiến trình, tip xoay vòng, thanh cinematic).
-// Instance tự nạp prefab "SceneTransitionManager" từ 1 thư mục Resources (xem SceneTransitionSetupTool).
 [RequireComponent(typeof(CanvasGroup))]
 public class SceneTransitionManager : MonoBehaviour
 {
@@ -69,7 +68,6 @@ public class SceneTransitionManager : MonoBehaviour
         SetHidden();
     }
 
-    // Gradient tối dần ra rìa màn hình để ảnh nền loading trông điện ảnh hơn, không cần asset ảnh
     static Sprite GenerateVignetteSprite(int size = 256, float maxAlpha = 0.65f)
     {
         Texture2D texture = new Texture2D(size, size, TextureFormat.RGBA32, false);
@@ -91,7 +89,6 @@ public class SceneTransitionManager : MonoBehaviour
         return Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f));
     }
 
-    // Tạo sprite hình khuyên (ring) bằng code để spinner không phụ thuộc asset ảnh nào cả
     static Sprite GenerateRingSprite(int size = 128, float innerRatio = 0.72f)
     {
         Texture2D texture = new Texture2D(size, size, TextureFormat.RGBA32, false);
@@ -109,7 +106,6 @@ public class SceneTransitionManager : MonoBehaviour
 
                 if (dist <= outerRadius && dist >= innerRadius)
                 {
-                    // dùng góc để chừa 1 khoảng hở nhỏ (spinner kiểu "C" thay vì vòng tròn kín)
                     float angle = Mathf.Atan2(y + 0.5f - center.y, x + 0.5f - center.x) * Mathf.Rad2Deg;
                     if (angle < 0f) angle += 360f;
                     alpha = angle > 40f ? 1f : Mathf.InverseLerp(0f, 40f, angle);
@@ -146,7 +142,6 @@ public class SceneTransitionManager : MonoBehaviour
         Coroutine tipRoutine = (s != null && s.tips != null && s.tips.Count > 1) ? StartCoroutine(RotateTips(s)) : null;
         Coroutine spinRoutine = StartCoroutine(SpinLoader());
 
-        // Chạy song song với fade để thanh cinematic thực sự "trượt vào" trong lúc màn hình mờ dần, không bị ẩn rồi mới hiện
         if (s != null && s.useCinematicBars) StartCoroutine(AnimateBars(true, s));
         yield return StartCoroutine(Fade(0f, 1f, s));
 
@@ -155,15 +150,21 @@ public class SceneTransitionManager : MonoBehaviour
 
         float elapsed = 0f;
         float minDisplay = s != null ? s.minDisplaySeconds : 1f;
+        float displayedProgress = 0f;
 
         while (!op.isDone)
         {
             elapsed += Time.unscaledDeltaTime;
-            float progress = Mathf.Clamp01(op.progress / 0.9f);
-            SetProgress(progress);
+            float targetProgress = Mathf.Clamp01(op.progress / 0.9f);
 
-            if (op.progress >= 0.9f && elapsed >= minDisplay)
+            // Nâng cấp: Tăng thanh tiến trình mượt mà (Smooth progress bar interpolation)
+            displayedProgress = Mathf.MoveTowards(displayedProgress, targetProgress, Time.unscaledDeltaTime * 1.5f);
+            SetProgress(displayedProgress);
+
+            if (displayedProgress >= 0.99f && op.progress >= 0.9f && elapsed >= minDisplay)
             {
+                SetProgress(1f);
+                yield return new WaitForSecondsRealtime(0.2f);
                 op.allowSceneActivation = true;
             }
 
@@ -171,13 +172,13 @@ public class SceneTransitionManager : MonoBehaviour
         }
 
         SetProgress(1f);
-        yield return null; // để scene mới chạy xong Awake/Start trước khi mở màn ra
+        yield return new WaitForSecondsRealtime(0.15f);
 
         if (s != null && s.useCinematicBars) StartCoroutine(AnimateBars(false, s));
         yield return StartCoroutine(Fade(1f, 0f, s));
 
         if (tipRoutine != null) StopCoroutine(tipRoutine);
-        StopCoroutine(spinRoutine);
+        if (spinRoutine != null) StopCoroutine(spinRoutine);
 
         SetHidden();
         isTransitioning = false;

@@ -4,6 +4,7 @@ using UnityEngine;
 public class DayManager : MonoBehaviour
 {
     public static DayManager instance;
+    public static DayManager Instance => instance;
 
     [Header("Day Settings")]
     public int currentDay = 1;

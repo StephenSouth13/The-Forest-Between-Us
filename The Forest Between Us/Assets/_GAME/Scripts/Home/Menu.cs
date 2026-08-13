@@ -11,6 +11,7 @@ using UnityEngine.UI;
 /// Fully code-driven, no prefabs required.
 /// Scene flow: Home ──► Tutorial ──► GamePlay
 /// </summary>
+[ExecuteAlways]
 public class MainMenuController : MonoBehaviour
 {
     // ─────────────────────────────────────────────────────────────────
@@ -176,20 +177,47 @@ public class MainMenuController : MonoBehaviour
     // ─────────────────────────────────────────────────────────────────
     void Awake()
     {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible   = true;
-        Time.timeScale   = 1f;
-        _music = gameObject.AddComponent<AudioSource>();
-        _music.loop = true; _music.spatialBlend = 0f;
-        _music.volume = PlayerPrefs.GetFloat("MV", 0.55f);
-        _sfx = gameObject.AddComponent<AudioSource>();
-        _sfx.spatialBlend = 0f;
-        _sfx.volume = PlayerPrefs.GetFloat("SV", 0.85f);
-        _hasSave = SaveSystem.LoadProgress(out _saveDay, out _saveKarma, out _);
+        if (Application.isPlaying)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible   = true;
+            Time.timeScale   = 1f;
+            _music = gameObject.AddComponent<AudioSource>();
+            _music.loop = true; _music.spatialBlend = 0f;
+            _music.volume = PlayerPrefs.GetFloat("MV", 0.55f);
+            _sfx = gameObject.AddComponent<AudioSource>();
+            _sfx.spatialBlend = 0f;
+            _sfx.volume = PlayerPrefs.GetFloat("SV", 0.85f);
+            _hasSave = SaveSystem.LoadProgress(out _saveDay, out _saveKarma, out _);
+        }
+    }
+
+    void OnEnable()
+    {
+        if (!Application.isPlaying)
+        {
+            GenerateMenuUI();
+        }
     }
 
     void Start()
     {
+        GenerateMenuUI();
+
+        if (Application.isPlaying)
+        {
+            StartCoroutine(CoStartMusic());
+            StartCoroutine(CoAnimateFireflies());
+            StartCoroutine(CoAnimateFog());
+            StartCoroutine(CoTitleBreath());
+            StartCoroutine(CoScanlineFloat());
+        }
+    }
+
+    void GenerateMenuUI()
+    {
+        if (_cvs != null) return;
+
         DestroyOldCanvases(); // must run first
         BuildCanvas();
         BuildBackground();
@@ -203,12 +231,6 @@ public class MainMenuController : MonoBehaviour
         BuildPanelConfirmNew();
         BuildLoadingOverlay();
         SwitchTo(null);
-
-        StartCoroutine(CoStartMusic());
-        StartCoroutine(CoAnimateFireflies());
-        StartCoroutine(CoAnimateFog());
-        StartCoroutine(CoTitleBreath());
-        StartCoroutine(CoScanlineFloat());
     }
 
     /// <summary>Destroy any Canvas in the scene that is NOT ours, so nothing covers the menu.</summary>
