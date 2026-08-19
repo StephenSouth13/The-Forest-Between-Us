@@ -72,7 +72,12 @@ public class InventoryManager : MonoBehaviour
         float addedWeight = newItem.itemWeight * amount;
         if (currentWeight + addedWeight > maxWeightCapacity)
         {
-            Debug.LogWarning($"⚠️ QUÁ TẢI TRỌNG LƯỢNG! ({currentWeight + addedWeight:F1} / {maxWeightCapacity:F1} kg). Không thể nhặt thêm {newItem.itemName}.");
+            string msg = $"⚠️ QUÁ TẢI TRỌNG LƯỢNG BALO! ({currentWeight + addedWeight:F1} / {maxWeightCapacity:F1} kg). Không thể nhặt thêm {newItem.itemName}.";
+            Debug.LogWarning(msg);
+            if (RadioDialogueUIController.instance != null)
+            {
+                RadioDialogueUIController.instance.ShowSubtitle("🎒 BALO BỊ QUÁ TẢI TRỌNG LƯỢNG", msg, 3.5f);
+            }
             return false;
         }
 
@@ -107,7 +112,12 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        Debug.LogWarning($"⚠️ BẢNG Ô BALO ĐÃ ĐẦY! Không thể chứa thêm {remainingAmount}x {newItem.itemName}.");
+        string fullMsg = $"⚠️ BẢNG Ô BALO ĐÃ ĐẦY! Không thể chứa thêm {remainingAmount}x {newItem.itemName}.";
+        Debug.LogWarning(fullMsg);
+        if (RadioDialogueUIController.instance != null)
+        {
+            RadioDialogueUIController.instance.ShowSubtitle("🎒 BALO ĐÃ ĐẦY Ô CHỨA", fullMsg, 3.5f);
+        }
         return false;
     }
 
@@ -273,6 +283,40 @@ public class InventoryManager : MonoBehaviour
                 slot.gameObject.SetActive(false);
             }
         }
+    }
+
+    // 🧹 TỰ ĐỘNG XẮP XẾP & DỒN SLOT BALO (AUTO-ARRANGE & STACK)
+    public void AutoSortAndArrangeInventory()
+    {
+        RefreshSlots();
+
+        // 1. Gom tất cả vật phẩm hiện có ra danh sách tạm
+        List<KeyValuePair<ItemData, int>> itemsList = new List<KeyValuePair<ItemData, int>>();
+
+        foreach (InventorySlot slot in allSlots)
+        {
+            if (!slot.IsEmpty() && slot.GetItem() != null && slot.GetCount() > 0)
+            {
+                itemsList.Add(new KeyValuePair<ItemData, int>(slot.GetItem(), slot.GetCount()));
+                slot.ClearSlot();
+            }
+        }
+
+        // 2. Sắp xếp danh sách theo Loại (Category) -> Tên (Name)
+        itemsList.Sort((pair1, pair2) =>
+        {
+            int catCompare = pair1.Key.category.CompareTo(pair2.Key.category);
+            if (catCompare != 0) return catCompare;
+            return pair1.Key.itemName.CompareTo(pair2.Key.itemName);
+        });
+
+        // 3. Nạp lại vào Balo và tự động gộp dồn Stack tối đa
+        foreach (var pair in itemsList)
+        {
+            PickUpItem(pair.Key, pair.Value);
+        }
+
+        Debug.Log("<b>[InventoryManager]</b> 🧹 Đã tự động dồn ô & sắp xếp Balo theo Loại & Tên!");
     }
 
     public void ClearInventory()

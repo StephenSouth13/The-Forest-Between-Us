@@ -34,12 +34,46 @@ public class PlayerStatsManager : MonoBehaviour
     public float staminaDrainRate = 20f;
     public float staminaRegenRate = 15f;
 
-    [Header("State Flags")]
+    [Header("State Flags & Encumbrance (Tải Trọng Balo)")]
     public bool isRunning;
     public bool isStarving;
     public bool isDehydrated;
+    public float currentWeightPenaltyMultiplier = 1.0f; // 1.0 = Bình thường, 0.5 = Giảm 50% tốc độ do nặng
 
     private float nextDamageTime;
+
+    // 🎒 TÍNH TOÁN HỆ SỐ TỐC ĐỘ DI CHUYỂN DỰA TRÊN TRỌNG LƯỢNG BALO (ENCUMBRANCE SYSTEM)
+    public float GetMovementSpeedMultiplier()
+    {
+        if (InventoryManager.instance == null) return 1.0f;
+
+        float currentWeight = InventoryManager.instance.GetTotalWeight();
+        float maxWeight = InventoryManager.instance.maxWeightCapacity; // Mặc định 30kg
+
+        if (maxWeight <= 0) return 1.0f;
+
+        float weightRatio = currentWeight / maxWeight; // Tỷ lệ từ 0.0 -> 1.0+
+
+        // 🟢 Dưới 50% tải trọng (<= 15kg): Tốc độ 100% bình thường
+        if (weightRatio <= 0.5f)
+        {
+            currentWeightPenaltyMultiplier = 1.0f;
+        }
+        // 🟡 Từ 50% -> 90% tải trọng (15kg - 27kg): Giảm dần từ 100% xuống 75% tốc độ
+        else if (weightRatio <= 0.9f)
+        {
+            float t = (weightRatio - 0.5f) / 0.4f;
+            currentWeightPenaltyMultiplier = Mathf.Lerp(1.0f, 0.75f, t);
+        }
+        // 🔴 Trên 90% tải trọng (>= 27kg): Balo quá nặng! Giảm còn 50% tốc độ & không thể chạy nhanh (Sprint)
+        else
+        {
+            float t = Mathf.Clamp01((weightRatio - 0.9f) / 0.1f);
+            currentWeightPenaltyMultiplier = Mathf.Lerp(0.75f, 0.5f, t);
+        }
+
+        return currentWeightPenaltyMultiplier;
+    }
 
     void Awake()
     {
