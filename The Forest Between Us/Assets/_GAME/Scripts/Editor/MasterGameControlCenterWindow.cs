@@ -195,6 +195,75 @@ public class MasterGameControlCenterWindow : EditorWindow
         }
         EditorGUILayout.EndHorizontal();
 
+        // 🗺️ SƠ ĐỒ LIÊN KẾT SCENE TRỰC QUAN (VISUAL SCENE FLOW GRAPH)
+        EditorGUILayout.LabelField("🗺️ SƠ ĐỒ LUỒNG CHUYỂN CẢNH TRỰC QUAN (VISUAL SCENE FLOW GRAPH)", EditorStyles.boldLabel);
+        EditorGUILayout.HelpBox("Sơ đồ luồng di chuyển từ Menu Chính (Home) vào Thế giới Sinh tồn (GamePlay) & các Scene trợ giúp:", MessageType.Info);
+        
+        EditorGUILayout.BeginVertical("box");
+        GUI.color = new Color(0.9f, 0.95f, 1f);
+        
+        // Flow Diagram Node Box
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        
+        // Node 1: Home
+        GUI.color = new Color(0.3f, 0.8f, 0.4f);
+        if (GUILayout.Button("🏠 HOME.unity\n(Menu Chính)", GUILayout.Width(130), GUILayout.Height(50)))
+        {
+            OpenSceneByName("Home");
+        }
+
+        GUI.color = Color.white;
+        GUILayout.Label(" ──► [SceneTransitionManager] ──► ", EditorStyles.boldLabel, GUILayout.Height(50));
+
+        // Node 2: GamePlay
+        GUI.color = new Color(0.2f, 0.6f, 1f);
+        if (GUILayout.Button("🎮 GAMEPLAY.unity\n(Thế Giới Sinh Tồn)", GUILayout.Width(140), GUILayout.Height(50)))
+        {
+            OpenSceneByName("GamePlay");
+        }
+
+        GUI.color = Color.white;
+        GUILayout.Label(" ◄── [Save / Death Respawn] ──► ", EditorStyles.boldLabel, GUILayout.Height(50));
+
+        // Node 3: Tutorial / Sample
+        GUI.color = new Color(1f, 0.7f, 0.2f);
+        if (GUILayout.Button("🌲 Forest_Environment\n(Màn Chơi Mẫu / Sample)", GUILayout.Width(150), GUILayout.Height(50)))
+        {
+            OpenSceneByName("Forest_EnvironmentSample");
+        }
+
+        GUILayout.FlexibleSpace();
+        EditorGUILayout.EndHorizontal();
+
+        GUILayout.Space(8);
+
+        // Sub Node Row: Control Center & Master
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+
+        GUI.color = new Color(0.9f, 0.4f, 0.4f);
+        if (GUILayout.Button("🧠 Developer_Control_Center.unity (Brain Scene)", GUILayout.Width(280), GUILayout.Height(30)))
+        {
+            OpenSceneByName("Developer_Control_Center");
+        }
+
+        GUILayout.Space(20);
+
+        GUI.color = new Color(0.7f, 0.5f, 0.9f);
+        if (GUILayout.Button("🎓 Tutorial.unity (Hướng Dẫn Chơi)", GUILayout.Width(220), GUILayout.Height(30)))
+        {
+            OpenSceneByName("Tutorial");
+        }
+
+        GUILayout.FlexibleSpace();
+        EditorGUILayout.EndHorizontal();
+
+        GUI.color = Color.white;
+        EditorGUILayout.EndVertical();
+
+        GUILayout.Space(10);
+
         // 🔍 TỰ ĐỘNG QUÉT TOÀN BỘ FILE SCENE TRONG PROJECT (DYNAMIC SCENE SCANNER)
         EditorGUILayout.LabelField("📂 Danh Sách Tất Cả Scene Trong Dự Án (Tự động cập nhật khi đổi tên):", EditorStyles.miniBoldLabel);
         string[] sceneGuids = AssetDatabase.FindAssets("t:Scene");
@@ -208,7 +277,7 @@ public class MasterGameControlCenterWindow : EditorWindow
                 {
                     string sceneName = System.IO.Path.GetFileNameWithoutExtension(path);
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"• {sceneName}", GUILayout.Width(220));
+                    EditorGUILayout.LabelField($"• {sceneName}", GUILayout.Width(240));
                     if (GUILayout.Button("🚪 Mở Scene Này", GUILayout.Width(110)))
                     {
                         if (CheckAndConfirmPlayMode()) EditorSceneManager.OpenScene(path);
@@ -274,5 +343,23 @@ public class MasterGameControlCenterWindow : EditorWindow
             AssetDatabase.SaveAssets();
             Debug.Log($"<b>[Master Control Center]</b> 💾 Auto-Saved Scene '{activeScene.name}' and Assets successfully!");
         }
+    }
+
+    private void OpenSceneByName(string targetSceneName)
+    {
+        if (!CheckAndConfirmPlayMode()) return;
+
+        string[] sceneGuids = AssetDatabase.FindAssets($"{targetSceneName} t:Scene");
+        foreach (string guid in sceneGuids)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            if (System.IO.Path.GetFileNameWithoutExtension(path).Equals(targetSceneName, System.StringComparison.OrdinalIgnoreCase))
+            {
+                EditorSceneManager.OpenScene(path);
+                return;
+            }
+        }
+
+        EditorUtility.DisplayDialog("Lỗi Mở Scene", $"Không tìm thấy Scene tên '{targetSceneName}' trong dự án!", "OK");
     }
 }
