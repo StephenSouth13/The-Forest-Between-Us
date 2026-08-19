@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -255,10 +255,10 @@ public partial class GrassOcclusion : MonoBehaviour
 	static List<GameObject> FindAllPrefabInstances(UnityEngine.Object prefab)
 	{
 		List<GameObject> instances = new List<GameObject>();
-		GameObject[] gameObjects = FindObjectsOfType(typeof(GameObject)) as GameObject[];
+		GameObject[] gameObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
 
 		foreach(GameObject go in gameObjects)
-			if (PrefabUtility.GetPrefabType(go) == PrefabType.PrefabInstance && PrefabUtility.GetCorrespondingObjectFromSource(go) == prefab)
+			if (PrefabUtility.GetPrefabInstanceStatus(go) != PrefabInstanceStatus.NotAPrefab && PrefabUtility.GetCorrespondingObjectFromSource(go) == prefab)
 				instances.Add(go);
 
 		return instances;

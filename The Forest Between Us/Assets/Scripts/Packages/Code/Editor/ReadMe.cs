@@ -172,7 +172,20 @@ public class ReadMe : EditorWindow {
         SessionState.SetBool(kShownThisSession, true);
     }
 
-    [PreferenceItem("Read Me")]
+    [SettingsProvider]
+    public static SettingsProvider CreateReadMeSettingsProvider()
+    {
+        var provider = new SettingsProvider("Preferences/Read Me", SettingsScope.User)
+        {
+            label = "Read Me",
+            guiHandler = (searchContext) =>
+            {
+                OnPrefsGUI();
+            }
+        };
+        return provider;
+    }
+
     static void OnPrefsGUI() {
         int cookie = EditorPrefs.GetInt(kShowOnStart + salt, defaultValue: 0);
         bool showOnStart = cookie < kShowOnStartCookie;
