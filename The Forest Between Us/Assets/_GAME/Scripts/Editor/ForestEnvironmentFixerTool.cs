@@ -166,6 +166,55 @@ public class ForestEnvironmentFixerTool
             dm.directionalLight = sun;
         }
 
+        // -------------------------------------------------------------
+        // STEP 5: SETUP PLAYER & CONTROLLER (TỰ ĐỘNG TẠO NHÂN VẬT 3D NẾU THIẾU)
+        // -------------------------------------------------------------
+        GameObject playerObj = GameObject.FindWithTag("Player");
+        if (playerObj == null)
+        {
+            playerObj = GameObject.Find("Player");
+            if (playerObj == null) playerObj = GameObject.Find("FPSController");
+        }
+
+        if (playerObj == null)
+        {
+            // Tự động tạo Player 3D Capsule chuẩn FPS
+            playerObj = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            playerObj.name = "Player_Survivor_3D";
+            playerObj.tag = "Player";
+            playerObj.transform.position = new Vector3(0f, 2f, 0f); // Spawn ở tọa độ trung tâm
+
+            // Thêm CharacterController
+            CharacterController cc = playerObj.AddComponent<CharacterController>();
+            cc.height = 2.0f;
+            cc.radius = 0.5f;
+
+            // Thêm Camera con
+            GameObject camGO = new GameObject("PlayerCamera");
+            camGO.transform.SetParent(playerObj.transform);
+            camGO.transform.localPosition = new Vector3(0f, 0.8f, 0.2f); // Tầm mắt
+            Camera playerCam = camGO.AddComponent<Camera>();
+            camGO.AddComponent<AudioListener>();
+            camGO.tag = "MainCamera";
+
+            // Thêm UniversalSceneCameraController & PlayerInteraction
+            camGO.AddComponent<UniversalSceneCameraController>();
+            PlayerInteraction interaction = playerObj.AddComponent<PlayerInteraction>();
+            interaction.playerCamera = playerCam;
+
+            Undo.RegisterCreatedObjectUndo(playerObj, "Create Player_Survivor_3D");
+            Debug.Log("<b>[ForestFixer]</b> 🧍 Đã tự động tạo Nhân Vật 3D (Player_Survivor_3D) kèm Camera góc nhìn thứ nhất!");
+        }
+        else
+        {
+            if (!playerObj.CompareTag("Player")) playerObj.tag = "Player";
+            if (playerObj.GetComponent<PlayerInteraction>() == null)
+            {
+                PlayerInteraction interaction = playerObj.AddComponent<PlayerInteraction>();
+                interaction.playerCamera = Camera.main;
+            }
+        }
+
         // Reset Player Vitals
         if (PlayerStatsManager.instance != null)
         {
