@@ -217,7 +217,7 @@ Material:
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
     - _SEASONSETTINGS: 0
-    - _SeasonChangeGlobal: -2
+    - _SeasonChangeGlobal: -0.2
     - _SelfShading: 0
     - _SelfShadingVertexColor: 0
     - _SimplePivotSway: 0

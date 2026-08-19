@@ -239,7 +239,7 @@ Material:
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
     - _SEASONSETTINGS: 0
-    - _SeasonChangeGlobal: -2
+    - _SeasonChangeGlobal: -0.2
     - _SeasonChnageA: 0
     - _SeasonChnageB: 0
     - _SeasonVertexColorR: 0

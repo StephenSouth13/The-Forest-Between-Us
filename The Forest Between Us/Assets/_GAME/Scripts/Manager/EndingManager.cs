@@ -131,6 +131,40 @@ public class EndingManager : MonoBehaviour
         }
     }
 
+    // 🏆 TÍNH XẾP LOẠI SEASON 1 (SEASON 1 SURVIVAL GRADE CALCULATION)
+    public string CalculateSeason1Grade(out Color gradeColor)
+    {
+        // Hệ thống điểm Season 1:
+        // Sống 30 ngày (100đ max), Karma (100đ max), Diệt quái (2đ/con), Chặt cây & Khai thác (1đ/món)
+        int score = (totalDaysSurvived * 10) + playerKarma + (totalMonstersKilled * 3) + (totalTreesChopped) + (totalRocksMined);
+
+        if (totalDaysSurvived >= 30 && playerKarma >= 80 && totalMonstersKilled >= 20)
+        {
+            gradeColor = new Color(1f, 0.84f, 0f); // Vàng Hoàng Kim (Gold)
+            return "HẠNG S — ANH HÙNG THẦN THOẠI BẮC SƠN";
+        }
+        else if (totalDaysSurvived >= 25 && score >= 250)
+        {
+            gradeColor = new Color(0.3f, 0.9f, 1f); // Xanh Lam Huyền Diệu (Cyan)
+            return "HẠNG A — BẬC THẦY SINH TỒN VÙNG RỪNG NGUYÊN SINH";
+        }
+        else if (totalDaysSurvived >= 15 && score >= 150)
+        {
+            gradeColor = new Color(0.2f, 0.8f, 0.3f); // Xanh Lục Rừng Xanh (Green)
+            return "HẠNG B — KẺ SỐNG SÓT KIÊN CƯỜNG";
+        }
+        else if (totalDaysSurvived >= 7)
+        {
+            gradeColor = new Color(1f, 0.6f, 0f); // Cam (Orange)
+            return "HẠNG C — THỢ SẮN TẬP SỰ";
+        }
+        else
+        {
+            gradeColor = new Color(0.8f, 0.2f, 0.2f); // Đỏ Thảm Họa (Red)
+            return "HẠNG D — NẠN NHÂN CỦA SƯƠNG MÙ VÙNG ĐỨT GÃY";
+        }
+    }
+
     void DisplayEnding(string title, string description)
     {
         if (endingTitleText != null) endingTitleText.text = title;
@@ -138,16 +172,22 @@ public class EndingManager : MonoBehaviour
 
         if (statsSummaryText != null)
         {
+            Color gradeColor;
+            string gradeTitle = CalculateSeason1Grade(out gradeColor);
+            string hexColor = ColorUtility.ToHtmlStringRGB(gradeColor);
+
             string karmaRating = playerKarma >= 75 ? "<color=#00FF88>Anh Hùng Rừng Xanh (Thiện)</color>" :
                                 (playerKarma <= 25 ? "<color=#FF4444>Bị Tha Hóa Bóng Đêm (Ác)</color>" : "<color=#FFCC00>Kẻ Sống Sót Trung Lập</color>");
 
-            statsSummaryText.text = $"<b>📊 TỔNG KẾT TỔNG THỂ HÀNH TRÌNH:</b>\n" +
-                                    $"• Số Ngày Sống Sót: <b>{totalDaysSurvived} Ngày</b>\n" +
+            statsSummaryText.text = $"🏆 <b>ĐÁNH GIÁ THÀNH TÍCH SEASON 1:</b>\n" +
+                                    $"<size=120%><color=#{hexColor}><b>{gradeTitle}</b></color></size>\n\n" +
+                                    $"📊 <b>TỔNG KẾT HÀNH TRÌNH 30 NGÀY SINH TỒN:</b>\n" +
+                                    $"• Số Ngày Sống Sót: <b>{totalDaysSurvived} / 30 Ngày</b>\n" +
+                                    $"• Điểm Nhân Quả (Karma): <b>{playerKarma}/100</b> ({karmaRating})\n" +
+                                    $"• Quái Vật Tiêu Diệt: <b>{totalMonstersKilled} Con</b>\n" +
                                     $"• Số Cây Đã Chặt: <b>{totalTreesChopped} Cây</b>\n" +
                                     $"• Số Đá Khai Thác: <b>{totalRocksMined} Khối</b>\n" +
-                                    $"• Quái Vật Tiêu Diệt: <b>{totalMonstersKilled} Con</b>\n" +
-                                    $"• Đồ Đạc Đã Chế Tạo: <b>{totalItemsCrafted} Món</b>\n" +
-                                    $"• Điểm Nhân Quả (Karma): <b>{playerKarma}/100</b> ({karmaRating})";
+                                    $"• Đồ Đạc Đã Chế Tạo: <b>{totalItemsCrafted} Món</b>";
         }
     }
 
