@@ -4,41 +4,64 @@ public class PlayerStatsManager : MonoBehaviour
 {
     public static PlayerStatsManager instance;
 
-    [Header("Level System")]
+    [Header("🌟 CẤU HÌNH CẤP ĐỘ & XP (LEVEL SYSTEM)")]
+    [Tooltip("Cấp độ hiện tại của nhân vật sinh tồn.")]
     public int level = 1;
+    [Tooltip("Điểm kinh nghiệm XP hiện tại.")]
     public float currentXP = 0f;
+    [Tooltip("Số điểm XP cần đạt để thăng cấp tiếp theo.")]
     public float xpToNextLevel = 100f;
 
-    [Header("Real Player Vitals (0 - 100)")]
+    [Header("❤️ CHỈ SỐ SINH TỒN THỰC TẾ (0 - 100)")]
+    [Tooltip("Máu tối đa của nhân vật.")]
     public float maxHealth = 100f;
+    [Tooltip("Máu hiện tại (Nếu về 0 sẽ kích hoạt màn hình Chết/Hồi sinh).")]
     public float currentHealth = 100f;
 
+    [Tooltip("Thể lực tối đa.")]
     public float maxStamina = 100f;
+    [Tooltip("Thể lực hiện tại (Dùng khi chạy nhanh / chặt cây).")]
     public float currentStamina = 100f;
 
+    [Tooltip("Mức độ Khát nước tối đa.")]
     public float maxThirst = 100f;
+    [Tooltip("Cột Nước hiện tại (Tụt dần theo thời gian).")]
     public float currentThirst = 100f;
 
+    [Tooltip("Mức độ Đói bụng tối đa.")]
     public float maxHunger = 100f;
+    [Tooltip("Cột Đói hiện tại (Tụt dần theo thời gian).")]
     public float currentHunger = 100f;
 
+    [Tooltip("Cột Tỉnh táo / Giấc ngủ tối đa.")]
     public float maxSleep = 100f;
-    public float currentSleep = 100f; // 100 = Tỉnh táo hoàn toàn, 0 = Đuối sức kiệt huệ
+    [Tooltip("Cột Giấc ngủ (100 = Tỉnh táo hoàn toàn, 0 = Đuối sức kiệt huệ).")]
+    public float currentSleep = 100f;
 
+    [Tooltip("Điểm Karma Nhân Quả (0 = Ác/Bị tha hóa bóng đêm, 50 = Trung lập, 100 = Thiện/Anh hùng).")]
     public int karma = 50;
 
-    [Header("Drain Rates (per second)")]
+    [Header("⏱️ TỐC ĐỘ TỤT CHỈ SỐ (DRAIN RATES / GIÂY)")]
+    [Tooltip("Tốc độ tụt cột Khát nước mỗi giây.")]
     public float thirstDrainRate = 0.08f;
+    [Tooltip("Tốc độ tụt cột Đói bụng mỗi giây.")]
     public float hungerDrainRate = 0.05f;
+    [Tooltip("Tốc độ tụt cột Buồn ngủ mỗi giây.")]
     public float sleepDrainRate = 0.03f;
+    [Tooltip("Tốc độ tiêu hao Thể lực khi chạy Sprint mỗi giây.")]
     public float staminaDrainRate = 20f;
+    [Tooltip("Tốc độ hồi lại Thể lực khi đi bộ/đứng yên mỗi giây.")]
     public float staminaRegenRate = 15f;
 
-    [Header("State Flags & Encumbrance (Tải Trọng Balo)")]
+    [Header("🎒 TRẠNG THÁI & HỆ SỐ NẶNG BALO (ENCUMBRANCE)")]
+    [Tooltip("Đang bấm phím chạy Sprint hay không.")]
     public bool isRunning;
+    [Tooltip("Đang bị nhịn đói (Hunger = 0).")]
     public bool isStarving;
+    [Tooltip("Đang bị khát nước (Thirst = 0).")]
     public bool isDehydrated;
-    public float currentWeightPenaltyMultiplier = 1.0f; // 1.0 = Bình thường, 0.5 = Giảm 50% tốc độ do nặng
+    [Tooltip("Hệ số giảm tốc độ do Balo nặng (1.0 = Đi 100% bình thường, 0.5 = Nặng quá giảm 50% tốc độ).")]
+    public float currentWeightPenaltyMultiplier = 1.0f;
 
     private float nextDamageTime;
 

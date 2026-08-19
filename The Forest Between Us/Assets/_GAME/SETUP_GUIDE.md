@@ -431,4 +431,24 @@ Menu: **`Tools > Forest Between Us > Setup Crafting System`**
 
 ---
 
+## 🎥 15. TÍNH NĂNG NÂNG CAO: CAMERA ĐIỀU KHIỂN TOÀN BỘ SCENE & HIỆU ỨNG CINEMATIC
+
+Dự án đã tích hợp Script Nâng Cao [UniversalSceneCameraController.cs](file:///d:/VTC_Academy/game3d/The-Forest-Between-Us/The%20Forest%20Between%20Us/Assets/_GAME/Scripts/Player/UniversalSceneCameraController.cs) giúp quản lý và điều khiển Camera trên **mọi Scene**:
+
+### 🎯 Khả năng đáp ứng & Nâng cấp:
+1. **🛸 Chế độ Bay Tự Do Quan Sát Toàn Bộ Scene (Free-Fly Scene Camera)**:
+   * Giữ **Chuột Phải (Right Click)** + Phím **`W, A, S, D`**: Bay tự do kiểm tra bất kỳ vị trí nào trong Scene như trong Unity Editor.
+   * Giữ **`Shift`**: Tăng tốc độ bay nhanh $2.5\times$ qua các khu vực xa.
+
+2. **💥 Hiệu ứng Rung Lắc Camera Động (Dynamic Screen Shake)**:
+   * Tự động phản hồi khi nhân vật bị quái đánh, chặt cây hoặc trúng bom nổ (`TriggerCameraShake(duration, intensity)`).
+
+3. **🏃 Tự Động Co Giãn Góc Nhìn FOV (Dynamic FOV Zoom)**:
+   * Tự động tăng FOV từ $60^\circ \rightarrow 68^\circ$ tạo hiệu ứng cảm giác tốc độ khi nhân vật chạy nhanh (Sprint).
+
+4. **⚡ Tự động gán & Đáp ứng 100% mọi Scene**:
+   * Khi bạn chạy nút **`⚡ Setup Tích Hợp Vào Scene`** trong **Master Control Center**, hệ thống tự động tìm Camera chính (`Camera.main`) của Scene đó và nâng cấp ngay lập tức mà không cần gán thủ công!
+
+---
+
 > **💡 MẸO VÀNG:** Bạn không cần nhớ phím tắt hay vị trí từng file script. Chỉ cần mở cửa sổ **`Tools > Forest Between Us > 🎮 MASTER CONTROL CENTER`**, tất cả mọi công cụ đã được gom gọn và phân loại theo từng nhóm chức năng rõ ràng kèm nút nhấn Tự Động Lưu (`Auto-Save`)!

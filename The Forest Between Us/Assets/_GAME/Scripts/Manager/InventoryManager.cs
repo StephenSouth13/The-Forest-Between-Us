@@ -5,12 +5,18 @@ public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager instance;
 
-    [Header("UI Settings")]
+    [Header("🎒 BẬT GỢI Ý INSPETOR: GIAO DIỆN & TẢI TRỌNG BALO")]
+    [Tooltip("Danh sách toàn bộ các ô Slot chứa đồ trong Balo (Tự động nạp khi bấm nút Setup).")]
     public List<InventorySlot> allSlots = new List<InventorySlot>();
+
+    [Tooltip("Kéo Transform của Panel chứa các ô Slot (Grid) vào đây.")]
     public Transform slotContainer;
 
-    [Header("Drop Settings")]
-    public GameObject itemPickupPrefab; // Prefab dùng chung khi thả item ra thế giới (cần có sẵn ItemObject)
+    [Header("📦 VẬT PHẨM VỨT RA ĐẤT (DROP ITEM)")]
+    [Tooltip("Prefab hiển thị vật phẩm rớt ra đất khi vứt đồ khỏi Balo (Có chứa script ItemObject).")]
+    public GameObject itemPickupPrefab;
+
+    [Tooltip("Vị trí ngực/tay nhân vật để rớt đồ ra trước mặt khi vứt.")]
     public Transform dropPoint;
 
     public event System.Action<ItemData, int> OnItemUsed;
@@ -34,8 +40,9 @@ public class InventoryManager : MonoBehaviour
         allSlots.AddRange(slotContainer.GetComponentsInChildren<InventorySlot>(true));
     }
 
-    [Header("Backpack Capacity Settings")]
-    public float maxWeightCapacity = 30.0f; // Sức chứa trọng lượng tối đa của Balo (30 kg)
+    [Header("⚖️ CẤU HÌNH SỨC CHỨA BALO (MAX WEIGHT)")]
+    [Tooltip("Sức chứa trọng lượng tối đa của Balo (kg). Vượt quá 50% bắt đầu giảm tốc độ chạy, vượt quá 30kg sẽ bị cấm nhặt đồ.")]
+    public float maxWeightCapacity = 30.0f;
 
     public float GetTotalWeight()
     {
