@@ -354,8 +354,8 @@ public class HarvestSystemSetupTool
         Renderer rend = go.GetComponent<Renderer>();
         if (rend != null)
         {
-            rend.sharedMaterial = new Material(Shader.Find("Standard"));
-            rend.sharedMaterial.color = new Color(0.1f, 0.8f, 0.2f, 0.3f);
+            // Tắt hiển thị MeshRenderer của Vùng Muỗi để tránh quả cầu tím khổng lồ che mắt
+            rend.enabled = false;
         }
 
         MosquitoZone mZone = go.GetComponent<MosquitoZone>();
